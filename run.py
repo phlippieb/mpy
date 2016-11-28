@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import psodroc.benchmarks.spherical as spherical
+import psodroc.benchmarks.ackley as ackley
 import psodroc.pso.gbest_pso as gbest
 
 # set up gbest to solve the spherical benchmark function
 
-gbest.function = spherical.spherical
-gbest.lower_bound = spherical.lower_bound
-gbest.upper_bound = spherical.upper_bound
+gbest.function = ackley.ackley
+gbest.lower_bound = ackley.domain[0]
+gbest.upper_bound = ackley.domain[1]
 gbest.num_dimensions = 5
 gbest.init_pso_defaults()
 gbest.init_swarm(size=25)

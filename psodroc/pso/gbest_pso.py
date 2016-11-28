@@ -1,7 +1,6 @@
 import numpy as np
 
 # PSO parameters
-# Init these
 w = None # inertia component weight
 c1 = None # cognitive component constant
 c2 = None # social component constant
@@ -17,7 +16,6 @@ gbest_position = None
 gbest_fitness = None
 
 # Search space
-# Init these
 function = None
 num_dimensions = None
 lower_bound = None # (same across all dimensions)
