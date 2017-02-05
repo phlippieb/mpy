@@ -1,45 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import psodroc.benchmarks.spherical as spherical
 import psodroc.benchmarks.ackley as ackley
-import psodroc.pso.gbest_pso as gbest
+import psodroc.pso.lbest_pso as lbest
 
-# set up gbest to solve the spherical benchmark function
+# set up lbest to solve the ackley benchmark function
 
-gbest.function = ackley.ackley
-gbest.lower_bound = ackley.domain[0]
-gbest.upper_bound = ackley.domain[1]
-gbest.num_dimensions = 5
-gbest.init_pso_defaults()
-gbest.init_swarm(size=25)
+lbest.function = ackley.ackley
+lbest.lower_bound = ackley.domain[0]
+lbest.upper_bound = ackley.domain[1]
+lbest.num_dimensions = 5
+lbest.init_pso_defaults()
+lbest.init_swarm(size=25)
+
 iterations = 100
 
-# example 1: plotting all fitnesses over time
-
-all_fits = np.zeros([iterations, gbest.swarm_size])
+all_fits = np.zeros([iterations, lbest.swarm_size])
 for i in range(0, iterations):
-    gbest.iterate()
-    for index, fitness in np.ndenumerate(gbest.fitnesses):
+    lbest.iterate()
+    for index, fitness in np.ndenumerate(lbest.fitnesses):
         all_fits[i, index] = fitness
 plt.plot(all_fits)
 plt.show()
 
-# example 2: writing best solutions to file
-gbest.init_swarm(size=25)
-solutions = []
-for sample in range(0, 30):
-    for iteration in range(0, iterations):
-        gbest.iterate()
-    solution = min(gbest.fitnesses)
-    solutions.append(solution)
-
-path = './results/fit/gbest.{}.spherical.{}'.format(gbest.swarm_size, gbest.num_dimensions)
-dir = os.path.dirname(path)
-if not os.path.exists(dir):
-    os.makedirs(dir)
-with open(path, 'w') as f:
-    for solution in solutions:
-        str_fitness = '{}\n'.format(solution)
-        f.write(str_fitness)
-f.closed
+best_fits = []
+for fits in all_fits:
+    best_fit = min(fits)
+    best_fits.append(best_fit)
+plt.plot(best_fits)
+plt.show()
