@@ -2,23 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import psodroc.benchmarks.ackley as ackley
-import psodroc.pso.lbest_pso as lbest
+import psodroc.pso.von_neumann_pso as vn
 
-# set up lbest to solve the ackley benchmark function
+# set up Von Neumann PSO to solve the ackley benchmark function
 
-lbest.function = ackley.ackley
-lbest.lower_bound = ackley.domain[0]
-lbest.upper_bound = ackley.domain[1]
-lbest.num_dimensions = 5
-lbest.init_pso_defaults()
-lbest.init_swarm(size=25)
+vn.function = ackley.ackley
+vn.lower_bound = ackley.domain[0]
+vn.upper_bound = ackley.domain[1]
+vn.num_dimensions = 5
+vn.init_pso_defaults()
+vn.init_swarm(size=25)
 
-iterations = 100
+iterations = 1000
 
-all_fits = np.zeros([iterations, lbest.swarm_size])
+all_fits = np.zeros([iterations, vn.swarm_size])
 for i in range(0, iterations):
-    lbest.iterate()
-    for index, fitness in np.ndenumerate(lbest.fitnesses):
+    vn.iterate()
+    for index, fitness in np.ndenumerate(vn.fitnesses):
         all_fits[i, index] = fitness
 plt.plot(all_fits)
 plt.show()
