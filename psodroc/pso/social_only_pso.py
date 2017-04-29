@@ -2,16 +2,13 @@ import numpy as np
 
 # PSO parameters
 w = None # inertia component weight
-c1 = None # cognitive component constant
-c2 = None # social component constant
+c1 = None # social component constant
 
 # Swarm variables
 swarm_size = 0
 positions = None
 velocities = None
 fitnesses = None
-pbest_positions = None
-pbest_fitnesses = None
 gbest_position = None
 gbest_fitness = None
 
@@ -20,7 +17,6 @@ function = None
 num_dimensions = None
 lower_bound = None # (same across all dimensions)
 upper_bound = None
-
 
 def init_swarm(size):
     # Initializes swarm with `size` number of particles.
@@ -39,13 +35,12 @@ def init_swarm(size):
     global velocities
     velocities = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
 
-    global pbest_positions
+    # Personal bests aren't used to guide the swarm,
+    # but they are used here as a convenience to find the global best.
     pbest_positions = np.copy(positions)
-
-    global pbest_fitnesses
     pbest_fitnesses = [function(position) for position in pbest_positions]
-
     gbest_index = np.argmin(pbest_fitnesses)
+
     global gbest_position
     gbest_position = np.copy(pbest_positions[gbest_index])
 
@@ -54,14 +49,11 @@ def init_swarm(size):
 
 
 def init_pso_defaults():
-    # Initializes the algorithm parameters `w`, `c1` and `c2` to commonly used default values.
+    # Initializes the algorithm parameters `w` and `c1` to commonly used default values.
     global w
     w =  0.729844
     global c1
     c1 = 1.49618
-    global c2
-    c2 = 1.49618
-
 
 def iterate():
     # Performs one iteration of the algorithm.
@@ -74,39 +66,23 @@ def iterate():
     global velocities
     global positions
     global fitnesses
-    global pbest_positions
-    global pbest_fitnesses
     global gbest_position
 
     inertia_component = w * velocities
 
     r1 = np.random.rand(swarm_size, num_dimensions)
-    cognitive_component = c1 * r1 * (pbest_positions - positions)
+    social_component = c1 * r1 * (gbest_position - positions)
 
-    r2 = np.random.rand(swarm_size, num_dimensions)
-    social_component = c2 * r2 * (gbest_position - positions)
-
-    unclamped_velocities = inertia_component + cognitive_component + social_component
+    unclamped_velocities = inertia_component + social_component
     velocities = _clamped_velocities(unclamped_velocities)
 
     positions = positions + velocities
 
     fitnesses = [function(position) for position in positions]
 
-    new_pbest_positions = []
-    new_pbest_fitnesses = [] # TODO: use or remove!
-    for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
-        if current_fitness < old_pbest_fitness:
-            new_pbest_positions.append(current_position)
-        else:
-            new_pbest_positions.append(old_pbest_position)
-
-    pbest_positions = new_pbest_positions
-    pbest_fitnesses = [function(position) for position in pbest_positions]
-
-    gbest_index = np.argmin(pbest_fitnesses)
-    gbest_position = pbest_positions[gbest_index]
-    gbest_fitness = pbest_fitnesses[gbest_index]
+    gbest_index = np.argmin(fitnesses)
+    gbest_position = positions[gbest_index]
+    gbest_fitness = fitnesses[gbest_index]
 
 
 def _clamped_velocities(unclamped_velocities):
@@ -115,6 +91,7 @@ def _clamped_velocities(unclamped_velocities):
     clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
     velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)
     return velocities
+
 
 _did_validate_search_space = False
 def _validate_search_space():
@@ -140,8 +117,6 @@ def _validate_algorithm():
         raise Exception("gbest_pso.w was not set")
     if c1 is None:
         raise Exception("gbest_pso.c1 was not set")
-    if c2 is None:
-        raise Exception("gbest_pso.c2 was not set")
     _did_validate_algorithm = True
 
 _did_validate_swarm = False
@@ -154,10 +129,6 @@ def _validate_swarm():
     if velocities is None:
         raise Exception("gbest_pso.init_swarm was not called")
     if fitnesses is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if pbest_positions is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if pbest_fitnesses is None:
         raise Exception("gbest_pso.init_swarm was not called")
     if gbest_position is None:
         raise Exception("gbest_pso.init_swarm was not called")

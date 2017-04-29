@@ -118,20 +118,19 @@ def _update_lbests():
         neighbour_indexes = _neighbourhood_indices_for_index(i)
 
         neighbour1_index = neighbour_indexes[0]
-        neighbour1_position = positions[neighbour1_index]
-        neighbour1_fitness = function(neighbour1_position)
+        neighbour1_pbest_position = pbest_positions[neighbour1_index]
+        neighbour1_pbest_fitness = pbest_fitnesses[neighbour1_index]
 
         neighbour2_index = neighbour_indexes[1]
-        neighbour2_position = positions[neighbour2_index]
-        neighbour2_fitness = function(neighbour2_position)
+        neighbour2_pbest_position = pbest_positions[neighbour2_index]
+        neighbour2_pbest_fitness = pbest_fitnesses[neighbour2_index]
 
-        if neighbour1_fitness < fitnesses[i] or neighbour2_fitness < fitnesses[i]:
-            if neighbour1_fitness < neighbour2_fitness:
-                lbest_positions[i] = neighbour1_position
-                lbest_fitnesses[i] = neighbour1_fitness
-            else:
-                lbest_positions[i] = neighbour2_position
-                lbest_fitnesses[i] = neighbour2_fitness
+        if neighbour1_pbest_fitness < fitnesses[i]:
+            lbest_positions[i] = neighbour1_pbest_position
+            lbest_fitnesses[i] = neighbour1_pbest_fitness
+        elif neighbour2_pbest_fitness < fitnesses[i]:
+            lbest_positions[i] = neighbour2_pbest_position
+            lbest_fitnesses[i] = neighbour2_pbest_fitness
         else:
             lbest_positions[i] = positions[i]
             lbest_fitnesses[i] = fitnesses[i]
@@ -144,7 +143,7 @@ def _neighbourhood_indices_for_index(i):
     return [neighbour1, neighbour2]
 
 def _clamped_velocities(unclamped_velocities):
-    # Calculates and returns clamped velocities by performing `max(min(velocity, minimum_allowed), maximum_allowed)` on each velocity.
+    # Returns the given velocities clamped between lower_bound and upper_bound.
     clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
     clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
     velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)

@@ -123,10 +123,10 @@ def _update_lbests():
         neighbour_right_index = _index_right_of(i)
         neighbour_below_index = _index_below(i)
 
-        neighbour_above_position = positions[neighbour_above_index]
-        neighbour_left_position = positions[neighbour_left_index]
-        neighbour_right_position = positions[neighbour_right_index]
-        neighbour_below_position = positions[neighbour_below_index]
+        neighbour_above_position = pbest_positions[neighbour_above_index]
+        neighbour_left_position = pbest_positions[neighbour_left_index]
+        neighbour_right_position = pbest_positions[neighbour_right_index]
+        neighbour_below_position = pbest_positions[neighbour_below_index]
 
         neighbour_above_fitness = function(neighbour_above_position)
         neighbour_left_fitness = function(neighbour_left_position)
@@ -168,7 +168,7 @@ def _index_above(i):
     if _grid[a_row][i_col] == -1:
         warnings.warn("von_neumann_pso._index_above: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
-    return _grid[a_row][i_col]
+    return _grid[a_row][i_col].astype(int)
 
 def _index_below(i):
     # Given an index (in the swarm), this finds the item below that index (in the grid) and returns its index (in the swarm).
@@ -190,7 +190,7 @@ def _index_below(i):
     if _grid[a_row][i_col] == -1:
         warnings.warn("von_neumann_pso._index_below: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
-    return _grid[a_row][i_col]
+    return _grid[a_row][i_col].astype(int)
 
 def _index_left_of(i):
     # Given an index (in the swarm), this finds the item to the left of that index (in the grid) and returns its index (in the swarm).
@@ -212,7 +212,7 @@ def _index_left_of(i):
     if _grid[i_row][a_col] == -1:
         warnings.warn("von_neumann_pso._index_left_of: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
-    return _grid[i_row][a_col]
+    return _grid[i_row][a_col].astype(int)
 
 def _index_right_of(i):
     # Given an index (in the swarm), this finds the item to the right of that index (in the grid) and returns its index (in the swarm).
@@ -234,7 +234,7 @@ def _index_right_of(i):
     if _grid[i_row][a_col] == -1:
         warnings.warn("von_neumann_pso._index_right_of: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
-    return _grid[i_row][a_col]
+    return _grid[i_row][a_col].astype(int)
 
 _grid = None
 _grid_rows = None
@@ -297,7 +297,7 @@ def _pos_of(val, matrix):
 
 
 def _clamped_velocities(unclamped_velocities):
-    # Calculates and returns clamped velocities by performing `max(min(velocity, minimum_allowed), maximum_allowed)` on each velocity.
+    # Returns the given velocities clamped between lower_bound and upper_bound.
     clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
     clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
     velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)
