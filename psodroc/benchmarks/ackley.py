@@ -9,7 +9,10 @@ def ackley(xs):
     if D == 0:
         raise Exception("ackley.ackley may not have 0 dimensions")
 
-    return -20 * np.exp(-0.2 * (np.sqrt(sum(x * x for x in xs) / D))) - np.exp(sum([np.cos(2 * np.pi * x) for x in xs]) / D) + 20 + np.exp(1)
+    return -20 * np.exp(-0.2 * (np.sqrt(sum(x * x for x in xs) / D))) \
+    - np.exp(sum([np.cos(2 * np.pi * x) for x in xs]) / D) \
+    + 20 \
+    + np.exp(1)
 
 domain = [-32.0, 32.0]
 # min = [0.0, ... 0.0] = 0.0

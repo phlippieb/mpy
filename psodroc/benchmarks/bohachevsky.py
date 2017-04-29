@@ -7,7 +7,11 @@ def bohachevsky(xs):
     if D < 2:
         raise Exception("bohachevsky.bohachevsky must have 2 or more dimensions")
 
-    return sum([np.square(xi) + 2 * np.square(xi1) - 0.3 * np.cos(3 * np.pi * xi) - 0.4 * np.cos(4 * np.pi * xi1) + 0.7 for xi, xi1 in zip(xs[:-1], xs[1:])])
+    return np.sum([ np.square(xi) + 2 * np.square(xi1) \
+                 - 0.3 * np.cos(3 * np.pi * xi) \
+                 - 0.4 * np.cos(4 * np.pi * xi1) \
+                 + 0.7 \
+                 for xi, xi1 in zip(xs[:-1], xs[1:]) ])
 
 domain = [-15.0, 15.0]
 # min = [0.0, ... 0.0] = 0.0
