@@ -2,7 +2,7 @@ import numpy as np
 
 # S. K. Mishra. Some new test functions for global optimization and performance of repulsive particle swarm method. Technical Report 2718, University Library of Munich, Germany, August 2006.
 
-def levy(xs):
+def levy13(xs):
     D = len(xs)
     if D < 2:
         raise Exception("levy.levy must have 2 or more dimensions")
