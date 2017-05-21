@@ -1,6 +1,6 @@
 import numpy as np
 
-# X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82–102, July 1999.
+# X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
 def goldstein_price(x1, x2):
     a1 = np.square(x1 + x2 + 1)
