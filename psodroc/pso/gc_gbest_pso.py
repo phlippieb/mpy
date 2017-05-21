@@ -1,4 +1,4 @@
-imort numpy as np
+import numpy as np
 
 # PSO parameters
 w = None # Inertia weight component
