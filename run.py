@@ -1,15 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import psodroc.benchmarks.ackley as ackley
-import psodroc.pso.von_neumann_pso as pso
+import psodroc.benchmarks.alpine as f
+import psodroc.pso.lbest_pso as pso
 
-pso.function = ackley.ackley
-pso.lower_bound = ackley.domain[0]
-pso.upper_bound = ackley.domain[1]
+pso.function = f.function
+pso.lower_bound = f.min(0)
+pso.upper_bound = f.max(0)
 pso.num_dimensions = 5
 pso.init_pso_defaults()
-pso.init_swarm(size=25)
+pso.init_swarm(size=250)
 
 iterations = 1000
 
@@ -22,5 +22,7 @@ for i in range(0, iterations):
     best_fit = min(all_fits[i])
     best_fits.append(best_fit)
 
-plt.plot(all_fits)
+print("best: {}".format(min(best_fits)))
+
+plt.plot(best_fits)
 plt.show()

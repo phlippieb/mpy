@@ -5,7 +5,13 @@ import numpy as np
 def function(xs, p = 10):
     return -np.sum([np.sin(x) * np.power(np.sin(((i + 1) * np.square(x)) / np.pi), (2 * p)) for i, x in enumerate(xs)])
 
-domain = [0, np.pi]
+# domain = [0, pi] across all dimensions
+def min(d):
+    return 0.0
+
+def max(d):
+    return np.pi
+
 # min (D = 2) ~ -1.8013
 # min (D = 5) ~ -4.6877
 # min (D = 10) ~ -96602 # TODO: might be wrong -- try -9.6602

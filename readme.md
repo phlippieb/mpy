@@ -4,6 +4,8 @@ This is a library that provides PSO algorithms, optimisation benchmark functions
 ## Structure
 The `psodroc` package contains modules for PSO algorithms under `pso` and benchmark functions under `benchmark`. The project root contains an example script that runs the algorithms.
 
+Each benchmark is in a file called `<benchmark name>.py`. In each benchmark file, the actual function implementation is in a function called `function(xs)`, which takes a candidate solution vector as a parameter. Each file also provides the benchmark's domain through functions called `min(d)` and `max(d)`, which respectively return the minimum and maximum allowed `x` value in dimension `d`.
+
 # Install
 This library uses python 2.7 and `numpy`. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. The easiest way to get all of that is to install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy jupyter matplotlib`.
 
