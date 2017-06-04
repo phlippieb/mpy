@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import psodroc.benchmarks.alpine as f
+import psodroc.benchmarks.pathological as f
 import psodroc.pso.lbest_pso as pso
 
 pso.function = f.function
