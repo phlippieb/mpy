@@ -21,8 +21,6 @@ def _test_min_1():
         m = np.full(D, 0.)
         assert function(m) == 0.
 
-def _test_min_2():
-    for D in [1, 2, 3, 5, 10, 20, 30, 50, 100]:
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
             m = np.full(D, 0.)
