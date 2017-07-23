@@ -9,9 +9,9 @@ def function(xs):
 
 # Domain is [-100, 100] across all dimensions
 def min(d):
-    return -100
+    return -100.0
 
 def max(d):
-    return 100
+    return 100.0
 
 # Minimum is [0, ..., 0] = 0

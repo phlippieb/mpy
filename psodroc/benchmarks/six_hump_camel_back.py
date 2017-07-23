@@ -18,9 +18,9 @@ def function(xs):
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
-    return -5
+    return -5.0
 
 def max(d):
-    return 5
+    return 5.0
 
 # Minimum is at [0.08983, -0.7126] and [-0.08983, 0.7126], and is -1.03162842755

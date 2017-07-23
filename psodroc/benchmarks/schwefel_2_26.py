@@ -7,9 +7,9 @@ def function(xs):
 
 # Domain is [-500, 500] across all dimensions
 def min(d):
-    return -500
+    return -500.0
 
 def max(d):
-    return 500
+    return 500.0
 
 # Minimum is [420.9687, ..., 420.9687]

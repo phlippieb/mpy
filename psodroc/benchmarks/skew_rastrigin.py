@@ -11,9 +11,9 @@ def y(x):
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
-    return -5
+    return -5.0
 
 def max(d):
-    return 5
+    return 5.0
 
 # Minimum is [0, ..., 0] = 0

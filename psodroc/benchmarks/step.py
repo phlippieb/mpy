@@ -7,10 +7,10 @@ def function(xs):
 
 # domain is [-20, 20] across all dimensions
 def min(d):
-    return -20
+    return -20.0
 
 def max(d):
-    return 20
+    return 20.0
 
 # min is [0, ..., 0] = 0
 # though, seemingly, it is really [(-0.5, 0.5), ..., (-0.5, 0.5)]?
