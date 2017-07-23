@@ -7,7 +7,14 @@ The `psodroc` package contains modules for PSO algorithms under `pso` and benchm
 Each benchmark is in a file called `<benchmark name>.py`. In each benchmark file, the actual function implementation is in a function called `function(xs)`, which takes a candidate solution vector as a parameter. Each file also provides the benchmark's domain through functions called `min(d)` and `max(d)`, which respectively return the minimum and maximum allowed `x` value in dimension `d`.
 
 # Install
-This library uses python 2.7 and `numpy`. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. The easiest way to get all of that is to install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy jupyter matplotlib`.
+This library uses python 2.7 and `numpy`, and `pytest` for unit tests. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. To get all of that, you can install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy pytest jupyter matplotlib`.
+
+# Run
+
+The project contains a makefile, which can be used to run some basic commands:
+- `make run` runs a file named `run.py`, which is used as the main entrypoint for the project.
+- `make clean` removes temporary files.
+- `make test` runs all unit tests using `pytest`.
 
 # Coding style
 Instead of aiming to create an elegant, generic, extensible library, I opted to make the code straight-forward and clear. My chosen approach can be summed up as "clarity over elegance". This especially caused me to reject DRY (don't repeat yourself) in favour of defining each algorithm, benchmark and measurement as an independent script. There will be lots of repeated code, but any part of the library can be fully understood by simply reading its file from top to bottom, without referencing oany other code or files. No base classes or common behaviour is factored out. This is a deliberate choice.
