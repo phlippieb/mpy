@@ -4,7 +4,7 @@ import numpy as np
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
-def functions(xs):
+def function(xs):
     D = len(xs)
     if D < 1:
         raise Exception("ackley.function must have 1 or more dimensions.")
