@@ -2,7 +2,7 @@ import numpy as np
 
 # N. Hansen and S. Kern. Evaluating the CMA Evolution Strategy on Multimodal Test Functions. In Proceedings of the 8th International Conference on Parallel Problem Solving from Nature, volume 3242 of Lecture Notes in Computer Science, pages 282-291. Springer Berlin / Heidelberg, 2004.
 
-def funcion(xs):
+def function(xs):
     D = len(xs)
     return 10 * D + np.sum([np.square(y(x)) - (10 * np.cos(2 * np.pi * y(x))) for x in xs])
 
