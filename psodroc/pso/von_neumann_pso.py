@@ -254,7 +254,7 @@ def _init_grid():
     _grid_rows = _rows_of_square_filled(_grid_cols, swarm_size)
 
     # Fill with -1 to indicate empty cells.
-    _grid = np.full((_grid_rows, _grid_cols), -1)
+    _grid = np.full((_grid_rows, _grid_cols), -1, dtype=np.int64)
 
     # Iterate over grid and fill with swarm indices.
     index = 0
