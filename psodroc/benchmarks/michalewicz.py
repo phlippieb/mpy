@@ -16,3 +16,17 @@ def max(d):
 # min (D = 5) ~ -4.6877
 # min (D = 10) ~ -96602 # TODO: might be wrong -- try -9.6602
 # min (D = 30) ~ -29.6309
+
+# Tests:
+import pytest as pt
+
+def _test_min():
+    # The min input is known at 2 dimensions; assert:
+    m2 = np.array([2.2, 1.57])
+    assert function(m2) == pt.approx(-1.8013, 1e-4)
+
+    # The min values are known at 5 and 10 dimensions; assert nothing is lower:
+    m5 = -4.6877
+    for i in range(100):
+        p = np.random.uniform(low=min(0), high=max(0), size=5)
+        assert m5 <= function(p)
