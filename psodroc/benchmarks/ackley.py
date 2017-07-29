@@ -24,8 +24,8 @@ def max(d):
 # Minimum is [0.0, ... 0.0] = 0.0
 
 # Tests:
-
 import pytest as pt
+
 def _test_min():
     for D in [1, 2, 5, 10, 20, 50]:
         m = np.full(D, 0.0)
