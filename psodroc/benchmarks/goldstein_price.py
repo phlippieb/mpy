@@ -25,3 +25,25 @@ def max(d):
     return 2.0
 
 # min = [0, -1] = 3
+
+# Tests:
+import pytest as pt
+
+def _test_assert_dimensions():
+    xss = [[], [1], [1,2,3], [1,2,3,4,5]]
+    for xs in xss:
+        with pt.raises(Exception):
+            function(xs)
+
+def _test_min():
+    m = np.array([0., -1.])
+    assert function(m) == 3
+
+    for i in range(100):
+        p = np.random.uniform(low=min(0), high=min(0), size=2)
+        # Check that the minimum is less than the random point, unless the random point is the minimum:
+        assert p.all() == m.all() or function(m) < function(p)
+
+def _test_other():
+    xs = [2., 2.]
+    assert function(xs) == 76728
