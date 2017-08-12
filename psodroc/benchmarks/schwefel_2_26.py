@@ -13,3 +13,21 @@ def max(d):
     return 500.0
 
 # Minimum is [420.9687, ..., 420.9687]
+
+# Tests:
+import pytest as pt
+
+def _test_min():
+    for D in [1, 2, 5, 10, 20, 50]:
+        m = np.full(D, 420.9687)
+        y = -D * 418.9829
+        assert function(m) == pt.approx(y)
+
+        for i in range(100):
+            p = np.random.uniform(low=min(0), high=max(0), size=D)
+            # Check that the minimum is less than the random point, unless the random point is the minimum:
+            assert p.all() == m.all() or function(m) < function(p)
+
+def _test_other():
+    xs = [1., 2., 3.]
+    assert function(xs) == pt.approx(-5.77808281)
