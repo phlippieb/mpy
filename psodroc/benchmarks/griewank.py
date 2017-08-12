@@ -4,7 +4,7 @@ import numpy as np
 
 def function(xs):
     return (np.sum([x * x for x in xs]) / 4000.0) \
-    - np.prod([np.cos(x / np.sqrt(i+1)) for i, x in enumerate(xs)]) \
+    - np.prod([np.cos(x / np.sqrt(i)) for i, x in enumerate(xs, 1)]) \
     + 1
 
 # domain = [-600.0, 600.0] across all dimensions

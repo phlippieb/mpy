@@ -4,8 +4,8 @@ import numpy as np
 
 def function(xs):
     return np.sum([np.square(x) for x in xs]) \
-    + np.square(np.sum([((i+1)*x)/2 for i, x in enumerate(xs)])) \
-    + np.power(np.sum([((i+1)*x)/2 for i, x in enumerate(xs)]), 4)
+    + np.square(np.sum([(i*x)/2 for i, x in enumerate(xs, 1)])) \
+    + np.power(np.sum([(i*x)/2 for i, x in enumerate(xs, 1)]), 4)
 
 # domain = [-5, 10] across all dimensions
 def min(d):
