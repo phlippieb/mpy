@@ -5,18 +5,18 @@ import numpy as np
 def function(xs, kMax=20):
     ks = range(kMax+1) # Range is exclusive; function definition is inclusive
 
-    return np.sum([np.sum([np.power(0.5, k) * np.cos(2 * np.pi * np.power(3, k) * (x + 0.5)) for k in ks]) for x in xs]) \
+    return np.sum(np.sum(np.power(.5, k) * np.cos(2. * np.pi * np.power(3., k) * (x + .5)) for k in ks) for x in xs) \
     - (len(xs) * _constant(ks))
 
 def _constant(ks):
-    return np.sum([np.power(0.5, k) * np.cos(2 * np.pi * np.power(3, k) * 0.5) for k in ks])
+    return np.sum([np.power(.5, k) * np.cos(2. * np.pi * np.power(3, k) * .5) for k in ks])
 
 # domain is [-0.5, -0.5] in all dimensions
 def min(d):
-    return -0.5
+    return -.5
 
 def max(d):
-    return 0.5
+    return .5
 
 # min = [0, ..., 0] = 0
 
@@ -26,7 +26,7 @@ import pytest as pt
 def _test_min():
     for D in [2, 5, 10, 20, 50]:
         m = np.full(D, 0.)
-        assert function(m) == pt.approx(0.0)
+        assert function(m) == 0.
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)

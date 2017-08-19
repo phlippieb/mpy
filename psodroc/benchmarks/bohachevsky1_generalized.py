@@ -7,18 +7,18 @@ def function(xs):
     if D < 2:
         raise Exception("bohachevsky1_generalized.function must have 2 or more dimensions.")
 
-    return np.sum([ np.square(xi) + 2 * np.square(xi1) \
-                 - 0.3 * np.cos(3 * np.pi * xi) \
-                 - 0.4 * np.cos(4 * np.pi * xi1) \
-                 + 0.7 \
+    return np.sum([ np.square(xi) + 2. * np.square(xi1) \
+                 - .3 * np.cos(3. * np.pi * xi) \
+                 - .4 * np.cos(4. * np.pi * xi1) \
+                 + .7 \
                  for xi, xi1 in zip(xs[:-1], xs[1:]) ])
 
 # domain = [-15.0, 15.0] across all dimensions
 def min(d):
-    return -15.0
+    return -15.
 
 def max(d):
-    return 15.0
+    return 15.
 
 # min = [0.0, ... 0.0] = 0.0
 
@@ -34,7 +34,7 @@ def _test_assert_dimensions():
 def _test_min():
     for D in [2, 5, 10, 20, 50]:
         m = np.full(D, 0.)
-        assert function(m) == 0.0
+        assert function(m) == 0.
 
         for i in range(100):
             p = np.random.uniform(low=min(2), high=min(2), size=D)

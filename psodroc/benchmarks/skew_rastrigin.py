@@ -4,10 +4,8 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    return 10 * D + np.sum([np.square(y(x)) - (10 * np.cos(2 * np.pi * y(x))) for x in xs])
-
-def y(x):
-    return 10 * x if x > 0 else x
+    ys = [10. * x if x > 0 else x for x in xs]
+    return 10. * D + np.sum(np.square(y) - (10. * np.cos(2. * np.pi * y)) for y in ys)
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
@@ -24,7 +22,7 @@ import pytest as pt
 def _test_min():
     for D in [2, 5, 10, 20, 50]:
         m = np.full(D, 0.)
-        assert function(m) == pt.approx(0.0)
+        assert function(m) == pt.approx(0.)
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
@@ -33,6 +31,6 @@ def _test_min():
 
 def _test_other():
     xs = [1., 2.]
-    assert function(xs) == 500
+    assert function(xs) == 500.
     xs = [-1., -2.]
-    assert function(xs) == 5
+    assert function(xs) == 5.

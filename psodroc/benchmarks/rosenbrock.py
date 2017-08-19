@@ -7,9 +7,8 @@ def function(xs):
     if D < 2:
         raise Exception("rosenbrock.function must have 2 or more dimensions.")
 
-    return np.sum([(100 * np.square(xi1 - np.square(xi))) \
-                   + np.square(xi - 1) \
-                   for xi, xi1 in zip(xs[:-1], xs[1:])])
+    return np.sum((100. * np.square(xi1 - np.square(xi))) + np.square(xi - 1.) \
+        for xi, xi1 in zip(xs[:-1], xs[1:]))
 
 
 # Domain is [-2.048, 2.048] across all dimensions
@@ -27,7 +26,7 @@ import pytest as pt
 def _test_min():
     for D in [2, 5, 10, 20, 50]:
         m = np.full(D, 1.)
-        assert function(m) == pt.approx(0.0)
+        assert function(m) == pt.approx(0.)
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)

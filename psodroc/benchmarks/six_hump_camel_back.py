@@ -9,19 +9,19 @@ def function(xs):
     x1 = xs[0]
     x2 = xs[1]
 
-    return (4 * np.square(x1)) \
-    - (2.1 * np.power(x1, 4)) \
-    + (np.power(x1, 6) / 3) \
+    return (4. * np.square(x1)) \
+    - (2.1 * np.power(x1, 4.)) \
+    + (np.power(x1, 6.) / 3.) \
     + (x1 * x2) \
-    - (4 * np.square(x2)) \
-    + (4 * np.power(x2, 4))
+    - (4. * np.square(x2)) \
+    + (4. * np.power(x2, 4.))
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
-    return -5.0
+    return -5.
 
 def max(d):
-    return 5.0
+    return 5.
 
 # Minimum is at [0.08983, -0.7126] and [-0.08983, 0.7126], and is -1.03162842755
 
@@ -48,6 +48,6 @@ def _test_min():
 
 # def _test_other():
     xs = [0., 0.]
-    assert function(xs) == 0
+    assert function(xs) == 0.
     xs = [-1., 1.]
     assert function(xs) == pt.approx(1.2333333)

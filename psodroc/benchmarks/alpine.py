@@ -3,14 +3,14 @@ import numpy as np
 # S. Rahnamayan, H. R. Tizhoosh, and M. M. A. Salama. A novel population initialization method for accelerating evolutionary algorithms. Computers & Mathematics with Applications, 53(10):1605-1614, May 2007.
 
 def function(xs):
-    return sum([ np.abs(x * np.sin(x) + 0.1 * x) for x in xs ])
+    return sum(np.abs(x * np.sin(x) + .1 * x) for x in xs)
 
 # domain = [-10.0, 10.0] across all dimensions
 def min(d):
-    return -10.0
+    return -10.
 
 def max(x):
-    return 10.0
+    return 10.
 
 # min = [0.0, ... 0.0] = 0.0
 
@@ -19,15 +19,14 @@ def max(x):
 import pytest as pt
 def _test_min():
     for D in [1, 2, 5, 10, 20, 50]:
-        m = np.full(D, 0.0)
-        assert function(m) == 0.0
+        m = np.full(D, 0.)
+        assert function(m) == 0.
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
-            m = np.full(D, 0.)
             # Check that the minimum is less than the random point, unless the random point is the minimum:
             assert p.all() == m.all() or function(m) < function(p)
 
 def _test_other():
-    xs = [1, 2]
+    xs = [1., 2.]
     assert function(xs) == 2.96006583845926

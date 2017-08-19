@@ -4,7 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    return np.sum([np.square(np.sum(xs[j] for j in range(i+1))) for i in range(D)])
+    return np.sum(np.square(np.sum(xs[:i+1])) for i in range(D))
 
 # domain = [-100, 100] across all dimensions
 def min(d):
@@ -24,7 +24,6 @@ def _test_min():
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
-            m = np.full(D, 0.)
             # Check that the minimum is less than the random point, unless the random point is the minimum:
             assert p.all() == m.all() or function(m) < function(p)
 

@@ -3,16 +3,16 @@ import numpy as np
 # S. K. Mishra. Performance of Repulsive Particle Swarm Method in Global Optimization of Some Important Test Functions: A Fortran Program. Technical report, Social Science Research Network (SSRN), August 2006.
 
 def function(xs):
-    return np.sum([np.square(x) for x in xs]) \
-    + np.square(np.sum([(i*x)/2 for i, x in enumerate(xs, 1)])) \
-    + np.power(np.sum([(i*x)/2 for i, x in enumerate(xs, 1)]), 4)
+    a = np.sum(np.square(xs))
+    b = np.sum((i*x)/2. for i, x in enumerate(xs, 1))
+    return a + np.square(b) + np.power(b, 4.)
 
 # domain = [-5, 10] across all dimensions
 def min(d):
-    return -5.0
+    return -5.
 
 def max(d):
-    return 10.0
+    return 10.
 
 # min = [0, ..., 0] = 0
 
@@ -22,7 +22,7 @@ import pytest as pt
 def _test_min():
     for D in [1, 2, 5, 10, 20, 50]:
         m = np.full(D, 0.)
-        assert function(m) == pt.approx(0.0)
+        assert function(m) == 0.
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)

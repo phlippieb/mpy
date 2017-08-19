@@ -12,9 +12,9 @@ def function(xs):
 
     return np.square(x1) \
         + 2 * np.square(x2) \
-        - 0.3 * np.cos(3 * np.pi * x1) \
-        - 0.4 * np.cos(4 * np.pi * x2) \
-        + 0.7
+        - .3 * np.cos(3. * np.pi * x1) \
+        - .4 * np.cos(4. * np.pi * x2) \
+        + .7
 
 # Domain is [-100, 100] for x1 and x2
 def min(d):
@@ -37,7 +37,7 @@ def _test_assert_dimensions():
 
 def _test_min():
     m = np.array([0., 0.])
-    assert function(m) == 0.0
+    assert function(m) == 0.
 
     for i in range(100):
         p = np.random.uniform(low=min(2), high=min(2), size=2)
@@ -47,4 +47,3 @@ def _test_min():
 def _test_other():
     xs = np.array([1., 2.])
     assert function(xs) == 9.6
-    

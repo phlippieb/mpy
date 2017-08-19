@@ -11,7 +11,7 @@ def function(xs):
 
     return np.square(1.5 - x1 + (x1 * x2)) \
     + np.square(2.25 - x1 + (x1 * np.square(x2))) \
-    + np.square(2.625 - x1 + (x1 * np.power(x2, 3)))
+    + np.square(2.625 - x1 + (x1 * np.power(x2, 3.)))
 
 # domain = [-4.5, 4.5] across all dimensions
 def min(d):
@@ -31,8 +31,8 @@ def _test_assert_dimensions():
             function(xs)
 
 def _test_min():
-    m = np.array([3., 0.5])
-    assert function(m) == 0.0
+    m = np.array([3., .5])
+    assert function(m) == 0.
 
     for i in range(100):
         p = np.random.uniform(low=min(2), high=min(2), size=2)

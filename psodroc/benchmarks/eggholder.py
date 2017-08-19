@@ -10,15 +10,15 @@ def function(xs):
     x1 = xs[0]
     x2 = xs[1]
 
-    return (-(x2 + 47) * (np.sin(np.sqrt(np.abs((x2 + (x1/2) + 47)))))) \
-    + (-x1 * (np.sin(np.sqrt(np.abs(x1 - (x2 + 47))))))
+    return (-(x2 + 47.) * (np.sin(np.sqrt(np.abs((x2 + (x1/2.) + 47.)))))) \
+    + (-x1 * (np.sin(np.sqrt(np.abs(x1 - x2 - 47.)))))
 
 # domain = [-512.0, 512.0] across all dimensions
 def min(d):
-    return -512.0
+    return -512.
 
 def max(d):
-    return 512.0
+    return 512.
 
 # min = [512, 404.23181] ~ -959.640662720823
 
@@ -41,5 +41,5 @@ def _test_min():
         assert p.all() == m.all() or function(m) < function(p)
 
 def _test_other():
-    xs = [200, 100]
+    xs = [200., 100.]
     assert function(xs) == pt.approx(-166.745338888944)

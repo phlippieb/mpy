@@ -3,15 +3,14 @@ import numpy as np
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
 def function(xs):
-    return np.sum([np.abs(x) for x in xs]) \
-    + np.prod([np.abs(x) for x in xs])
+    return np.sum(np.abs(xs)) + np.prod(np.abs(xs))
 
 # Domain is [-10, 10] across all dimensions
 def min(d):
-    return -10.0
+    return -10.
 
 def max(d):
-    return 10.0
+    return 10.
 
 # Minimum is at [0, ..., 0] = 0
 
@@ -21,7 +20,7 @@ import pytest as pt
 def _test_min():
     for D in [2, 5, 10, 20, 50]:
         m = np.full(D, 0.)
-        assert function(m) == pt.approx(0.0)
+        assert function(m) == pt.approx(0.)
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)

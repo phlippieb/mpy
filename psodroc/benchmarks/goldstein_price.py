@@ -10,19 +10,19 @@ def function(xs):
     x2 = xs[1]
 
     a1 = np.square(x1 + x2 + 1)
-    a2 = 19 - (14 * x1) + (3 * np.square(x2)) - (14 * x2) + (6 * x1 * x2) + (3 * np.square(x2))
-    a = 1 + (a1 * a2)
-    b1 = np.square((2 * x1) - (3 * x2))
-    b2 = 18 - (32 * x1) + (12 * np.square(x1)) + (48 * x2) - (36 * x1 * x2) + (27 * np.square(x2))
-    b = 30 + (b1 * b2)
+    a2 = 19. - (14. * x1) + (3. * np.square(x1)) - (14. * x2) + (6. * x1 * x2) + (3. * np.square(x2))
+    a = 1. + (a1 * a2)
+    b1 = np.square((2. * x1) - (3. * x2))
+    b2 = 18. - (32. * x1) + (12. * np.square(x1)) + (48. * x2) - (36. * x1 * x2) + (27. * np.square(x2))
+    b = 30. + (b1 * b2)
     return a * b
 
 # domain = [-2.0, 2.0] across all dimensions
 def min(d):
-    return -2.0
+    return -2.
 
 def max(d):
-    return 2.0
+    return 2.
 
 # min = [0, -1] = 3
 
@@ -37,7 +37,7 @@ def _test_assert_dimensions():
 
 def _test_min():
     m = np.array([0., -1.])
-    assert function(m) == 3
+    assert function(m) == 3.
 
     for i in range(100):
         p = np.random.uniform(low=min(0), high=min(0), size=2)
@@ -46,4 +46,4 @@ def _test_min():
 
 def _test_other():
     xs = [2., 2.]
-    assert function(xs) == 76728
+    assert function(xs) == 76728.
