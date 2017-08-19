@@ -153,50 +153,36 @@ def _clamped_velocities(unclamped_velocities):
 _did_validate_search_space = False
 def _validate_search_space():
     global _did_validate_search_space
-    if _did_validate_search_space: # Only check once
-        return
-    if function is None:
-        raise Exception("lbest_pso.function was not set")
-    if num_dimensions is None:
-        raise Exception("lbest_pso.num_dimensions was not set")
-    if lower_bound is None:
-        raise Exception("lbest_pso.lower_bound was not set")
-    if upper_bound is None:
-        raise Exception("lbest_pso.upper_bound was not set")
+    if _did_validate_search_space: return
+
+    assert function is not None, "lbest_pso.function was not set"
+    assert num_dimensions is not None, "lbest_pso.num_dimensions was not set"
+    assert lower_bound is not None, "lbest_pso.lower_bound was not set"
+    assert upper_bound is not None, "lbest_pso.upper_bound was not set"
     _did_validate_search_space = True
 
 
 _did_validate_algorithm = False
 def _validate_algorithm():
     global _did_validate_algorithm
-    if _did_validate_algorithm:
-        return
-    if w is None:
-        raise Exception("lbest_pso.w was not set")
-    if c1 is None:
-        raise Exception("lbest_pso.c1 was not set")
-    if c2 is None:
-        raise Exception("lbest_pso.c2 was not set")
+    if _did_validate_algorithm: return
+
+    assert w is not None, "lbest_pso.w was not set"
+    assert c1 is not None, "lbest_pso.c1 was not set"
+    assert c2 is not None, "lbest_pso.c2 was not set"
     _did_validate_algorithm = True
 
 
 _did_validate_swarm = False
 def _validate_swarm():
     global _did_validate_swarm
-    if _did_validate_swarm:
-        return
-    if positions is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if velocities is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if fitnesses is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if pbest_positions is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if pbest_fitnesses is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if lbest_positions is None:
-        raise Exception("lbest_pso.init_swarm was not called")
-    if lbest_fitnesses is None:
-        raise Exception("lbest_pso.init_swarm was not called")
+    if _did_validate_swarm: return
+
+    assert positions is not None, "lbest_pso.init_swarm was not called"
+    assert velocities is not None, "lbest_pso.init_swarm was not called"
+    assert fitnesses is not None, "lbest_pso.init_swarm was not called"
+    assert pbest_positions is not None, "lbest_pso.init_swarm was not called"
+    assert pbest_fitnesses is not None, "lbest_pso.init_swarm was not called"
+    assert lbest_positions is not None, "lbest_pso.init_swarm was not called"
+    assert lbest_fitnesses is not None, "lbest_pso.init_swarm was not called"
     _did_validate_swarm = True

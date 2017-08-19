@@ -185,14 +185,10 @@ def _clamped_velocities(unclamped_velocities):
 _did_validate_search_space = False
 def _validate_search_space():
     global _did_validate_search_space
-    if _did_validate_search_space: # Only check once
-        return
-    if function is None:
-        raise Exception("gc_gbest_pso.function was not set")
-    if num_dimensions is None:
-        raise Exception("gc_gbest_pso.num_dimensions was not set")
-    if lower_bound is None:
-        raise Exception("gc_gbest_pso.lower_bound was not set")
-    if upper_bound is None:
-        raise Exception("gc_gbest_pso.upper_bound was not set")
+    if _did_validate_search_space: return
+
+    assert function is not None, "gc_gbest_pso.function was not set"
+    assert num_dimensions is not None, "gc_gbest_pso.num_dimensions was not set"
+    assert lower_bound is not None, "gc_gbest_pso.lower_bound was not set"
+    assert upper_bound is not None, "gc_gbest_pso.upper_bound was not set"
     _did_validate_search_space = True

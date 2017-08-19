@@ -115,33 +115,23 @@ def _gaussian(mean, deviation):
 _did_validate_search_space = False
 def _validate_search_space():
     global _did_validate_search_space
-    if _did_validate_search_space: # Only check once
-        return
-    if function is None:
-        raise Exception("gbest_pso.function was not set")
-    if num_dimensions is None:
-        raise Exception("gbest_pso.num_dimensions was not set")
-    if lower_bound is None:
-        raise Exception("gbest_pso.lower_bound was not set")
-    if upper_bound is None:
-        raise Exception("gbest_pso.upper_bound was not set")
+    if _did_validate_search_space: return
+
+    assert function is not None, "gbest_pso.function was not set"
+    assert num_dimensions is not None, "gbest_pso.num_dimensions was not set"
+    assert lower_bound is not None, "gbest_pso.lower_bound was not set"
+    assert upper_bound is not None, "gbest_pso.upper_bound was not set"
     _did_validate_search_space = True
 
 _did_validate_swarm = False
 def _validate_swarm():
     global _did_validate_swarm
-    if _did_validate_swarm:
-        return
-    if positions is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if fitnesses is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if pbest_positions is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if pbest_fitnesses is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if gbest_position is None:
-        raise Exception("gbest_pso.init_swarm was not called")
-    if gbest_fitness is None:
-        raise Exception("gbest_pso.init_swarm was not called")
+    if _did_validate_swarm: return
+
+    assert positions is not None, "gbest_pso.init_swarm was not called"
+    assert fitnesses is not None, "gbest_pso.init_swarm was not called"
+    assert pbest_positions is not None, "gbest_pso.init_swarm was not called"
+    assert pbest_fitnesses is not None, "gbest_pso.init_swarm was not called"
+    assert gbest_position is not None, "gbest_pso.init_swarm was not called"
+    assert gbest_fitness is not None, "gbest_pso.init_swarm was not called"
     _did_validate_swarm = True
