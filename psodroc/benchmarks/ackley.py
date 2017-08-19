@@ -6,8 +6,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D < 1:
-        raise Exception("ackley.function must have 1 or more dimensions.")
+    assert D > 0, "ackley.function must have 1 or more dimensions."
 
     return -20. * np.exp(-.2 * (np.sqrt(sum(np.square(x) for x in xs) / D))) \
     - np.exp(sum(np.cos(2. * np.pi * x) for x in xs) / D) \

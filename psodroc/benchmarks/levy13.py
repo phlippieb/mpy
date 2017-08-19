@@ -4,8 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D != 2:
-        raise Exception("levy13.function is only defined for 2")
+    assert D == 2, "levy13.function is only defined for 2"
     x1 = xs[0]
     x2 = xs[1]
 

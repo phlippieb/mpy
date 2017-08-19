@@ -4,8 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D < 2:
-        raise Exception("bohachevsky1_generalized.function must have 2 or more dimensions.")
+    assert D > 1, "bohachevsky1_generalized.function must have 2 or more dimensions."
 
     return np.sum([ np.square(xi) + 2. * np.square(xi1) \
                  - .3 * np.cos(3. * np.pi * xi) \

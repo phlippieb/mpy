@@ -4,8 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D < 2:
-        raise Exception("Pathological.function must have 2 or more dimensions.")
+    assert D > 1, "Pathological.function must have 2 or more dimensions."
 
     result = 0
     for xi, xi1 in zip(xs[:-1], xs[1:]):

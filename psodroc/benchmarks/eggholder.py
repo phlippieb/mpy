@@ -5,8 +5,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D != 2:
-        raise Exception("eggholder.function must have exactly 2 dimensions.")
+    assert D == 2, "eggholder.function must have exactly 2 dimensions."
     x1 = xs[0]
     x2 = xs[1]
 

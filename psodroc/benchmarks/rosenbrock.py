@@ -4,8 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    if D < 2:
-        raise Exception("rosenbrock.function must have 2 or more dimensions.")
+    assert D > 1, "rosenbrock.function must have 2 or more dimensions."
 
     return np.sum((100. * np.square(xi1 - np.square(xi))) + np.square(xi - 1.) \
         for xi, xi1 in zip(xs[:-1], xs[1:]))
