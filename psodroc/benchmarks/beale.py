@@ -5,8 +5,7 @@ import numpy as np
 def function(xs):
     D = len(xs)
     assert D == 2, "beale.function must have exactly 2 dimensions."
-    x1 = xs[0]
-    x2 = xs[1]
+    (x1, x2) = (xs[0], xs[1])
 
     return np.square(1.5 - x1 + (x1 * x2)) \
     + np.square(2.25 - x1 + (x1 * np.square(x2))) \

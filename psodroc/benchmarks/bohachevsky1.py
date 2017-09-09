@@ -5,9 +5,7 @@ import numpy as np
 def function(xs):
     D = len(xs)
     assert D == 2, "bohachevsky1.function is only defined for 2 dimensions."
-
-    x1 = xs[0]
-    x2 = xs[1]
+    (x1, x2) = (xs[0], xs[1])
 
     return np.square(x1) \
         + 2 * np.square(x2) \

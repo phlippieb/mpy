@@ -5,8 +5,7 @@ import numpy as np
 def function(xs):
     D = len(xs)
     assert D == 2, "goldstein_price.function must have exactly 2 dimensions."
-    x1 = xs[0]
-    x2 = xs[1]
+    (x1, x2) = (xs[0], xs[1])
 
     a1 = np.square(x1 + x2 + 1)
     a2 = 19. - (14. * x1) + (3. * np.square(x1)) - (14. * x2) + (6. * x1 * x2) + (3. * np.square(x2))

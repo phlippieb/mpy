@@ -5,8 +5,7 @@ import numpy as np
 def function(xs):
     D = len(xs)
     assert D == 2, "six_hump_camel_back.function must have exactly 2 dimensions."
-    x1 = xs[0]
-    x2 = xs[1]
+    (x1, x2) = (xs[0], xs[1])
 
     return (4. * np.square(x1)) \
     - (2.1 * np.power(x1, 4.)) \
