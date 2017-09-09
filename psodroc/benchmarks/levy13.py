@@ -5,8 +5,7 @@ import numpy as np
 def function(xs):
     D = len(xs)
     assert D == 2, "levy13.function is only defined for 2"
-    x1 = xs[0]
-    x2 = xs[1]
+    (x1, x2) = (xs[0], xs[1])
 
     return np.square(np.sin(3 * np.pi * x1)) \
         + np.square(x1 - 1.) * (1. + np.square(np.sin(3. * np.pi * x2))) \
@@ -19,7 +18,7 @@ def min(d):
 def max(d):
     return 10.
 
-# Minimum is [1.0, ... 1.0] = 0.0
+# Minimum is [1.0, 1.0] = 0.0
 
 # Tests:
 import pytest as pt
