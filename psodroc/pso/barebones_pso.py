@@ -45,6 +45,10 @@ def init_swarm(size):
     gbest_position = pbest_positions[gbest_index]
     gbest_fitness = pbest_fitnesses[gbest_index]
 
+def init_pso_defaults():
+    # Nothing to init
+    return
+
 
 def iterate():
     # Performs one iteration of the algorithm.
@@ -71,7 +75,6 @@ def iterate():
 
     # Update the personal global best positions and fitnesses.
     new_pbest_positions = []
-    new_pbest_fitnesses = []
     for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
         if current_fitness < old_pbest_fitness:
             new_pbest_positions.append(current_position)
@@ -111,6 +114,7 @@ def _gaussian(mean, deviation):
         i += 1
     return result
 
+# Validation:
 
 _did_validate_search_space = False
 def _validate_search_space():
