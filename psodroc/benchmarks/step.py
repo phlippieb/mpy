@@ -26,8 +26,7 @@ def _test_min():
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
             # Check that the minimum is less than the random point, unless the random point is the minimum:
-            # TODO: Account for this: for xs close to m, result is also 0.
-            assert p.all() == m.all() or function(m) < function(p)
+            assert p.all() == m.all() or function(m) <= function(p)
 
 def _test_other():
     xs = [1., 2.]
