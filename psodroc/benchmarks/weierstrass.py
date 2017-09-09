@@ -35,4 +35,4 @@ def _test_min():
 
 def _test_other():
     xs = [.1, .1]
-    assert function(xs, kMax=2) == pt.approx(1.786474508)
+    assert function(xs, kMax=2) == pt.approx(1.786474508, rel=1e-9)

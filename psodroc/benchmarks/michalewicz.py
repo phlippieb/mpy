@@ -23,7 +23,7 @@ import pytest as pt
 def _test_min():
     # The min input is known at 2 dimensions; assert:
     m2 = np.array([2.2, 1.57])
-    assert function(m2) == pt.approx(-1.8013, 1e-4)
+    assert function(m2) == pt.approx(-1.8013, abs=1e-3)
 
     # The min values are known at 5 and 10 dimensions; assert nothing is lower:
     m5 = -4.6877

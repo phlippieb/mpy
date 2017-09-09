@@ -36,8 +36,8 @@ def _test_min():
     m1 = np.array([0.08983, -0.7126])
     m2 = np.array([-0.08983, 0.7126])
     y = -1.03162842755
-    assert function(m1) == pt.approx(y)
-    assert function(m2) == pt.approx(y)
+    assert function(m1) == pt.approx(y, rel=1e-10)
+    assert function(m2) == pt.approx(y, rel=1e-10)
 
     for i in range(100):
         p = np.random.uniform(low=min(0), high=min(0), size=2)

@@ -21,7 +21,7 @@ def _test_min():
     for D in [1, 2, 5, 10, 20, 50]:
         m = np.full(D, 420.9687)
         y = -D * 418.9829
-        assert function(m) == pt.approx(y)
+        assert function(m) == pt.approx(y, rel=1e-6)
 
         for i in range(100):
             p = np.random.uniform(low=min(0), high=max(0), size=D)
@@ -30,4 +30,4 @@ def _test_min():
 
 def _test_other():
     xs = [1., 2., 3.]
-    assert function(xs) == pt.approx(-5.77808281)
+    assert function(xs) == pt.approx(-5.77808281, rel=1e-9)

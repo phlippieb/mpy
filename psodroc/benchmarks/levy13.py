@@ -25,7 +25,7 @@ import pytest as pt
 
 def _test_min():
     m = np.array([1., 1.])
-    assert function(m) == pt.approx(0.)
+    assert function(m) == pt.approx(0., abs=1e-16)
 
     for i in range(100):
         p = np.random.uniform(low=min(0), high=max(0), size=2)

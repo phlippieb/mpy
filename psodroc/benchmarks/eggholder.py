@@ -31,7 +31,7 @@ def _test_assert_dimensions():
 
 def _test_min():
     m = np.array([512., 404.23181])
-    assert function(m) == pt.approx(-959.640662720823)
+    assert function(m) == pt.approx(-959.640662720823, abs=1e-12)
 
     for i in range(100):
         p = np.random.uniform(low=min(0), high=min(0), size=2)
@@ -40,4 +40,4 @@ def _test_min():
 
 def _test_other():
     xs = [200., 100.]
-    assert function(xs) == pt.approx(-166.745338888944)
+    assert function(xs) == pt.approx(-166.745338888944, abs=1e-12)
