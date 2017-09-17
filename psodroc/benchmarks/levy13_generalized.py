@@ -4,10 +4,6 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-
-    for (x1, x2) in zip(xs[:-1], xs[1:]):
-        print("\nx1: {}, x2: {}\n".format(x1, x2))
-
     return np.square(np.sin(3. * np.pi * xs[0])) \
         + np.sum((np.square(x1 - 1.) * (1. + np.square(np.sin(3. * np.pi * x2)))) for x1, x2 in zip(xs[:-1], xs[1:])) \
         + np.square(xs[D-1] - 1.) * (1. + np.square(np.sin(2. * np.pi * xs[D-1])))
