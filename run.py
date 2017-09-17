@@ -1,17 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import psodroc.benchmarks.michalewicz as f
-import psodroc.pso.barebones_pso as pso
+import psodroc.benchmarks.levy13_generalized as f
+import psodroc.pso.gc_gbest_pso as pso
 
 pso.function = f.function
 pso.lower_bound = f.min(0)
 pso.upper_bound = f.max(0)
-pso.num_dimensions = 5
-# pso.init_pso_defaults()
+pso.num_dimensions = 50
+pso.init_pso_defaults()
 pso.init_swarm(size=10)
 
-iterations = 500
+iterations = 1000
 
 all_fits = np.zeros([iterations, pso.swarm_size])
 best_fits = []
