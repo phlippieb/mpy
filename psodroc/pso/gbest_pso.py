@@ -87,7 +87,7 @@ def iterate():
     social_component = c2 * r2 * (gbest_position - positions)
 
     unclamped_velocities = inertia_component + cognitive_component + social_component
-    velocities = _clamped_velocities(unclamped_velocities)
+    velocities = _clamp_velocities(unclamped_velocities)
 
     positions = positions + velocities
 
@@ -108,7 +108,7 @@ def iterate():
     gbest_fitness = pbest_fitnesses[gbest_index]
 
 
-def _clamped_velocities(unclamped_velocities):
+def _clamp_velocities(unclamped_velocities):
     # Returns the given velocities clamped between lower_bound and upper_bound.
     clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
     clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
