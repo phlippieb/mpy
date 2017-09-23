@@ -8,7 +8,7 @@ s = None # Successes threshhold
 f = None # Failures threshhold
 
 # Swarm variables
-swarm_size = 0
+swarm_size = None
 positions = None
 positions = None
 velocities = None
@@ -222,7 +222,8 @@ _did_validate_swarm = False
 def _validate_swarm():
     global _did_validate_swarm
     if _did_validate_swarm: return
-    
+   
+    assert swarm_size is not None, "gc_gbest_pso.init_swarm was not called" 
     assert positions is not None, "gc_gbest_pso.init_swarm was not called"
     assert velocities is not None, "gc_gbest_pso.init_swarm was not called"
     assert fitnesses is not None, "gc_gbest_pso.init_swarm was not called"
