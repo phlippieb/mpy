@@ -45,6 +45,12 @@ def init_swarm(size):
     global pbest_fitnesses
     pbest_fitnesses = [function(position) for position in pbest_positions]
 
+    global lbest_positions
+    lbest_positions = np.zeros((swarm_size, num_dimensions))
+    
+    global lbest_fitnesses
+    lbest_fitnesses = np.zeros(swarm_size)
+    
     _update_lbests()
 
 
@@ -105,15 +111,13 @@ def iterate():
 def _update_lbests():
     # Updates the lbest_positions and lbest_fitnesses of the swarm.
     # For each particle at index i, its neighbourhood consists of itself and the particles at indexes i-1 and i+1.
-    # The lbest particle for each particle is the particle in its neighbourhood with the best fitness.
+    # The lbest particle for each particle is best pbest of the particles in its neighbourhood.
     _validate_search_space()
 
     global swarm_size
     global num_dimensions
     global lbest_positions
     global lbest_fitnesses
-    lbest_positions = np.zeros((swarm_size, num_dimensions))
-    lbest_fitnesses = np.zeros(swarm_size)
     for i in range(0, swarm_size):
         neighbour_indexes = _neighbourhood_indices_for_index(i)
 
@@ -132,8 +136,8 @@ def _update_lbests():
             lbest_positions[i] = neighbour2_pbest_position
             lbest_fitnesses[i] = neighbour2_pbest_fitness
         else:
-            lbest_positions[i] = positions[i]
-            lbest_fitnesses[i] = fitnesses[i]
+            lbest_positions[i] = pbest_positions[i]
+            lbest_fitnesses[i] = pbest_fitnesses[i]
 
 def _neighbourhood_indices_for_index(i):
     # Returns the indices of the particles belonging to the neighbourhood of the particle at index i.
