@@ -1,3 +1,7 @@
+# TODO: someting is wrong with lbest_indices
+# should not init to all zeros (that just means every neighbourhood's best is particle 0)
+# also, not updating at all?
+
 import numpy as np
 
 # PSO parameters
@@ -107,9 +111,9 @@ def _update_lbests():
     global lbest_indices
     global lbest_positions
     global lbest_fitnesses
-    lbest_indices = np.zeros(swarm_size)
-    lbest_positions = np.zeros((swarm_size, num_dimensions))
-    lbest_fitnesses = np.zeros(swarm_size)
+    lbest_indices = np.zeros(swarm_size) # TODO wrong (move to init_swarm?)
+    lbest_positions = np.zeros((swarm_size, num_dimensions)) # TODO maybe wrong, move to init_swarm?
+    lbest_fitnesses = np.zeros(swarm_size) # TODO: maybe wrong, move to init_swarm?
     for i in range(0, swarm_size):
         neighbour_indexes = _neighbourhood_indices_for_index(i)
         neighbour1_index = neighbour_indexes[0]
@@ -131,6 +135,7 @@ def _update_lbests():
         else:
             lbest_index = neighbour2_index
         
+        lbest_indices[i] = lbest_index
         lbest_positions[i] = pbest_positions[lbest_index]
         lbest_fitnesses[i] = pbest_fitnesses[lbest_index]
     
