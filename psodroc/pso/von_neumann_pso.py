@@ -1,5 +1,3 @@
-# TODO look at own neighbour warnings
-
 import numpy as np
 import warnings
 
@@ -172,7 +170,7 @@ def _index_above(i):
         a_row = (a_row - 1) % _grid_rows
 
     # If we wrapped around back to the given item, warn the user.
-    if _grid[a_row][i_col] == -1:
+    if _grid[a_row][i_col] == i:
         warnings.warn("von_neumann_pso._index_above: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
     return _grid[a_row][i_col].astype(int)
@@ -194,7 +192,7 @@ def _index_below(i):
         a_row = (a_row + 1) % _grid_rows
 
     # If we wrapped around back to the given item, warn the user.
-    if _grid[a_row][i_col] == -1:
+    if _grid[a_row][i_col] == i:
         warnings.warn("von_neumann_pso._index_below: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
     return _grid[a_row][i_col].astype(int)
@@ -216,7 +214,7 @@ def _index_left_of(i):
         a_col = (a_col - 1) % _grid_cols
 
     # If we wrapped around back to the given item, warn the user.
-    if _grid[i_row][a_col] == -1:
+    if _grid[i_row][a_col] == i:
         warnings.warn("von_neumann_pso._index_left_of: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
     return _grid[i_row][a_col].astype(int)
@@ -238,7 +236,7 @@ def _index_right_of(i):
         a_col = (a_col + 1) % _grid_cols
 
     # If we wrapped around back to the given item, warn the user.
-    if _grid[i_row][a_col] == -1:
+    if _grid[i_row][a_col] == i:
         warnings.warn("von_neumann_pso._index_right_of: item {} is its own neighbour! Your swarm may be too small.".format(i))
 
     return _grid[i_row][a_col].astype(int)
