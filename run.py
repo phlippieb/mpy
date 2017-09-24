@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import psodroc.benchmarks.levy13_generalized as f
-import psodroc.pso.gc_gbest_pso as pso
+import psodroc.pso.gc_lbest_pso as pso
 
 pso.function = f.function
 pso.lower_bound = f.min(0)
