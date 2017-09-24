@@ -131,7 +131,7 @@ def _update_lbests():
         neighbour_below_index = _index_below(i)
         
         # Find the particle in the neighbourhood with the best pbest:
-        # (This is only the index within the group of this particle and its neighbours)
+        # (This is only an index with this particle's neighbourhood)
         best = np.argmin([
             pbest_fitnesses[i], # 0
             pbest_fitnesses[neighbour_above_index], # 1
@@ -150,7 +150,7 @@ def _update_lbests():
             lbest_index = neighbour_left_index
         elif best == 3:
             lbest_index = neighbour_right_index
-        elif best == 4:
+        else:
             lbest_index = neighbour_below_index
         
         lbest_positions[i] = pbest_positions[lbest_index]

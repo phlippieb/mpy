@@ -120,24 +120,27 @@ def _update_lbests():
     global lbest_fitnesses
     for i in range(0, swarm_size):
         neighbour_indexes = _neighbourhood_indices_for_index(i)
-
         neighbour1_index = neighbour_indexes[0]
-        neighbour1_pbest_position = pbest_positions[neighbour1_index]
-        neighbour1_pbest_fitness = pbest_fitnesses[neighbour1_index]
-
         neighbour2_index = neighbour_indexes[1]
-        neighbour2_pbest_position = pbest_positions[neighbour2_index]
-        neighbour2_pbest_fitness = pbest_fitnesses[neighbour2_index]
-
-        if neighbour1_pbest_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour1_pbest_position
-            lbest_fitnesses[i] = neighbour1_pbest_fitness
-        elif neighbour2_pbest_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour2_pbest_position
-            lbest_fitnesses[i] = neighbour2_pbest_fitness
+        
+        # Find the particle in the neighbourhood the best pbest
+        # (This is only an index with this particle's neighbourhood)
+        best = np.argmin([
+            pbest_fitnesses[i], # 0
+            pbest_fitnesses[neighbour1_index], # 1
+            pbest_fitnesses[neighbour2_index], # 2
+        ])
+        
+        lbest_index = None
+        if best == 0:
+            lbest_index = i
+        elif best == 1:
+            lbest_index = neighbour1_index
         else:
-            lbest_positions[i] = pbest_positions[i]
-            lbest_fitnesses[i] = pbest_fitnesses[i]
+            lbest_index = neighbour2_index
+        
+        lbest_positions[i] = pbest_positions[lbest_index]
+        lbest_fitnesses[i] = pbest_fitnesses[lbest_index]
 
 def _neighbourhood_indices_for_index(i):
     # Returns the indices of the particles belonging to the neighbourhood of the particle at index i.
