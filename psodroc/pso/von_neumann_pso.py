@@ -1,3 +1,5 @@
+# TODO look at own neighbour warnings
+
 import numpy as np
 import warnings
 
@@ -47,6 +49,13 @@ def init_swarm(size):
     pbest_fitnesses = [function(position) for position in pbest_positions]
 
     _init_grid()
+    
+    global lbest_positions
+    lbest_positions = np.zeros((swarm_size, num_dimensions))
+    
+    global lbest_fitnesses
+    lbest_fitnesses = np.zeros(swarm_size)
+    
     _update_lbests()
 
 
@@ -107,47 +116,45 @@ def iterate():
 def _update_lbests():
     # Updates the lbest_positions and lbest_fitnesses of the swarm.
     # Each particle's neighbourhood consists of the particles adjacent to it on a 2D grid.
-    # The local best particle in each neighbourhood is the particle with best fitness.
+    # The local best particle in each neighbourhood is the particle with best pbest.
     _validate_search_space()
 
     global swarm_size
     global num_dimensions
     global lbest_positions
     global lbest_fitnesses
-    lbest_positions = np.zeros((swarm_size, num_dimensions))
-    lbest_fitnesses = np.zeros(swarm_size)
-
+    
     for i in range(0, swarm_size):
         neighbour_above_index = _index_above(i)
         neighbour_left_index = _index_left_of(i)
         neighbour_right_index = _index_right_of(i)
         neighbour_below_index = _index_below(i)
-
-        neighbour_above_position = pbest_positions[neighbour_above_index]
-        neighbour_left_position = pbest_positions[neighbour_left_index]
-        neighbour_right_position = pbest_positions[neighbour_right_index]
-        neighbour_below_position = pbest_positions[neighbour_below_index]
-
-        neighbour_above_fitness = function(neighbour_above_position)
-        neighbour_left_fitness = function(neighbour_left_position)
-        neighbour_right_fitness = function(neighbour_right_position)
-        neighbour_below_fitness = function(neighbour_below_position)
-
-        if neighbour_above_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour_above_position
-            lbest_fitnesses[i] = neighbour_above_fitness
-        elif neighbour_left_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour_left_position
-            lbest_fitnesses[i] = neighbour_left_fitness
-        elif neighbour_right_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour_right_position
-            lbest_fitnesses[i] = neighbour_right_fitness
-        elif neighbour_below_fitness < fitnesses[i]:
-            lbest_positions[i] = neighbour_below_position
-            lbest_fitnesses[i] = neighbour_below_fitness
-        else:
-            lbest_positions[i] = positions[i]
-            lbest_fitnesses[i] = fitnesses[i]
+        
+        # Find the particle in the neighbourhood with the best pbest:
+        # (This is only the index within the group of this particle and its neighbours)
+        best = np.argmin([
+            pbest_fitnesses[i], # 0
+            pbest_fitnesses[neighbour_above_index], # 1
+            pbest_fitnesses[neighbour_left_index], # 2
+            pbest_fitnesses[neighbour_right_index], # 3
+            pbest_fitnesses[neighbour_below_index], # 4
+        ])
+        
+        # Update lbests:
+        lbest_index = None
+        if best == 0: 
+            lbest_index = i
+        elif best == 1:
+            lbest_index = neighbour_above_index
+        elif best == 2:
+            lbest_index = neighbour_left_index
+        elif best == 3:
+            lbest_index = neighbour_right_index
+        elif best == 4:
+            lbest_index = neighbour_below_index
+        
+        lbest_positions[i] = pbest_positions[lbest_index]
+        lbest_fitnesses[i] = pbest_fitnesses[lbest_index]
 
 def _index_above(i):
     # Given an index (in the swarm), this finds the item above that index (in the grid) and returns its index (in the swarm).
