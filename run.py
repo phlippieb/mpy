@@ -3,26 +3,38 @@ import matplotlib.pyplot as plt
 import os
 import psodroc.benchmarks.levy13_generalized as f
 import psodroc.pso.gc_lbest_pso as pso
+import psodroc.measures.diversity as diversity
+import psodroc.measures.two_piecewise_linear_approximation as twpla
 
 pso.function = f.function
 pso.lower_bound = f.min(0)
 pso.upper_bound = f.max(0)
-pso.num_dimensions = 50
+pso.num_dimensions = 20
 pso.init_pso_defaults()
-pso.init_swarm(size=10)
+pso.init_swarm(size=50)
 
-iterations = 1000
+iterations = 500
 
-all_fits = np.zeros([iterations, pso.swarm_size])
-best_fits = []
+# How often (in terms of iterations) to take diversity measurements:
+div_interval = 1
+# Iterations at which diversity measures are taken
+div_xs = []
+# Diversity measurements taken
+div_ys = []
+
 for i in range(0, iterations):
     pso.iterate()
-    for index, fitness in np.ndenumerate(pso.fitnesses):
-        all_fits[i, index] = fitness
-    best_fit = min(all_fits[i])
-    best_fits.append(best_fit)
+    
+    # Capture diversity
+    if i % div_interval == 0:
+        div = diversity.avg_distance_around_swarm_centre(pso.positions)
+        div_xs.append(i)
+        div_ys.append(div)
 
-print("best: {}".format(min(best_fits)))
+# Calculate a two-piecewise linear approximation of all diversity measurements
+droc = twpla.fit_to(div_xs, div_ys)
 
-plt.plot(best_fits)
+# Plot all diversity measurements as points, and the two-piecewise linear approximation of the diversity measurements as lines
+plt.plot(div_xs, div_ys, ".", color="black")
+twpla.plot(len(div_xs)-1, droc)
 plt.show()
