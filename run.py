@@ -24,7 +24,7 @@ div_ys = []
 
 for i in range(0, iterations):
     pso.iterate()
-    
+
     # Capture diversity
     if i % div_interval == 0:
         div = diversity.avg_distance_around_swarm_centre(pso.positions)
