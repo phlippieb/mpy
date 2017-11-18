@@ -53,7 +53,7 @@ def init_swarm(size):
 
     global gbest_index
     gbest_index = np.argmin(pbest_fitnesses)
-    
+
     global gbest_position
     gbest_position = np.copy(pbest_positions[gbest_index])
 
@@ -88,17 +88,17 @@ def iterate():
     # Requires initialized algorithm and swarm parameters.
     _validate_algorithm()
     _validate_swarm()
-    
+
     global gbest_index
     global gbest_position
     global gbest_fitness
-    
+
     for index in range(0, swarm_size):
         if index == gbest_index:
             _iterate_best()
         else:
             _iterate_non_best(index)
-    
+
     # All particles are updated; now just determine the global best values.
     new_gbest_index = np.argmin(pbest_fitnesses)
     if gbest_index != new_gbest_index:
@@ -106,16 +106,16 @@ def iterate():
         num_successes = 0
         num_failures = 0
         # rho remains unchanged
-    
+
     gbest_position = pbest_positions[gbest_index]
-    
+
     gbest_fitness = pbest_fitnesses[gbest_index]
 
 def _iterate_best():
     # Perofrms a special iteration of the algorithm for the swarm's most fit particle.
     # Afterwards, the velocity, position, fitness, personal best position and personal best fitness
     # of the best particle, as well as rho, num_successes and num_failures will be updated.
-    
+
     global velocities
     global rho
     global positions
@@ -124,27 +124,26 @@ def _iterate_best():
     global pbest_positions
     global num_successes
     global num_failures
-    
+
     inertia_component = w * velocities[gbest_index]
-    
+
     r2 = np.random.rand(num_dimensions)
     local_search_component = rho * (1 - (2 * r2))
-    
-    unclamped_velocity = -(positions[gbest_index]) + gbest_position + inertia_component + local_search_component
-    velocity = _clamp_velocity(unclamped_velocity)
-    
+
+    velocity = -(positions[gbest_index]) + gbest_position + inertia_component + local_search_component
+
     position = gbest_position + inertia_component + local_search_component
     # i.e. positions[gbest_index] + velocity
-    
+
     fitness = function(position)
-    
+
     velocities[gbest_index] = velocity
-    
+
     positions[gbest_index] = position
-    
+
     fitnesses[gbest_index] = fitness
-    
-    if fitness < pbest_fitnesses[gbest_index]:
+
+    if fitness < pbest_fitnesses[gbest_index] and _position_is_within_bounds(position):
         pbest_fitnesses[gbest_index] = fitness
         pbest_positions[gbest_index] = position
         num_successes += 1
@@ -152,14 +151,14 @@ def _iterate_best():
     else:
         num_failures += 1
         num_successes = 0
-    
+
     if num_successes > s:
         rho *= 2.
     elif num_failures > f:
         # Here we do rho /= 2, but ensure that rho never reaches zero.
         rho = max(rho / 2, np.finfo(float).tiny)
     # Else, rho remains the same.
-        
+
 def _iterate_non_best(index):
     # Performs a normal iteration of the algorithm for the single particle identified by the given index.
     # Afterwards, the velocity, position, fitness, personal best position, and personal best fitness
@@ -169,38 +168,39 @@ def _iterate_non_best(index):
     global pbest_positions
     global fitnesses
     global pbest_fitnesses
-    
+
     inertia_component = w * velocities[index]
-    
+
     r1 = np.random.rand(num_dimensions)
     cognitive_component = c1 * r1 * (pbest_positions[index] - positions[index])
-    
+
     r2 = np.random.rand(num_dimensions)
     social_component = c2 * r2 * (gbest_position - positions[index])
-    
-    unclamped_velocity = inertia_component + cognitive_component + social_component
-    velocity = _clamp_velocity(unclamped_velocity)
-    
+
+    velocity = inertia_component + cognitive_component + social_component
+
     position = positions[index] + velocity
-    
+
     fitness = function(position)
-    
+
     velocities[index] = velocity
-    
+
     positions[index] = position
-    
+
     fitnesses[index] = fitness
-    
-    if fitness < pbest_fitnesses[index]:
+
+    if fitness < pbest_fitnesses[index] and _position_is_within_bounds(position):
         pbest_fitnesses[index] = fitness
         pbest_positions[index] = position
 
 
-def _clamp_velocity(unclamped_velocity):
-    # Returns the given velocity clamped between lower_bound and upper_bound.
-    velocity = np.maximum(np.minimum(unclamped_velocity, upper_bound), lower_bound)
-    return velocity
-
+def _position_is_within_bounds(position):
+    # A position is considered to be within the bounds of the search space only if
+    # each dimension component is within those bounds.
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
 
 # Validation
 
@@ -231,8 +231,8 @@ _did_validate_swarm = False
 def _validate_swarm():
     global _did_validate_swarm
     if _did_validate_swarm: return
-   
-    assert swarm_size is not None, "gc_gbest_pso.init_swarm was not called" 
+
+    assert swarm_size is not None, "gc_gbest_pso.init_swarm was not called"
     assert positions is not None, "gc_gbest_pso.init_swarm was not called"
     assert velocities is not None, "gc_gbest_pso.init_swarm was not called"
     assert fitnesses is not None, "gc_gbest_pso.init_swarm was not called"

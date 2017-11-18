@@ -67,30 +67,31 @@ def iterate():
     global positions
     global fitnesses
     global gbest_position
+    global gbest_fitness
 
     inertia_component = w * velocities
 
     r1 = np.random.rand(swarm_size, num_dimensions)
     social_component = c1 * r1 * (gbest_position - positions)
 
-    unclamped_velocities = inertia_component + social_component
-    velocities = _clamped_velocities(unclamped_velocities)
+    velocities = inertia_component + social_component
 
     positions = positions + velocities
 
     fitnesses = [function(position) for position in positions]
 
     gbest_index = np.argmin(fitnesses)
-    gbest_position = positions[gbest_index]
-    gbest_fitness = fitnesses[gbest_index]
+    if _position_is_within_bounds(positions[gbest_index]) and fitnesses[gbest_index] < gbest_fitness:
+        gbest_position = positions[gbest_index]
+        gbest_fitness = fitnesses[gbest_index]
 
-
-def _clamped_velocities(unclamped_velocities):
-    # Returns the given velocities clamped between lower_bound and upper_bound.
-    clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
-    clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
-    velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)
-    return velocities
+def _position_is_within_bounds(position):
+    # A position is considered to be within the bounds of the search space only if
+    # each dimension component is within those bounds.
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
 
 
 _did_validate_search_space = False

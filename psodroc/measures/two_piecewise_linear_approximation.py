@@ -52,7 +52,7 @@ def fit_to(xs, ys):
 # Plot a given two-piecewise linear function between 0 and the given maxX.
 def plot(maxX, tpwla):
     xs = np.linspace(0, maxX, maxX)
-    plt.plot(xs, _2pwl(xs, tpwla.x, tpwla.y, tpwla.m1, tpwla.m2))
+    plt.plot(xs, _2pwl(xs, tpwla.x, tpwla.y, tpwla.m1, tpwla.m2), color="black")
 
 # This function gives two lines with the given slopes that break at the given coordinates.
 # When fitting a piecewise approximation on some data, the error between the data and this function are minimized.

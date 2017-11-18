@@ -12,6 +12,8 @@ pbest_positions = None # each particle's personal best
 pbest_fitnesses = None
 lbest_positions = None # each particle's local best
 lbest_fitnesses = None
+gbest_position = None # the swarm's global best; not used in the algorithm, but exposed as a metric
+gbest_fitness = None
 
 # Search space
 function = None
@@ -45,6 +47,9 @@ def init_swarm(size):
     gbest_position = pbest_positions[gbest_index]
     gbest_fitness = pbest_fitnesses[gbest_index]
 
+def init_pso_defaults():
+    # Nothing to init
+    return
 
 def iterate():
     # Performs one iteration of the algorithm.
@@ -59,6 +64,7 @@ def iterate():
     global pbest_positions
     global pbest_fitnesses
     global gbest_position
+    global gbest_fitness
 
     # Update each particle's velocity using the current personal and global best positions.
     velocities = [_velocity(pbest_position, gbest_position) for pbest_position in pbest_positions]

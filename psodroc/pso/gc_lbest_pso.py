@@ -17,9 +17,10 @@ pbest_fitnesses = None # An array of values, each giving the fitness of a partic
 lbest_indices = None # An array of indices identifying the best particle in each particle's neighbourhood
 lbest_positions = None # An array of vectors, each giving the position of the best position found in a particle's neighbourhood so far
 lbest_fitnesses = None # An array of values, each giving the best fitness found in a particle's neighbourhood so far
-rhos = None # A rho value for each neighbourhood; used when updating the neighbourhood's best particle
-nums_successes = None # The number of successes of the best particle of each neighbourhood
-nums_failures = None # The number of failures of the best particle of each neighbourhood
+gbest_fitness = None # The best fitness among the swarm's lbest fitnesses; not used in the algorithm, but exposed as a metric
+rhos = None # An array containing a rho value for each neighbourhood; used when updating the neighbourhood's best particle
+nums_successes = None # An array containing the number of successes of the best particle of each neighbourhood
+nums_failures = None # An array containing the number of failures of the best particle of each neighbourhood
 
 # Search space parameters
 function = None # The objective function to minimize
@@ -44,9 +45,12 @@ def init_swarm(size):
     global velocities
     velocities = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
 
+    # Each particle's best position at first is simply its initial position.
     global pbest_positions
     pbest_positions = np.copy(positions)
 
+    # Each particle's best fitness at first is simply its initial fitness,
+    # which is its initial position evaluated by the objective function.
     global pbest_fitnesses
     pbest_fitnesses = [function(position) for position in pbest_positions]
 
@@ -71,7 +75,7 @@ def init_swarm(size):
     nums_failures = np.full(size, 0)
 
 def init_pso_defaults():
-    # Initializes the algorithm parameters `w`, `f` and `s` to commonly used default values.
+    # Initializes the algorithm parameters `w`, 'c1', 'c2', `f` and `s` to commonly used default values.
     global w
     w =  0.729844
     global c1
@@ -84,7 +88,7 @@ def init_pso_defaults():
     s = 15
 
 def iterate():
-    # Update each particle. Each neighbourhood's best particle is updated according to a different equation.
+    # Update each particle. Each neighbourhood's best particle is updated according to a special equation.
     # Requires initialized algorithm and swarm parameters.
     _validate_algorithm()
     _validate_swarm()
@@ -108,7 +112,7 @@ def _neighbourhood_indices_for_index(i):
 def _update_lbests():
     # Updates the lbest_indices, lbest_positions and lbest_fitnesses of the swarm.
     # For each particle at index i, its neighbourhood consists of itself and the particles at indexes i-1 and i+1.
-    # The lbest particle for each particle is the one the best pbest in its neighbourhood.
+    # The lbest particle for each particle is the one with the best pbest in its neighbourhood.
     _validate_search_space()
 
     global swarm_size
@@ -142,6 +146,9 @@ def _update_lbests():
         lbest_positions[i] = pbest_positions[lbest_index]
         lbest_fitnesses[i] = pbest_fitnesses[lbest_index]
 
+    global gbest_fitness
+    gbest_fitness = min(lbest_fitnesses)
+
 def _iterate_best(index):
     # Perofrms a special iteration of the algorithm for neighbourhood's most fit particle, identified by the given index.
     # Afterwards, the velocity, position, fitness, personal best position and personal best fitness
@@ -161,8 +168,7 @@ def _iterate_best(index):
     r2 = np.random.rand(num_dimensions)
     local_search_component = rhos[index] * (1 - (2 * r2))
 
-    unclamped_velocity = -(positions[index]) + lbest_positions[index] + inertia_component + local_search_component
-    velocity = _clamp_velocity(unclamped_velocity)
+    velocity = -(positions[index]) + lbest_positions[index] + inertia_component + local_search_component
 
     position = lbest_positions[index] + inertia_component + local_search_component
 
@@ -175,7 +181,7 @@ def _iterate_best(index):
     fitnesses[index] = fitness
 
 
-    if fitness < pbest_fitnesses[index]:
+    if fitness < pbest_fitnesses[index] and _position_is_within_bounds(position):
         pbest_fitnesses[index] = fitness
         pbest_positions[index] = position
         nums_successes[index] += 1
@@ -210,8 +216,7 @@ def _iterate_non_best(index):
     r2 = np.random.rand(num_dimensions)
     social_component = c2 * r2 * (lbest_positions[index] - positions[index])
 
-    unclamped_velocity = inertia_component + cognitive_component + social_component
-    velocity = _clamp_velocity(unclamped_velocity)
+    velocity = inertia_component + cognitive_component + social_component
 
     position = positions[index] + velocity
 
@@ -223,14 +228,18 @@ def _iterate_non_best(index):
 
     fitnesses[index] = fitness
 
-    if fitness < pbest_fitnesses[index]:
+    # If we have an improved and valid solution, update the pbest.
+    if fitness < pbest_fitnesses[index] and _position_is_within_bounds(position):
         pbest_fitnesses[index] = fitness
         pbest_positions[index] = position
 
-def _clamp_velocity(unclamped_velocity):
-    # Returns the given velocity clamped between lower_bound and upper_bound.
-    velocity = np.maximum(np.minimum(unclamped_velocity, upper_bound), lower_bound)
-    return velocity
+def _position_is_within_bounds(position):
+    # A position is considered to be within the bounds of the search space only if
+    # each dimension component is within those bounds.
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
 
 # Validation
 

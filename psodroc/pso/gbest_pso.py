@@ -77,6 +77,7 @@ def iterate():
     global pbest_positions
     global pbest_fitnesses
     global gbest_position
+    global gbest_fitness
 
     inertia_component = w * velocities
 
@@ -86,8 +87,7 @@ def iterate():
     r2 = np.random.rand(swarm_size, num_dimensions)
     social_component = c2 * r2 * (gbest_position - positions)
 
-    unclamped_velocities = inertia_component + cognitive_component + social_component
-    velocities = _clamp_velocities(unclamped_velocities)
+    velocities = inertia_component + cognitive_component + social_component
 
     positions = positions + velocities
 
@@ -95,7 +95,7 @@ def iterate():
 
     new_pbest_positions = []
     for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
-        if current_fitness < old_pbest_fitness:
+        if current_fitness < old_pbest_fitness and _position_is_within_bounds(current_position):
             new_pbest_positions.append(current_position)
         else:
             new_pbest_positions.append(old_pbest_position)
@@ -107,13 +107,13 @@ def iterate():
     gbest_position = pbest_positions[gbest_index]
     gbest_fitness = pbest_fitnesses[gbest_index]
 
-
-def _clamp_velocities(unclamped_velocities):
-    # Returns the given velocities clamped between lower_bound and upper_bound.
-    clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
-    clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
-    velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)
-    return velocities
+def _position_is_within_bounds(position):
+    # A position is considered to be within the bounds of the search space only if
+    # each dimension component is within those bounds.
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
 
 _did_validate_search_space = False
 def _validate_search_space():
