@@ -17,7 +17,7 @@ pbest_fitnesses = None # An array of values, each giving the fitness of a partic
 lbest_indices = None # An array of indices identifying the best particle in each particle's neighbourhood
 lbest_positions = None # An array of vectors, each giving the position of the best position found in a particle's neighbourhood so far
 lbest_fitnesses = None # An array of values, each giving the best fitness found in a particle's neighbourhood so far
-gbest_fitness = None # The best fitness among the swarms lbest fitnesses; not used in the algorithm, but exposed as a metric
+gbest_fitness = None # The best fitness among the swarm's lbest fitnesses; not used in the algorithm, but exposed as a metric
 rhos = None # An array containing a rho value for each neighbourhood; used when updating the neighbourhood's best particle
 nums_successes = None # An array containing the number of successes of the best particle of each neighbourhood
 nums_failures = None # An array containing the number of failures of the best particle of each neighbourhood
@@ -112,7 +112,7 @@ def _neighbourhood_indices_for_index(i):
 def _update_lbests():
     # Updates the lbest_indices, lbest_positions and lbest_fitnesses of the swarm.
     # For each particle at index i, its neighbourhood consists of itself and the particles at indexes i-1 and i+1.
-    # The lbest particle for each particle is the one the best pbest in its neighbourhood.
+    # The lbest particle for each particle is the one with the best pbest in its neighbourhood.
     _validate_search_space()
 
     global swarm_size
