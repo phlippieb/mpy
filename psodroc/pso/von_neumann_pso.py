@@ -15,6 +15,7 @@ pbest_positions = None # each particle's personal best
 pbest_fitnesses = None
 lbest_positions = None # each particle's local best
 lbest_fitnesses = None
+gbest_fitness = None # the swarm's best fitness; not used by the algorithm, but exposed as a metric
 
 # Search space
 function = None
@@ -47,13 +48,13 @@ def init_swarm(size):
     pbest_fitnesses = [function(position) for position in pbest_positions]
 
     _init_grid()
-    
+
     global lbest_positions
     lbest_positions = np.zeros((swarm_size, num_dimensions))
-    
+
     global lbest_fitnesses
     lbest_fitnesses = np.zeros(swarm_size)
-    
+
     _update_lbests()
 
 
@@ -89,8 +90,7 @@ def iterate():
     r2 = np.random.rand(swarm_size, num_dimensions)
     social_component = c2 * r2 * (lbest_positions - positions)
 
-    unclamped_velocities = inertia_component + cognitive_component + social_component
-    velocities = _clamped_velocities(unclamped_velocities)
+    velocities = inertia_component + cognitive_component + social_component
 
     positions = positions + velocities
 
@@ -99,7 +99,7 @@ def iterate():
     new_pbest_positions = []
     new_pbest_fitnesses = []
     for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
-        if current_fitness < old_pbest_fitness:
+        if current_fitness < old_pbest_fitness and _position_is_within_bounds(current_position):
             new_pbest_positions.append(current_position)
         else:
             new_pbest_positions.append(old_pbest_position)
@@ -121,13 +121,13 @@ def _update_lbests():
     global num_dimensions
     global lbest_positions
     global lbest_fitnesses
-    
+
     for i in range(0, swarm_size):
         neighbour_above_index = _index_above(i)
         neighbour_left_index = _index_left_of(i)
         neighbour_right_index = _index_right_of(i)
         neighbour_below_index = _index_below(i)
-        
+
         # Find the particle in the neighbourhood with the best pbest:
         # (This is only an index with this particle's neighbourhood)
         best = np.argmin([
@@ -137,10 +137,10 @@ def _update_lbests():
             pbest_fitnesses[neighbour_right_index], # 3
             pbest_fitnesses[neighbour_below_index], # 4
         ])
-        
+
         # Update lbests:
         lbest_index = None
-        if best == 0: 
+        if best == 0:
             lbest_index = i
         elif best == 1:
             lbest_index = neighbour_above_index
@@ -150,9 +150,12 @@ def _update_lbests():
             lbest_index = neighbour_right_index
         else:
             lbest_index = neighbour_below_index
-        
+
         lbest_positions[i] = pbest_positions[lbest_index]
         lbest_fitnesses[i] = pbest_fitnesses[lbest_index]
+
+    global gbest_fitness
+    gbest_fitness = min(lbest_fitnesses)
 
 def _index_above(i):
     # Given an index (in the swarm), this finds the item above that index (in the grid) and returns its index (in the swarm).
@@ -301,13 +304,15 @@ def _pos_of(val, matrix):
     return None
 
 
-def _clamped_velocities(unclamped_velocities):
-    # Returns the given velocities clamped between lower_bound and upper_bound.
-    clamp_min = np.full((swarm_size, num_dimensions), lower_bound)
-    clamp_max = np.full((swarm_size, num_dimensions), upper_bound)
-    velocities = np.maximum(np.minimum(unclamped_velocities, clamp_max), clamp_min)
-    return velocities
+def _position_is_within_bounds(position):
+    # A position is considered to be within the bounds of the search space only if
+    # each dimension component is within those bounds.
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
 
+# Validation
 
 _did_validate_search_space = False
 def _validate_search_space():
