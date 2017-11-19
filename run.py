@@ -1,19 +1,17 @@
-import numpy as np
 import matplotlib.pyplot as plt
-import os
 import psodroc.benchmarks.levy13_generalized as f
-import psodroc.pso.alternative_barebones_pso as pso
+import psodroc.pso.gc_von_neumann_pso as pso
 import psodroc.measures.diversity as diversity
 import psodroc.measures.two_piecewise_linear_approximation as twpla
 
 pso.function = f.function
 pso.lower_bound = f.min(0)
 pso.upper_bound = f.max(0)
-pso.num_dimensions = 20
+pso.num_dimensions = 40
 pso.init_pso_defaults()
 pso.init_swarm(size=50)
 
-iterations = 500
+iterations = 1000
 
 # How often (in terms of iterations) to take diversity measurements:
 div_interval = 1

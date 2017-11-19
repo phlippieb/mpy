@@ -97,7 +97,6 @@ def iterate():
     fitnesses = [function(position) for position in positions]
 
     new_pbest_positions = []
-    new_pbest_fitnesses = []
     for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
         if current_fitness < old_pbest_fitness and _position_is_within_bounds(current_position):
             new_pbest_positions.append(current_position)
