@@ -33,7 +33,7 @@ def init_swarm(size):
     fitnesses = [function(position) for position in positions]
 
     global velocities
-    velocities = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
+    velocities = np.zeros([swarm_size, num_dimensions])
 
     # Personal bests aren't used to guide the swarm,
     # but they are used here as a convenience to find the global best.

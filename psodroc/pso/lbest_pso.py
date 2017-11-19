@@ -32,7 +32,7 @@ def init_swarm(size):
     swarm_size = size
 
     global positions
-    positions = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
+    velocities = np.zeros([swarm_size, num_dimensions])
 
     global fitnesses
     fitnesses = [function(position) for position in positions]

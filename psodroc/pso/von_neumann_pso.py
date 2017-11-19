@@ -39,7 +39,7 @@ def init_swarm(size):
     fitnesses = [function(position) for position in positions]
 
     global velocities
-    velocities = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
+    velocities = np.zeros([swarm_size, num_dimensions])
 
     global pbest_positions
     pbest_positions = np.copy(positions)
