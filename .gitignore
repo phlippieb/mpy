@@ -13,6 +13,8 @@ results/*
 *.ipynb_checkpoints
 *.ipynb
 
+# atom ide
+.ropeproject
 
 # C extensions
 *.so
