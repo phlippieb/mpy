@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import psodroc.benchmarks.levy13_generalized as f
+import psodroc.benchmarks.rastrigin as f
 import psodroc.pso.gc_von_neumann_pso as pso
 import psodroc.measures.diversity as diversity
 import psodroc.measures.two_piecewise_linear_approximation as twpla
@@ -48,12 +48,13 @@ import psodroc.measures.two_piecewise_linear_approximation as twpla
 
 # print(gbests)
 
-import psodroc.measures.progressive_random_walk as walk
-import psodroc.measures.FEM as FEM
-points = walk.progressive_random_walk(-10, 10, 2, 1000, 2)
-xs = [p[0] for p in points]
-ys = [p[1] for p in points]
-# plt.plot(xs, ys)
-# plt.show()
-e = FEM.FEM_0_1(f, 10)
-print(e)
+import psodroc.measures.funnels as funnels
+import numpy as np  
+
+all_disps = []
+for i in range(0, 10):
+    disp = funnels.dispersion_metric(f.function, f.min(0), f.max(0), 2)
+    all_disps.append(disp)
+    print("disp {}: {}".format(i, disp))
+mean_disp = np.average(all_disps)
+print("\nmean: {}".format(mean_disp))

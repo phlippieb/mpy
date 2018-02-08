@@ -7,7 +7,7 @@ The `psodroc` package contains modules for PSO algorithms under `pso` and benchm
 Each benchmark is in a file called `<benchmark name>.py`. In each benchmark file, the actual function implementation is in a function called `function(xs)`, which takes a candidate solution vector as a parameter. Each file also provides the benchmark's domain through functions called `min(d)` and `max(d)`, which respectively return the minimum and maximum allowed `x` value in dimension `d`.
 
 # Install
-This library uses python 2.7 with `numpy` and `scipy`, as well as `pytest` for unit tests. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. To get all of that, you can install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy scipy pytest jupyter matplotlib pytest`.
+This library uses python 2.7 with `numpy`, `scipy` and `numb`, as well as `pytest` for unit tests. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. To get all of that, you can install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy scipy numba pytest jupyter matplotlib pytest`.
 
 # Run
 
