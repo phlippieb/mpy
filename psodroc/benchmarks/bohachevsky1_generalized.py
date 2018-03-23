@@ -18,6 +18,10 @@ def min(d):
 
 def max(d):
     return 15.
+    
+def is_dimensionality_valid(D):
+    # Generalized Bohachevsky is only defined in 2 or more dimensions.
+    return D > 1
 
 # min = [0.0, ... 0.0] = 0.0
 

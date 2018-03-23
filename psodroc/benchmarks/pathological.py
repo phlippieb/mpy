@@ -19,6 +19,10 @@ def min(d):
 
 def max(d):
     return 100.0
+    
+def is_dimensionality_valid(D):
+    # Pathological requires 2 or more dimensions.
+    return D > 1
 
 # min = [0, 0, ...] = 0
 

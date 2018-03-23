@@ -11,6 +11,9 @@ def min(d):
 
 def max(d):
     return 20.
+    
+def is_dimensionality_valid(D):
+    return True
 
 # min is [0, ..., 0] = 0
 # though, seemingly, it is really [(-0.5, 0.5), ..., (0.5, 0.5)]?

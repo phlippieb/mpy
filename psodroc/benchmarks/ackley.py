@@ -19,6 +19,10 @@ def min(d):
 
 def max(d):
     return 32.
+    
+def is_dimensionality_valid(D):
+    # Ackley divides by D, so D cannot be zero.
+    return D > 0
 
 # Minimum is [0.0, ... 0.0] = 0.0
 

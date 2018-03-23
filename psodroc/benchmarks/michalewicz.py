@@ -11,6 +11,9 @@ def min(d):
 
 def max(d):
     return np.pi
+    
+def is_dimensionality_valid(D):
+    return True
 
 # min (D = 2) ~ -1.8013
 # min (D = 5) ~ -4.6877

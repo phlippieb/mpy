@@ -17,6 +17,10 @@ def min(d):
 
 def max(d):
     return 512.
+    
+def is_dimensionality_valid(D):
+    # Eggholder is only defined in 2 dimensions.
+    return D == 2
 
 # min = [512, 404.23181] ~ -959.640662720823
 

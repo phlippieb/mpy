@@ -4,7 +4,7 @@ import numpy as np
 
 def function(xs):
     D = len(xs)
-    assert D == 2, "levy13.function is only defined for 2"
+    assert D == 2, "levy13.function is only defined for 2 dimensions"
     (x1, x2) = (xs[0], xs[1])
 
     return np.square(np.sin(3 * np.pi * x1)) \
@@ -17,6 +17,10 @@ def min(d):
 
 def max(d):
     return 10.
+    
+def is_dimensionality_valid(D):
+    # Levy 13 is only defined in 2 dimensions.
+    return D == 2
 
 # Minimum is [1.0, 1.0] = 0.0
 

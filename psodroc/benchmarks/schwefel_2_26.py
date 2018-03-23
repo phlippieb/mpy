@@ -11,6 +11,9 @@ def min(d):
 
 def max(d):
     return 500.
+    
+def is_dimensionality_valid(D):
+    return True
 
 # Minimum is [420.9687, ..., 420.9687]
 

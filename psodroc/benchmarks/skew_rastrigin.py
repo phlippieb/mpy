@@ -9,10 +9,13 @@ def function(xs):
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
-    return -5.0
+    return -5.
 
 def max(d):
-    return 5.0
+    return 5.
+    
+def is_dimensionality_valid(D):
+    return True
 
 # Minimum is [0, ..., 0] = 0
 

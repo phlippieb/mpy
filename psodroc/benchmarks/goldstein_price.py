@@ -21,6 +21,10 @@ def min(d):
 
 def max(d):
     return 2.
+    
+def is_dimensionality_valid(D):
+    # Goldstein-Price is only defined in 2 dimensions.
+    return D == 2
 
 # min = [0, -1] = 3
 

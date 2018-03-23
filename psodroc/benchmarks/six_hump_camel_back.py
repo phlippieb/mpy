@@ -20,6 +20,10 @@ def min(d):
 
 def max(d):
     return 5.
+    
+def is_dimensionality_valid(D):
+    # Six Hump Camel Back is only defined in 2 dimensions.
+    return D == 2
 
 # Minimum is at [0.08983, -0.7126] and [-0.08983, 0.7126], and is -1.03162842755
 

@@ -20,6 +20,10 @@ def min(d):
 
 def max(d):
     return +100.
+    
+def is_dimensionality_valid(D):
+    # Bohachevsky is only defined in 2 dimensions
+    return D == 2
 
 # Minimum is at [0, 0] = 0
 

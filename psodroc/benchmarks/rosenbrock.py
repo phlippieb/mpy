@@ -16,6 +16,10 @@ def min(d):
 
 def max(d):
     return 2.048
+    
+def is_dimensionality_valid(D):
+    # Rosenbrock requires 2 or more dimensions.
+    return D > 1
 
 # Minimum is [1, ..., 1] = 0
 

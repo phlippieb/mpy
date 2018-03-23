@@ -12,6 +12,9 @@ def min(d):
 
 def max(d):
     return 5.12
+    
+def is_dimensionality_valid(D):
+    return True
 
 # Minimum is [0, ..., 0] = 0
 

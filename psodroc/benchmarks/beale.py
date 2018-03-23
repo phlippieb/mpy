@@ -17,6 +17,10 @@ def min(d):
 
 def max(d):
     return 4.5
+    
+def is_dimensionality_valid(D):
+    # Beale is only defined in 2 dimensions.
+    return D == 2
 
 # min = [3, 0.5] = 0
 
