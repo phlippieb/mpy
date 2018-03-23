@@ -15,11 +15,13 @@ def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, ite
     existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
     if existing_result is None:
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
+        print ' - storing', len(new_results), 'results...'
         for (iteration, new_result) in enumerate(new_results):
             _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, new_result)
+        print ' - done.'
         return new_results[iteration]
     else:
-        print(' - result exists; returning now.')
+        print ' - result exists; returning now.'
         return existing_result
 
 def _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment):
