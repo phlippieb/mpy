@@ -51,7 +51,7 @@ def process(block_num, num_blocks):
     _process_indices(block_indices)
     
 def _process_indices(indices):
-    for i in indices:
+    for (index_number, i) in enumerate(indices):
         configuration = _get_configuration(i)
-        print "getting droc result", i, "of", len(indices), ':', configuration
+        print "getting droc result", index_number, "of", len(indices), ':', configuration
         drocs.get(*configuration)
