@@ -2,8 +2,7 @@ import db as db
 import warnings
 
 def store(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity):
-    # cur.execute('INSERT INTO %s (day, elapsed_time, net_time, length, average_speed, geometry) VALUES (%s, %s, %s, %s, %s, %s)', (escaped_name, day, time_length, time_length_net, length_km, avg_speed, myLine_ppy))
-    db.cursor.execute('INSERT INTO diversity (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity) VALUES (%s, %s, %s, %s, %s, %s, %s)', (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity))
+    db.cursor.execute('INSERT INTO diversity (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity) VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment) DO UPDATE SET diversity = %s', (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity, diversity))
     
 def fetch(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment):
     db.cursor.execute('SELECT diversity FROM diversity WHERE pso_name=%s AND swarm_size=%s AND benchmark_name=%s AND dimensionality=%s AND iteration=%s AND experiment=%s', (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment))

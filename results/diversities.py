@@ -8,20 +8,20 @@ import psodroc.measures.diversity as diversity
 import db.diversities as db_diversities
 
 # Assume we will never need more than 20k iterations per experiment
-_max_iterations = 20000
+_max_iterations = 10000
 
 def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment):
     # If the requested result exists, return it
     existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
     if existing_result is None:
+        print " - diversity result not found. calculating..."
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
-        print ' - storing', len(new_results), 'results...'
+        print ' - storing', len(new_results), 'diversity results...'
         for (iteration, new_result) in enumerate(new_results):
             _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, new_result)
-        print ' - done.'
         return new_results[iteration]
     else:
-        print ' - result exists; returning now.'
+        # print ' - result exists; returning now.'
         return existing_result
 
 def _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment):
@@ -31,7 +31,6 @@ def _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, 
     db_diversities.store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, result)
 
 def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions):
-    print " - result not found. calculating..."
     # Set up the PSO for a single diversity experiment
     pso = psos.get(pso_name)
     benchmark = benchmarks.get(benchmark_name)

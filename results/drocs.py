@@ -2,32 +2,31 @@
 # Calling `get` will cause a lookup for the result in the local DB.
 # If the result already exists, it will be returned.
 # If not, it will be calculated and stored for future queries.
-# 30 diversity measurements are used to determine a single diversity rate-of-change result.
 # The diversity measurements are obtained using the `diversities` module of this (the `results`) package.
 
 import diversities
 import psodroc.measures.two_piecewise_linear_approximation as tpwla
+import db.drocs as db_drocs
 
-def get(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations):
-    existing_result = _fetch(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations)
+def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
+    existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
     if existing_result is None:
-        new_result = _calculate(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations)
-        _store(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations, new_result)
+        print ' - droc result not found. calculating...'
+        new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+        print ' - storing droc result...'
+        _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, new_result)
         return new_result
     else:
         return existing_result
     
-def _fetch(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations):
-    # TODO: 
-    # fetch from DB if available
-    return None
+def _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
+    return db_drocs.fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
     
-def _store(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations, result):
-    # TODO:
-    # store to db
-    pass
+def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result):
+    db_drocs.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
 
-def _calculate(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations):
-    xs, ys = diversities.get(experiment_num, pso_name, pso_population_size, benchmark_name, benchmark_dimensions, num_iterations)
+def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
+    xs = range(0, num_iterations)
+    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num) for x in xs]
     droc = tpwla.fit_to(xs, ys).m1
     return droc
