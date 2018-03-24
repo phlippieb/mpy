@@ -47,3 +47,45 @@ Lastly, within the Python scripts, PostgreSQL is accessed using `psycopg2`. Inst
 ```
 conda install psycopg2
 ```
+
+# Setup on Ubuntu server
+
+1. Install PostgreSQL using aptitude:
+
+```
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+```
+
+(Side note, I don't know if `postgresql-contrib` is actually useful.)
+
+2. Create a role for the script to use:
+
+```
+sudo -u postgres createuser -sP psodroc
+```
+
+The `createuser` binary will prompt you for a password. Enter `psodroc`.
+
+3. Create a database for the script to use, with the new role as the owner:
+
+```
+sudo -u postgres createdb -O psodroc psodroc
+```
+
+4. Create the tables used by the script. First, check your current directory. You should be in the `mpy` root dir.
+Next, open a postgres shell for the `psodroc` database as the `psodroc` role/user:
+
+```
+psql -U psodroc -d psodroc
+```
+
+You should now see a prompt like `psodroc=>`.
+
+Lastly, from within this shell, run the `create_tables` scripts (assuming you are in the project root directory):
+
+```
+\i db/create_tables.sql
+```
+
+You should see two `CREATE TABLE` lines confirming that the tables were created. You can check that they were by entering `\d`. Quit the shell by entering `\q`.
