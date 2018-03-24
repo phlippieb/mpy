@@ -50,16 +50,67 @@ conda install psycopg2
 
 # Setup on Ubuntu server
 
-1. Install PostgreSQL using aptitude:
+## Install PostgreSQL using aptitude.
 
+**Note**: on Ubuntu 14.04, aptitude does not provide PostgreSQL 9.5, which is the minimum required version for some of the commands used by this library's scripts. On Ubuntu 16.04, I think you should be fine.
+
+### Installing on 16.04:
+
+On 16.04, PostgreSQL 9.5 is available, I think. Just run:
 ```
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-
 (Side note, I don't know if `postgresql-contrib` is actually useful.)
 
-2. Create a role for the script to use:
+### Installing on 14.04:
+
+
+Ensure we're up to date:
+```
+sudo apt-get update -y && apt-get upgrade -y
+```
+
+Edit `/etc/apt/sources.list.d/pgdg.list`:
+```
+sudo vi /etc/apt/sources.list.d/pgdg.list
+```
+(The file was empty when I did this, but it worked fine.) Then add these two lines to the file:
+```
+# PostgreSQL repository
+deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main
+```
+Save and quit.
+
+Download the repository key:
+```
+wget  - https://www.postgresql.org/media/keys/ACCC4CF8.asc
+```
+Then add the key to aptitude:
+```
+sudo apt-key add ACCC4CF8.asc
+```
+Lastly, you can remove the key, I think.
+```
+rm ACCC4CF8.asc
+```
+
+Update package sources again:
+```
+sudo apt-get update -y
+```
+Then install:
+```
+sudo apt-get install postgresql-9.5 -y
+```
+And you're done! Installing should have started the service by default, but you can verify that it's up by running
+```
+service postgresql status
+```
+
+## Create a role 
+
+The script assumes the role of a user named `psodroc`. Create the role for the script to use:
 
 ```
 sudo -u postgres createuser -sP psodroc
@@ -67,13 +118,17 @@ sudo -u postgres createuser -sP psodroc
 
 The `createuser` binary will prompt you for a password. Enter `psodroc`.
 
-3. Create a database for the script to use, with the new role as the owner:
+## Create a database
+
+The script works in a databse (also) called `psodroc`. Create the database for the script to use, with the new role as the owner:
 
 ```
 sudo -u postgres createdb -O psodroc psodroc
 ```
 
-4. Create the tables used by the script. First, check your current directory. You should be in the `mpy` root dir.
+## Create the tables
+
+First, check your current directory. You should be in the `mpy` root dir.
 Next, open a postgres shell for the `psodroc` database as the `psodroc` role/user:
 
 ```
