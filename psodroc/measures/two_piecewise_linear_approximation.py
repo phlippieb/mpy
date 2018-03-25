@@ -1,6 +1,5 @@
 from scipy import optimize
 import numpy as np
-import matplotlib.pyplot as plt
 
 # A structure to hold the result of a two-piecewise linear approximation calculation.
 # A two-piecewise linear approximation consist of two straight lines that meet at a breakpoint.
@@ -52,6 +51,7 @@ def fit_to(xs, ys):
 # Plot a given two-piecewise linear function between 0 and the given maxX.
 def plot(maxX, tpwla):
     xs = np.linspace(0, maxX, maxX)
+    import matplotlib.pyplot as plt
     plt.plot(xs, _2pwl(xs, tpwla.x, tpwla.y, tpwla.m1, tpwla.m2), color="black")
 
 # This function gives two lines with the given slopes that break at the given coordinates.
