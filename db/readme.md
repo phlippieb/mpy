@@ -135,14 +135,22 @@ Next, open a postgres shell for the `psodroc` database as the `psodroc` role/use
 psql psodroc -d psodroc
 ```
 
-If you get an error like "psql: FATAL:  Peer authentication failed for user "psodroc", try signing in like this:
+If you're on a server, you will probably get an error like "psql: FATAL:  Peer authentication failed for user "psodroc"". Try signing in like this:
 ```
 psql psodroc -h localhost -d psodroc
 ```
 
-You should now see a prompt like `psodroc=>`.
+If that also doesn't work, edit the file `/etc/postgresql/ <your postgres version> /main/pg_hba.conf`, find a line like
+```
+local       all         all                 peer
+```
+and replace it with (I think)
+```
+local       all         all                 trusted
+```
+Then sign into psql again with the `-h localhost` option.
 
-Lastly, from within this shell, run the `create_tables` scripts (assuming you are in the project root directory):
+You should now see a prompt like `psodroc=>` or `psodroc=#`. From within this shell, run the `create_tables` scripts (assuming you are in the project root directory):
 
 ```
 \i db/create_tables.sql
