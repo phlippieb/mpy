@@ -1,6 +1,6 @@
 import drocs
 from rank import rank
-# from db import droc_rank_between_psos_table
+from db import droc_rank_between_psos_table
 
 def get(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, progress=None, progress_total=None):
     # Status report
@@ -21,12 +21,10 @@ def get(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_
         return existing_result
         
 def _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations):
-    # return droc_rank_between_psos_table.fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
-    return None
+    return droc_rank_between_psos_table.fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
     
 def _store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank):
-    # droc_rank_between_psos_table.store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank)
-    return None
+    droc_rank_between_psos_table.store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank)
     
 def _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations):
     experiment_nums = range(0, 30)

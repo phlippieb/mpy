@@ -10,12 +10,14 @@ def store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, 
         (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result, result))
 
 def fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
-    db.cursor.execute('SELECT droc FROM droc WHERE pso_name=%s AND swarm_size=%s AND benchmark_name=%s AND dimensionality=%s AND iterations=%s AND experiment=%s', (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num))
+    db.cursor.execute(
+        'SELECT droc FROM droc WHERE pso_name=%s AND swarm_size=%s AND benchmark_name=%s AND dimensionality=%s AND iterations=%s AND experiment=%s', 
+        (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num))
     rows = db.cursor.fetchall()
     if len(rows) < 1:
         return None
     elif len(rows) > 1:
-        warnings.warn("Multiple results found when looking droc with {} {} {} {} {} {}".format(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num))
+        warnings.warn("Multiple results found when looking for droc with {} {} {} {} {} {}".format(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num))
         
     # rows is an array with an element for each returned row. We only expect one row (see warning above), so we take the first one.
     row = rows[0]
