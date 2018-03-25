@@ -42,7 +42,7 @@ psql -U <username> psodroc
 
 Then, within the `psql` shell, create the tables needed by the library; see `create_tables.sql` in this directory for commands with schema descriptions.
 
-Lastly, within the Python scripts, PostgreSQL is accessed using `psycopg2`. Install using anaconda:
+Lastly, within the Python scripts, PostgreSQL is accessed using `psycopg2`. This should be installed if you followed the readme in the project root. If not, install using anaconda:
 
 ```
 conda install psycopg2

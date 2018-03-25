@@ -7,12 +7,18 @@ The `psodroc` package contains modules for PSO algorithms under `pso` and benchm
 Each benchmark is in a file called `<benchmark name>.py`. In each benchmark file, the actual function implementation is in a function called `function(xs)`, which takes a candidate solution vector as a parameter. Each file also provides the benchmark's domain through functions called `min(d)` and `max(d)`, which respectively return the minimum and maximum allowed `x` value in dimension `d`.
 
 # Install
-This library uses python 2.7 with `numpy`, `scipy` and `numb`, as well as `pytest` for unit tests. Additionally, to explore and plot data, I recommend using `jupyter` notebooks and `matplotlib.pyplot`. To get all of that, you can install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: `conda install numpy scipy numba pytest jupyter matplotlib pytest`.
+This library uses python 2.7 with `numpy`, `scipy`, `numba`, and `matplotlib.pyplot`, as well as `pytest` for unit tests. Additionally, to explore and plot data, I recommend using `jupyter` notebooks. To get all of that, you can install [miniconda](http://conda.pydata.org/miniconda.html), and then use the conda package manager to install components: 
+```
+# Required:
+conda install numpy scipy numba pytest matplotlib pytest psycopg2
+
+# If you're using Jupyter:
+conda install jupyter
+```
 
 This library also uses a PostgreSQL database to manage results. For setup instructions, see the readme in the `db` directory.
 
 # Run
-
 The project contains a makefile, which can be used to run some basic commands:
 - `make run` runs a file named `run.py`, which is used as the main entrypoint for the project.
 - `make clean` removes temporary files.
@@ -22,4 +28,3 @@ The run script currently calculates all DRoC scripts. There are many of them, so
 
 # Coding style
 Instead of aiming to create an elegant, generic, extensible library, I opted to make the code straight-forward and clear. My chosen approach can be summed up as "clarity over elegance". This especially caused me to reject DRY (don't repeat yourself) in favour of defining each algorithm, benchmark and measurement as an independent script. There will be lots of repeated code, but any part of the library can be fully understood by simply reading its file from top to bottom, without referencing oany other code or files. No base classes or common behaviour is factored out. This is a deliberate choice.
-
