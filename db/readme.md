@@ -132,7 +132,12 @@ First, check your current directory. You should be in the `mpy` root dir.
 Next, open a postgres shell for the `psodroc` database as the `psodroc` role/user:
 
 ```
-psql -U psodroc -d psodroc
+psql psodroc -d psodroc
+```
+
+If you get an error like "psql: FATAL:  Peer authentication failed for user "psodroc", try signing in like this:
+```
+psql psodroc -h localhost -d psodroc
 ```
 
 You should now see a prompt like `psodroc=>`.
