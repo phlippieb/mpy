@@ -17,11 +17,12 @@ def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, ite
         existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
         
     if force_calculation or existing_result is None:
-        print " - diversity result not found. calculating..."
+        print "     - diversity result not found. calculating..."
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
-        print ' - storing', len(new_results), 'diversity results...'
+        print '     - storing', len(new_results), 'diversity results...'
         for (iteration, new_result) in enumerate(new_results):
             _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, new_result)
+        print '     - done.'
         return new_results[iteration]
     else:
         return existing_result
@@ -53,7 +54,7 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
         diversity_measurement = diversity.avg_distance_around_swarm_centre(xs)
         diversity_ys.append(diversity_measurement)
         pso.iterate()
-    print "\r - done.                                      "
+    # print "\r     - done.                                      "
     
     # Return the diversity measurements
     return diversity_ys

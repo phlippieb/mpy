@@ -17,13 +17,18 @@ if is_benchmark:
 elif block_number is not None and total_blocks is not None:
     print 'processing block', block_number, 'of', total_blocks, 'droc result blocks...'
     drocs.process(int(block_number), int(total_blocks))
-    
+
 elif block_number is not None:
     raise Exception('When providing a block_number arg, a total_blocks arg is required.')
-    
+
 elif total_blocks is not None:
     raise Exception('When providing a total_blocks arg, a block_number arg is required.')
 
 else:
     print 'processing all droc results...'
     drocs.process(0, 1)
+
+# # Example of a ranked PSO-vs-PSO droc result:
+# import results.droc_rank_between_psos as droc_ranks
+# rank_result = droc_ranks.get('gbest_pso', 'social_only_pso', 10, 'alpine', 3, 500)
+# print 'rank:', rank_result
