@@ -1,5 +1,6 @@
 import drocs
 import benchmarks
+from time import time
 
 pso_names = ['alternative_barebones_pso', 'barebones_pso', 'gbest_pso', 'gc_gbest_pso', 'gc_lbest_pso', 'gc_von_neumann_pso', 'lbest_pso', 'social_only_pso', 'von_neumann_pso']
 swarm_sizes = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -34,13 +35,6 @@ def _get_configuration(index):
                                     return configuration
                                 else:
                                     i += 1
-                                    
-
-# def _process(configurations):
-#     for (i, configuration) in enumerate(configurations):
-#         print "getting droc result", i, "of", len(configurations),
-#         print configuration
-#         drocs.get(*configuration)
         
 def process(block_num, num_blocks):
     print 'total configurations:', _num_valid_configurations()
@@ -50,8 +44,26 @@ def process(block_num, num_blocks):
     # _process(configurations)
     _process_indices(block_indices)
     
+def benchmark():
+    start_time = time()
+    _benchmark(start_time)
+    end_time = time()
+    print "\nBenchmark time (seconds): {}\n".format(end_time - start_time)
+    
 def _process_indices(indices):
     for (index_number, i) in enumerate(indices):
         configuration = _get_configuration(i)
         print "getting droc result", index_number, "of", len(indices), ':', configuration
         drocs.get(*configuration)
+    
+def _benchmark(start_time):
+    # 1 experiment each of Von Neumann PSO with 10, 50 and 100 particles, on the Griewank function in 5, 15 and 30 dimensions, up to 10k iterations.
+    # (So 3 x 3 = 9 experiments.)
+    i = 0
+    for swarm_size in [10, 50, 100]:
+        for dimensionality in [5, 15, 30]:
+            for num_iterations in [10000]:
+                print 'experiment', i, "of", 9
+                print 'time after start:', time() - start_time
+                drocs.get('von_neumann_pso', swarm_size, 'griewank', dimensionality, num_iterations, 1, force_calculation=True)
+                i += 1

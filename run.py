@@ -4,11 +4,17 @@ import results.all_drocs as drocs
 parser = OptionParser()
 parser.add_option('--block', dest='block_number')
 parser.add_option('--of', dest='total_blocks')
+parser.add_option('--benchmark', dest="is_benchmark", action="store_true", default=False)
 options, args = parser.parse_args()
+is_benchmark = options.is_benchmark
 block_number = options.block_number
 total_blocks = options.total_blocks
 
-if block_number is not None and total_blocks is not None:
+if is_benchmark:
+    print 'benchmarking'
+    drocs.benchmark()
+
+elif block_number is not None and total_blocks is not None:
     print 'processing block', block_number, 'of', total_blocks, 'droc result blocks...'
     drocs.process(int(block_number), int(total_blocks))
     

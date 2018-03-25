@@ -8,11 +8,14 @@ import diversities
 import psodroc.measures.two_piecewise_linear_approximation as tpwla
 import db.drocs as db_drocs
 
-def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
-    existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
-    if existing_result is None:
+def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
+    existing_result = None
+    if not force_calculation:
+        existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+        
+    if force_calculation or existing_result is None:
         print ' - droc result not found. calculating...'
-        new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+        new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=force_calculation)
         print ' - storing droc result...'
         _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, new_result)
         return new_result
@@ -25,8 +28,8 @@ def _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations,
 def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result):
     db_drocs.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
 
-def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
+def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
     xs = range(0, num_iterations)
-    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num) for x in xs]
+    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num, force_calculation=(force_calculation and x == 0)) for x in xs]
     droc = tpwla.fit_to(xs, ys).m1
     return droc

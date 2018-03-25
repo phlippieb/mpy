@@ -10,10 +10,13 @@ import db.diversities as db_diversities
 # Assume we will never need more than 20k iterations per experiment
 _max_iterations = 10000
 
-def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment):
+def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, force_calculation=False):
     # If the requested result exists, return it
-    existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
-    if existing_result is None:
+    existing_result = None
+    if not force_calculation:
+        existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
+        
+    if force_calculation or existing_result is None:
         print " - diversity result not found. calculating..."
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
         print ' - storing', len(new_results), 'diversity results...'

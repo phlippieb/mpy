@@ -24,7 +24,16 @@ The project contains a makefile, which can be used to run some basic commands:
 - `make clean` removes temporary files.
 - `make test` runs all unit tests using `pytest`.
 
-The run script currently calculates all DRoC scripts. There are many of them, so it supports running batches. To run a batch, do e.g. `python run.py --block 0 --of 5`; this will run the first of 5 equally large batches.
+The run script currently calculates all DRoC scripts. There are many of them, so it supports running batches. To run a batch, do e.g. 
+```
+python run.py --block 0 --of 5
+```
+This will run the first of 5 equally large batches.
+
+To benchmark a sample of runs, do
+```
+python run.py --benchmark
+```
 
 # Coding style
 Instead of aiming to create an elegant, generic, extensible library, I opted to make the code straight-forward and clear. My chosen approach can be summed up as "clarity over elegance". This especially caused me to reject DRY (don't repeat yourself) in favour of defining each algorithm, benchmark and measurement as an independent script. There will be lots of repeated code, but any part of the library can be fully understood by simply reading its file from top to bottom, without referencing oany other code or files. No base classes or common behaviour is factored out. This is a deliberate choice.
