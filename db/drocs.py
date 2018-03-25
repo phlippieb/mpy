@@ -2,7 +2,12 @@ import db as db
 import warnings
 
 def store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result):
-    db.cursor.execute('INSERT INTO droc (pso_name, swarm_size, benchmark_name, dimensionality, iterations, experiment, droc) VALUES (%s, %s, %s, %s, %s, %s, %s)', (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result))
+    db.cursor.execute(
+        'INSERT INTO droc (pso_name, swarm_size, benchmark_name, dimensionality, iterations, experiment, droc)' +
+        'VALUES (%s, %s, %s, %s, %s, %s, %s)' +
+        'ON CONFLICT (pso_name, swarm_size, benchmark_name, dimensionality, iterations, experiment)' +
+        'DO UPDATE SET droc = %s',
+        (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result, result))
 
 def fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
     db.cursor.execute('SELECT droc FROM droc WHERE pso_name=%s AND swarm_size=%s AND benchmark_name=%s AND dimensionality=%s AND iterations=%s AND experiment=%s', (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num))

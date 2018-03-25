@@ -6,7 +6,8 @@ def store(pso_name, swarm_size, benchmark_name, dimensionality, iteration, exper
         'INSERT INTO diversity (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity)' +
         'VALUES (%s, %s, %s, %s, %s, %s, %s)' +
         'ON CONFLICT (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment)' +
-        'DO UPDATE SET diversity = %s', (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity, diversity))
+        'DO UPDATE SET diversity = %s', 
+        (pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, diversity, diversity))
     
 def fetch(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment):
     db.cursor.execute(
