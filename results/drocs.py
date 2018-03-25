@@ -6,12 +6,14 @@
 
 import diversities
 import psodroc.measures.two_piecewise_linear_approximation as tpwla
-import db.drocs as db_drocs
+import db.droc_table as droc_table
 
 def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
     existing_result = None
     if not force_calculation:
         existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+    else:
+        print ' - forcing calculation.'
         
     if force_calculation or existing_result is None:
         print ' - droc result not found. calculating...'
@@ -23,10 +25,10 @@ def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, ex
         return existing_result
     
 def _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
-    return db_drocs.fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+    return droc_table.fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
     
 def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result):
-    db_drocs.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
+    droc_table.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
 
 def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
     xs = range(0, num_iterations)
