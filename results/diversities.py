@@ -48,7 +48,7 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
     
     # For each iteration of the PSO algorithm, take a diversity measurement.
     for i in range(0, _max_iterations):
-        print "\r -", (i*100)/_max_iterations, "percent complete...                         ",
+        # print "\r -", (i*100)/_max_iterations, "percent complete...                         ",
         xs = pso.positions
         diversity_measurement = diversity.avg_distance_around_swarm_centre(xs)
         diversity_ys.append(diversity_measurement)
