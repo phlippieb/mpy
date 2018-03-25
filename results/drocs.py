@@ -8,7 +8,13 @@ import diversities
 import psodroc.measures.two_piecewise_linear_approximation as tpwla
 import db.droc_table as droc_table
 
-def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
+def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, progress=None, progress_total=None):
+    # Status report
+    print ' - getting droc',
+    if progress is not None and progress_total is not None:
+        print progress, 'of', progress_total,
+    print ':', pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num
+    
     existing_result = None
     if not force_calculation:
         existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)

@@ -1,4 +1,5 @@
 from scipy import stats
+from numpy import median
 import warnings
 
 # Rank two samples of data.
@@ -19,7 +20,7 @@ def rank(lhs, rhs, alpha=0.05):
         if pval < alpha:
             # The difference between the medians of the samples is (still) significantly different.
             # Determine the significantly greater sample as the sample with the greater median (which is consistent with MWU):
-            if stats.median(lhs) < stats.median(rhs):
+            if median(lhs) < median(rhs):
                 return -1
             else:
                 return 1
