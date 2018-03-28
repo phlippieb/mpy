@@ -84,8 +84,10 @@ def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, num
     
     global _configs
     
-    for pso_1_name in pso_names:
-        for pso_2_name in pso_names:
+    for pso_1_i in range(0, len(pso_names)-1):
+        pso_1_name = pso_names[pso_1_i]
+        for pso_2_i in range(pso_1_i+1, len(pso_names)):
+            pso_2_name = pso_names[pso_2_i]
             if pso_1_name == pso_2_name:
                 continue
             for swarm_size in swarm_sizes:
