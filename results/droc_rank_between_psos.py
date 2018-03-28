@@ -24,7 +24,10 @@ def _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, n
     return droc_rank_between_psos_table.fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
     
 def _store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank):
+    # Store result for pso_1_name, pso_2_name (as given):
     droc_rank_between_psos_table.store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank)
+    # Store inverted result for inverted order (pso_2_name, pso_1_name):
+    droc_rank_between_psos_table.store(pso_2_name, pso_1_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank * -1)
     
 def _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations):
     experiment_nums = range(0, 30)
