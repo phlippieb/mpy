@@ -31,8 +31,8 @@ def process(batch_num, num_batches, prep=False):
     all_benchmark_names = [
         'spherical', # Unimodal, smooth, simple
         'rastrigin', # Rugged, unimodal on macro-scale
-        'rosenbrock' # Smooth, multimodal in 4 dimensions and up
-        # 'weierstrass' # Rugged on micro- and macro-scale
+        'rosenbrock', # Smooth, multimodal in 4 dimensions and up
+        'weierstrass' # Rugged on micro- and macro-scale
     ]
     
     all_dimensionalities = [
