@@ -51,7 +51,7 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
 
     # For each iteration of the PSO algorithm, take a diversity measurement.
     prev_perc = -10
-    perc_increment = 10
+    perc_increment = 1
     for i in range(0, _max_iterations):
         perc = (i*100)/_max_iterations
         if perc > prev_perc + (perc_increment - 1):
