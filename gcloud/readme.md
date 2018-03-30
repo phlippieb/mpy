@@ -13,6 +13,7 @@ This readme contains instructions for setting up the experiments on Google Cloud
     - Note the `<db-instance-id>` as the instance id/name of this db instance.
     - Generate a password for the `postgres` user and paste it somewhere.
     - Note the `zone`.
+    - Note the `<db-connection_id>`, which is different from the instance id.
 2. Go to the SQL instance's details on the (web) console.
     - Go to the USERS tab and create a user named `psodroc` with password `psodroc`.
     - Go to the DATABASES tab and create a database named `psodroc`.
@@ -51,12 +52,9 @@ This readme contains instructions for setting up the experiments on Google Cloud
         ```
     - Start the proxy. You may want to do this in a tmux session.
         ```
-        export INSTANCE_NAME="<db-instance-id>"
+        ./cloud_sql_proxy -instances="<db-connection-id>"=tcp:5432
         ```
-        where `<db-instance-id` is the instance-id of the sql instance you noted earlier.
-        ```
-        ./cloud_sql_proxy -instances="$INSTANCE_NAME"=tcp:5432
-        ```
+        where `<db-connection-id>` is the connection id for the db that you noted before; **note** that this is not the instance id!
     - Detach from the tmux session, or create a new window.
     - You should now be able to connect to your SQL instance via the proxy:
         ```
