@@ -14,13 +14,13 @@ def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, ex
     if progress is not None and progress_total is not None:
         print progress, 'of', progress_total,
     print ':', pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num
-    
+
     existing_result = None
     if not force_calculation:
         existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
     else:
         print '   - forcing calculation.'
-        
+
     if force_calculation or existing_result is None:
         print '   - droc result not found. calculating...'
         new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=force_calculation)
@@ -30,12 +30,13 @@ def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, ex
         return new_result
     else:
         return existing_result
-    
+
 def _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num):
     return droc_table.fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
-    
+
 def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result):
     droc_table.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
+    droc_table.commit()
 
 def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
     xs = range(0, num_iterations)
