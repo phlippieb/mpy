@@ -18,7 +18,7 @@ def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, ite
         existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
 
     if force_calculation or existing_result is None:
-        print t.now(), "     - diversity result not found. calculating..."
+        print t.now(), "     - diversity result not found. calculating for", _max_iterations, "iterations..."
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
         print t.now(), '     - storing', len(new_results), 'diversity results...'
         for (iteration, new_result) in enumerate(new_results):
@@ -50,13 +50,20 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
     diversity_ys = []
 
     # For each iteration of the PSO algorithm, take a diversity measurement.
+    prev_perc = -10
+    perc_increment = 10
     for i in range(0, _max_iterations):
+        perc = (i*100)/_max_iterations
+        if perc > prev_perc + (perc_increment - 1):
+            prev_perc = perc
+            print t.now(), '     -', perc, 'percent complete...'
         # print "\r -", (i*100)/_max_iterations, "percent complete...                         ",
         xs = pso.positions
         diversity_measurement = diversity.avg_distance_around_swarm_centre(xs)
         diversity_ys.append(diversity_measurement)
         pso.iterate()
     # print "\r     - done.                                      "
+    print t.now(), '     - 100 percent complete.'
 
     # Return the diversity measurements
     return diversity_ys
