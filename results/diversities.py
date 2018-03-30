@@ -6,6 +6,7 @@
 import psos, benchmarks
 import psodroc.measures.diversity as diversity
 import db.diversity_table as diversity_table
+import print_time as t
 
 # Assume we will never need more than 10k iterations per experiment
 _max_iterations = 10000
@@ -17,13 +18,13 @@ def get(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, ite
         existing_result = _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
 
     if force_calculation or existing_result is None:
-        print "     - diversity result not found. calculating..."
+        print t.now(), "     - diversity result not found. calculating..."
         new_results = _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions)
-        print '     - storing', len(new_results), 'diversity results...'
+        print t.now(), '     - storing', len(new_results), 'diversity results...'
         for (iteration, new_result) in enumerate(new_results):
             _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, new_result)
         diversity_table.commit()
-        print '     - done.'
+        print t.now(), '     - done.'
         return new_results[iteration]
     else:
         return existing_result

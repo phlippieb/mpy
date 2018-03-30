@@ -1,6 +1,7 @@
 import results.droc_rank_between_psos as rank
 import results.diversities as diversities
 import benchmarks
+import print_time as t
 
 _configs = []
 _prep_configs = []
@@ -68,7 +69,7 @@ def process(batch_num, num_batches, prep=False):
 
         for (i, index) in enumerate(batch_indices):
             prep_config = _prep_configs[index]
-            print 'Prep', i, 'of', batch_size, prep_config
+            print t.now(), 'Prep', i, 'of', batch_size, prep_config
             diversities.get(*prep_config)
     else:
         # Configurations for comparing DRoC performance for different swarm sizes:
@@ -90,12 +91,12 @@ def process(batch_num, num_batches, prep=False):
 
         for (i, index) in enumerate(batch_indices):
             config = _configs[index]
-            print 'Rank', i, 'of', batch_size
+            print t.now(), 'Rank', i, 'of', batch_size
             rank.get(*config)
 
 def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, nums_iterations):
-    print 'determining configurations...'
-    print '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names,', len(dimensionalities), 'dimensionalities, and', len(nums_iterations), 'numbers of iterations)'
+    print t.now(), 'determining configurations...'
+    print t.now(), '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names,', len(dimensionalities), 'dimensionalities, and', len(nums_iterations), 'numbers of iterations)'
 
     global _configs
 
@@ -115,7 +116,7 @@ def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, num
                             config = (pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
                             if not config in _configs:
                                 _configs.append(config)
-    print 'done.'
+    print t.now(), 'done.'
 
 def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities):
     global _prep_configs

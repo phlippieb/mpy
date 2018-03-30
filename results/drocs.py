@@ -7,10 +7,11 @@
 import diversities
 import psodroc.measures.two_piecewise_linear_approximation as tpwla
 import db.droc_table as droc_table
+import print_time as t
 
 def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, progress=None, progress_total=None):
     # Status report
-    print '   - getting droc',
+    print t.now(), '   - getting droc',
     if progress is not None and progress_total is not None:
         print progress, 'of', progress_total,
     print ':', pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num
@@ -19,14 +20,14 @@ def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, ex
     if not force_calculation:
         existing_result = _fetch(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
     else:
-        print '   - forcing calculation.'
+        print t.now(), '   - forcing calculation.'
 
     if force_calculation or existing_result is None:
-        print '   - droc result not found. calculating...'
+        print t.now(), '   - droc result not found. calculating...'
         new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=force_calculation)
-        print '   - storing droc result...'
+        print t.now(), '   - storing droc result...'
         _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, new_result)
-        print '   - done.'
+        print t.now(), '   - done.'
         return new_result
     else:
         return existing_result
