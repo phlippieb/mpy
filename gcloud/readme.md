@@ -72,7 +72,7 @@ This readme contains instructions for setting up the experiments on Google Cloud
         Follow the prompts. Source the new path with `source .bashrc`.
     - Install project dependencies:
         ```
-        conda install numpy scipy numba pytest matplotlib pytest psycopg2
+        conda install numba numpy psycopg2 pytest scipy 
         ```
     - Clone the project:
         ```

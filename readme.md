@@ -27,7 +27,10 @@ source ~/.bashrc
 Then install the required packages:
 ```
 # Required:
-conda install numpy scipy numba pytest matplotlib pytest psycopg2
+conda install numba numpy psycopg2 pytest scipy
+
+# If you're using pyplot:
+conda install matplotlib
 
 # If you're using Jupyter:
 conda install jupyter
