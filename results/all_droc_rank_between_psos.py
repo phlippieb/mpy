@@ -6,7 +6,7 @@ import print_time as t
 _configs = []
 _prep_configs = []
 
-def process(batch_num, num_batches, prep=False):
+def process(batch_num, num_batches, prep=False, verbose=False):
     all_pso_names = [
         # 'alternative_barebones_pso',
         # 'barebones_pso',
@@ -70,7 +70,7 @@ def process(batch_num, num_batches, prep=False):
         for (i, index) in enumerate(batch_indices):
             prep_config = _prep_configs[index]
             print t.now(), 'Prep', i, 'of', batch_size, prep_config
-            diversities.get(*prep_config)
+            diversities.get(*prep_config, verbose=verbose)
     else:
         # Configurations for comparing DRoC performance for different swarm sizes:
         # (with fixed 5D benchmarks and 2000 iterations per PSO)
@@ -92,7 +92,7 @@ def process(batch_num, num_batches, prep=False):
         for (i, index) in enumerate(batch_indices):
             config = _configs[index]
             print t.now(), 'Rank', i, 'of', batch_size
-            rank.get(*config)
+            rank.get(*config, verbose=verbose)
 
 def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, nums_iterations):
     print t.now(), 'determining configurations...'

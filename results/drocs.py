@@ -9,11 +9,9 @@ import psodroc.measures.two_piecewise_linear_approximation as tpwla
 import db.droc_table as droc_table
 import print_time as t
 
-def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, progress=None, progress_total=None):
+def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, verbose=False):
     # Status report
     print t.now(), '   - getting droc',
-    if progress is not None and progress_total is not None:
-        print progress, 'of', progress_total,
     print ':', pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num
 
     existing_result = None
@@ -24,7 +22,7 @@ def get(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, ex
 
     if force_calculation or existing_result is None:
         print t.now(), '   - droc result not found. calculating...'
-        new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=force_calculation)
+        new_result = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=force_calculation, verbose=verbose)
         print t.now(), '   - storing droc result...'
         _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, new_result)
         print t.now(), '   - done.'
@@ -39,8 +37,8 @@ def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations,
     droc_table.store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, result)
     droc_table.commit()
 
-def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False):
+def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, verbose=False):
     xs = range(0, num_iterations)
-    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num, force_calculation=(force_calculation and x == 0)) for x in xs]
+    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num, force_calculation=(force_calculation and x == 0), verbose=verbose) for x in xs]
     droc = tpwla.fit_to(xs, ys).m1
     return droc
