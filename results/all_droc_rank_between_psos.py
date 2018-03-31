@@ -8,8 +8,8 @@ _prep_configs = []
 
 def process(batch_num, num_batches, prep=False, verbose=False):
     all_pso_names = [
-        # 'alternative_barebones_pso',
-        # 'barebones_pso',
+        'alternative_barebones_pso',
+        'barebones_pso',
         'gbest_pso',
         'gc_gbest_pso',
         'gc_lbest_pso',
@@ -119,6 +119,9 @@ def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, num
     print t.now(), 'done.'
 
 def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities):
+    print t.now(), 'determining prep configurations...'
+    print t.now(), '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names, and', len(dimensionalities)
+    
     global _prep_configs
 
     for pso_name in pso_names:
