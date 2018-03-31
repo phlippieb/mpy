@@ -7,6 +7,7 @@ import psos, benchmarks
 import psodroc.measures.diversity as diversity
 import db.diversity_table as diversity_table
 import print_time as t
+import time
 
 # Assume we will never need more than 10k iterations per experiment
 _max_iterations = 10000
@@ -54,13 +55,16 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
     # For each iteration of the PSO algorithm, take a diversity measurement.
     if verbose:
         prev_perc = -1
-        perc_increment = 1
+        # perc_increment = 1
+        prev_time = time.time()
+        time_increment = 1
 
     for i in range(0, _max_iterations):
         if verbose:
             perc = (i*100)/_max_iterations
-            if perc > prev_perc + (perc_increment - 1):
+            if perc > prev_perc and time.time() > (prev_time + time_increment):
                 prev_perc = perc
+                prev_time = time.time()
                 print t.now(), '     -', perc, 'percent complete...'
 
         xs = pso.positions
