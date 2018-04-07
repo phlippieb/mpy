@@ -3,21 +3,23 @@ from rank import rank
 from db import droc_rank_between_psos_table
 import print_time as t
 
-def get(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=False):
-    # Status report
+def get(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=False, benchmark=False):
     print t.now(), ' - getting rank between psos',
     print ':', pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations
 
-    # Actions
-    existing_result = _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
-    if existing_result is None:
-        print t.now(), '   - droc rank between pso\'s not found. calculating...'
-        new_result = _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=verbose)
-        print t.now(), '   - storing result...'
-        _store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, new_result)
-        return new_result
+    if benchmark:
+        # Don't try and fetch existing result, and don't store result
+        _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=verbose)
     else:
-        return existing_result
+        existing_result = _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
+        if existing_result is None:
+            print t.now(), '   - droc rank between pso\'s not found. calculating...'
+            new_result = _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=verbose)
+            print t.now(), '   - storing result...'
+            _store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, new_result)
+            return new_result
+        else:
+            return existing_result
 
 def _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations):
     return droc_rank_between_psos_table.fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)

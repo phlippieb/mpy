@@ -2,6 +2,7 @@ import results.droc_rank_between_psos as rank
 import results.diversities as diversities
 import benchmarks
 import print_time as t
+from timeit import default_timer as timer
 
 _configs = []
 _prep_configs = []
@@ -94,6 +95,14 @@ def process(batch_num, num_batches, prep=False, verbose=False):
             print t.now(), 'Rank', i, 'of', batch_size
             rank.get(*config, verbose=verbose)
 
+def benchmark():
+    # Run and time small number of computationally-expensive simulations.
+    start = timer()
+    rank.get('alternative_barebones_pso', 'gc_von_neumann_pso', 100, 'weierstrass', 500, 1000, verbose=True, benchmark=True)
+    duration = timer() - start
+    print '\n'
+    print t.now(), 'duration:', duration
+
 def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, nums_iterations):
     print t.now(), 'determining configurations...'
     print t.now(), '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names,', len(dimensionalities), 'dimensionalities, and', len(nums_iterations), 'numbers of iterations)'
@@ -121,7 +130,7 @@ def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, num
 def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities):
     print t.now(), 'determining prep configurations...'
     print t.now(), '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names, and', len(dimensionalities)
-    
+
     global _prep_configs
 
     for pso_name in pso_names:
