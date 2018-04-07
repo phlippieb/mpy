@@ -10,12 +10,13 @@ def avg_distance_around_swarm_centre(xs):
         "Swarm must have more than zero particles."
     assert np.shape(xs)[1] > 0, \
         "Swarm must have more than zero dimensions."
-    
+
     # Calculate the "swarm centre" once-off:
     dimension_averages = np.mean(xs, axis=0)
-    
+
     # Return the average distance between each particle and the swarm centre:
-    return np.average([np.sqrt(sum(np.square(d - dimension_averages[k]) for (k, d) in enumerate(x))) for x in xs])
+    return np.average([np.sqrt(np.sum(np.square(x - dimension_averages))) for x in xs])
+
 
 # Tests:
 import pytest as pt
@@ -38,7 +39,7 @@ def _test_assert_not_empty():
     for xs in xss:
         with pt.raises(Exception):
             avg_distance_around_swarm_centre(xs)
-        
+
 def _test_zero_distance():
     xs = [[0., 1., 2.], [0., 1., 2.], [0., 1., 2.]]
     assert avg_distance_around_swarm_centre(xs) == 0, \
@@ -48,10 +49,10 @@ def _test_lonely_swarm():
     xs = [[0., 1., 2., 4.]]
     assert avg_distance_around_swarm_centre(xs) == 0, \
         "Expected a swarm with just one particle to yield a zero avg distance to the swarm centre."
-    
+
 def _test_other():
     xs = [[-1, 0], [0, -1], [1, 0], [0, 1]]
     assert avg_distance_around_swarm_centre(xs) == 1
-    
+
     xs = [[-2.5, 1.5], [-0.5, 1.5], [1.5, -0.5], [1.5, -2.5], [1.5, 3.5], [1.5, 5.5], [5.5, 1.5], [3.5, 1.5]]
     assert avg_distance_around_swarm_centre(xs) == 3

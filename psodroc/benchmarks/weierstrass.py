@@ -1,23 +1,24 @@
 import numpy as np
+from numba import vectorize
 
 # S. K. Mishra. Performance of Repulsive Particle Swarm Method in Global Optimization of Some Important Test Functions: A Fortran Program. Technical report, Social Science Research Network (SSRN), August 2006.
 
-
 def function(xs):
     D = len(xs)
-    result = 0
-    for i in range(D):
-        for k in _ks:
-            result += (_as[k] * np.cos(_b1s[k] * (xs[i] + .5)))
-    return result - D * _const_term
+    return _summed(xs, _ks) - D * _const_term
+
+def _summed(xs, ks):
+    return np.sum(np.sum(_inner(x, ks)) for x in xs)
+
+@vectorize(['float64(float64, float64)'])
+def _inner(x, k):
+    return np.power(.5, k) * np.cos(2. * np.pi * np.power(3., k) * (x + .5))
 
 # Pre-calculated components (to speed up calculation):
 # Do not change kMax during runtime!
 _kMax = 20
 _ks = range(_kMax+1)
 _const_term = np.sum([np.power(.5, k) * np.cos(2. * np.pi * np.power(3, k) * .5) for k in _ks])
-_as = [np.power(.5, k) for k in _ks]
-_b1s = [2. * np.pi * np.power(3., k) for k in _ks]
 
 
 # domain is [-0.5, -0.5] in all dimensions
