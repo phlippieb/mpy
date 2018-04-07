@@ -97,8 +97,10 @@ def process(batch_num, num_batches, prep=False, verbose=False):
 
 def benchmark():
     # Run and time small number of computationally-expensive simulations.
+
     start = timer()
-    rank.get('alternative_barebones_pso', 'gc_von_neumann_pso', 100, 'weierstrass', 500, 1000, verbose=True, benchmark=True)
+    for i in range(3):
+        diversities.get('alternative_barebones_pso', 500, 'weierstrass', 500, 0, i, verbose=True, force_calculation=True)
     duration = timer() - start
     print '\n'
     print t.now(), 'duration:', duration

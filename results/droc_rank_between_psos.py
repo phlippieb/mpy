@@ -9,7 +9,7 @@ def get(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_
 
     if benchmark:
         # Don't try and fetch existing result, and don't store result
-        _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=verbose)
+        _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=verbose, benchmark=True)
     else:
         existing_result = _fetch(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations)
         if existing_result is None:
@@ -31,9 +31,9 @@ def _store(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, n
     droc_rank_between_psos_table.store(pso_2_name, pso_1_name, swarm_size, benchmark_name, dimensionality, num_iterations, rank * -1)
     droc_rank_between_psos_table.commit()
 
-def _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=False):
+def _calculate(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, verbose=False, benchmark=False):
     experiment_nums = range(0, 30)
-    pso_1_drocs = [drocs.get(pso_1_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, verbose=verbose) for experiment_num in experiment_nums]
-    pso_2_drocs = [drocs.get(pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, verbose=verbose) for experiment_num in experiment_nums]
+    pso_1_drocs = [drocs.get(pso_1_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, verbose=verbose, force_calculation=benchmark) for experiment_num in experiment_nums]
+    pso_2_drocs = [drocs.get(pso_2_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, verbose=verbose, force_calculation=benchmark) for experiment_num in experiment_nums]
     result = rank.rank(pso_1_drocs, pso_2_drocs)
     return result

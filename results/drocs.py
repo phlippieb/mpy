@@ -39,6 +39,6 @@ def _store(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations,
 
 def _calculate(pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num, force_calculation=False, verbose=False):
     xs = range(0, num_iterations)
-    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num, force_calculation=(force_calculation and x == 0), verbose=verbose) for x in xs]
+    ys = [diversities.get(pso_name, swarm_size, benchmark_name, dimensionality, x, experiment_num, verbose=verbose, force_calculation=(force_calculation and x == 0)) for x in xs]
     droc = tpwla.fit_to(xs, ys).m1
     return droc
