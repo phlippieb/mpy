@@ -7,6 +7,7 @@ docs/_build
 
 # Boilerplate
 *.py[cod]
+.pytest_cache
 
 # IPython and notebooks
 *.ipynb_checkpoints
