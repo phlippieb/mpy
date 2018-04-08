@@ -1,11 +1,21 @@
 import numpy as np
+from numba import vectorize
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
 def function(xs):
-    return (np.sum(np.square(x) for x in xs) / 4000.) \
-    - np.prod([np.cos(x / np.sqrt(i)) for i, x in enumerate(xs, 1)]) \
-    + 1.
+    _is = range(1, len(xs) + 1)
+    return (np.sum(_inner1(xs)) / 4000.) \
+        - np.prod(_inner2(xs, _is)) \
+        + 1
+
+@vectorize(['float64(float64)'])
+def _inner1(x):
+    return np.square(x)
+
+@vectorize(['float64(float64, int64)'])
+def _inner2(x, i):
+    return np.cos(x / np.sqrt(i))
 
 # domain = [-600.0, 600.0] across all dimensions
 def min(d):
@@ -13,7 +23,7 @@ def min(d):
 
 def max(d):
     return 600.
-    
+
 def is_dimensionality_valid(D):
     return True
 
