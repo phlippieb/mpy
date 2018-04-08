@@ -100,7 +100,7 @@ def benchmark():
 
     start = timer()
     for i in range(3):
-        diversities.get('alternative_barebones_pso', 500, 'schwefel_2_26', 500, 0, i, verbose=True, force_calculation=True)
+        diversities.get('alternative_barebones_pso', 500, 'skew_rastrigin', 500, 0, i, verbose=True, force_calculation=True)
     duration = timer() - start
     print '\n'
     print t.now(), 'duration:', duration

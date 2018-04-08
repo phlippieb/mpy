@@ -1,11 +1,19 @@
 import numpy as np
+from numba import vectorize
 
 # N. Hansen and S. Kern. Evaluating the CMA Evolution Strategy on Multimodal Test Functions. In Proceedings of the 8th International Conference on Parallel Problem Solving from Nature, volume 3242 of Lecture Notes in Computer Science, pages 282-291. Springer Berlin / Heidelberg, 2004.
 
 def function(xs):
     D = len(xs)
-    ys = [10. * x if x > 0 else x for x in xs]
-    return 10. * D + np.sum(np.square(y) - (10. * np.cos(2. * np.pi * y)) for y in ys)
+    return 10. * D + np.sum(_inner(_y(xs)))
+
+@vectorize(['float64(float64)'])
+def _y(x):
+    return 10. * x if x > 0 else x
+
+
+def _inner(y):
+    return np.square(y) - (10. * np.cos(2. * np.pi * y))
 
 # Domain is [-5, 5] across all dimensions
 def min(d):
@@ -13,7 +21,7 @@ def min(d):
 
 def max(d):
     return 5.
-    
+
 def is_dimensionality_valid(D):
     return True
 
