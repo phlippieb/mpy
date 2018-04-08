@@ -1,11 +1,20 @@
 import numpy as np
+from numba import vectorize
 
 # S. K. Mishra. Performance of Repulsive Particle Swarm Method in Global Optimization of Some Important Test Functions: A Fortran Program. Technical report, Social Science Research Network (SSRN), August 2006.
 
 def function(xs):
-    a = np.sum(np.square(xs))
-    b = np.sum((i*x)/2. for i, x in enumerate(xs, 1))
+    a = np.sum(_a(xs))
+    b = np.sum(_b(xs, range(1, len(xs) + 1)))
     return a + np.square(b) + np.power(b, 4.)
+
+@vectorize(['float64(float64)'])
+def _a(x):
+    return np.square(x)
+
+@vectorize(['float64(float64, int64)'])
+def _b(x, i):
+    return (i * x) / 2.
 
 # domain = [-5, 10] across all dimensions
 def min(d):
@@ -13,7 +22,7 @@ def min(d):
 
 def max(d):
     return 10.
-    
+
 def is_dimensionality_valid(D):
     return True
 

@@ -99,8 +99,8 @@ def benchmark():
     # Run and time small number of computationally-expensive simulations.
 
     start = timer()
-    for i in range(3):
-        diversities.get('alternative_barebones_pso', 500, 'step', 500, 0, i, verbose=True, force_calculation=True)
+    for i in range(30):
+        diversities.get('alternative_barebones_pso', 500, 'zakharov', 500, 0, i, verbose=True, force_calculation=True)
     duration = timer() - start
     print '\n'
     print t.now(), 'duration:', duration
