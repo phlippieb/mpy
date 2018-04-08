@@ -1,9 +1,14 @@
 import numpy as np
+from numba import vectorize
 
 # S. Rahnamayan, H. R. Tizhoosh, and M. M. A. Salama. A novel population initialization method for accelerating evolutionary algorithms. Computers & Mathematics with Applications, 53(10):1605-1614, May 2007.
 
 def function(xs):
-    return sum(np.abs(x * np.sin(x) + .1 * x) for x in xs)
+    return sum(_inner(xs))
+
+@vectorize(['float64(float64)'])
+def _inner(x):
+    return np.abs(x * np.sin(x) + .1 * x)
 
 # domain = [-10.0, 10.0] across all dimensions
 def min(d):
@@ -11,7 +16,7 @@ def min(d):
 
 def max(x):
     return 10.
-    
+
 def is_dimensionality_valid(D):
     return True
 
