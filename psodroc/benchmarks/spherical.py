@@ -1,9 +1,14 @@
 import numpy as np
+from numba import vectorize
 
 # K. A. De Jong. An analysis of the behavior of a class of genetic adaptive systems. PhD thesis, University of Michigan, Ann Arbor, MI, USA, 1975.
 
 def function(xs):
-    return sum(np.square(xs))
+    return np.sum(_inner(xs))
+
+@vectorize(['float64(float64)'])
+def _inner(x):
+    return np.square(x)
 
 # domain = [-5.12, 5.12] across all dimensions
 def min(d):
@@ -11,7 +16,7 @@ def min(d):
 
 def max(d):
     return 5.12
-    
+
 def is_dimensionality_valid(D):
     return True
 
