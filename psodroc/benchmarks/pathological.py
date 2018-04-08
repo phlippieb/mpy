@@ -1,17 +1,19 @@
 import numpy as np
+from numba import vectorize
 
 # S. Rahnamayan, H. R. Tizhoosh, and M. M. A. Salama. A novel population initialization method for accelerating evolutionary algorithms. Computers & Mathematics with Applications, 53(10):1605-1614, May 2007.
 
 def function(xs):
     D = len(xs)
     assert D > 1, "Pathological.function must have 2 or more dimensions."
+    return np.sum(_inner(xs[:-1], xs[1:]))
 
-    result = 0
-    for xi, xi1 in zip(xs[:-1], xs[1:]):
-        a = (np.square(np.sin(np.sqrt((100 * np.square(xi)) + np.square(xi1))))) - 0.5
-        b = 1 + (0.001 * np.square(np.square(xi) - (2 * xi * xi1) + np.square(xi1)))
-        result += 0.5 + (a / b)
-    return result
+@vectorize(['float64(float64, float64)'])
+def _inner(x1, x2):
+    return 0.5 + ( \
+        (np.square(np.sin(np.sqrt((100 * np.square(x1)) + np.square(x2)))) - 0.5) \
+        / (1 + (0.001 * np.square(np.square(x1) - (2 * x1 * x2) + np.square(x2)))) \
+    )
 
 # domain = [-100, 100 across all dimensions]
 def min(d):
@@ -19,7 +21,7 @@ def min(d):
 
 def max(d):
     return 100.0
-    
+
 def is_dimensionality_valid(D):
     # Pathological requires 2 or more dimensions.
     return D > 1
