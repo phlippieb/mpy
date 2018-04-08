@@ -1,12 +1,21 @@
 import numpy as np
+from numba import vectorize
 
 # S. K. Mishra. Some new test functions for global optimization and performance of repulsive particle swarm method. Technical Report 2718, University Library of Munich, Germany, August 2006.
 
 def function(xs):
     D = len(xs)
+    # return np.square(np.sin(3. * np.pi * xs[0])) \
+    #     + np.sum(np.square(x1 - 1.) * (1. + np.square(np.sin(3. * np.pi * x2))) for x1, x2 in zip(xs[:-1], xs[1:])) \
+    #     + np.square(xs[D-1] - 1.) * (1. + np.square(np.sin(2. * np.pi * xs[D-1])))
+
     return np.square(np.sin(3. * np.pi * xs[0])) \
-        + np.sum((np.square(x1 - 1.) * (1. + np.square(np.sin(3. * np.pi * x2)))) for x1, x2 in zip(xs[:-1], xs[1:])) \
+        + np.sum(_inner(xs[:-1], xs[1:])) \
         + np.square(xs[D-1] - 1.) * (1. + np.square(np.sin(2. * np.pi * xs[D-1])))
+
+@vectorize(['float64(float64, float64)'])
+def _inner(x1, x2):
+    return np.square(x1 - 1.) * (1. + np.square(np.sin(3. * np.pi * x2)))
 
 # domain = [-10.0, 10.0] across all dimensions
 def min(d):
@@ -14,7 +23,7 @@ def min(d):
 
 def max(d):
     return 10.
-    
+
 def is_dimensionality_valid(D):
     return True
 
