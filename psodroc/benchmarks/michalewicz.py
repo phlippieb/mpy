@@ -1,9 +1,15 @@
 import numpy as np
+from numba import vectorize
 
 # S. K. Mishra. Performance of Repulsive Particle Swarm Method in Global Optimization of Some Important Test Functions: A Fortran Program. Technical report, Social Science Research Network (SSRN), August 2006.
 
-def function(xs, p=10):
-    return -np.sum(np.sin(x) * np.power(np.sin((i*np.square(x)) / np.pi), (2 * p)) for i, x in enumerate(xs, 1))
+def function(xs):
+    return -np.sum(_inner(xs, range(1, len(xs) + 1)))
+
+@vectorize(['float64(float64, int64)'])
+def _inner(x, i):
+    p = 10
+    return np.sin(x) * np.power(np.sin((i*np.square(x)) / np.pi), (2 * p))
 
 # domain = [0, pi] across all dimensions
 def min(d):
@@ -11,7 +17,7 @@ def min(d):
 
 def max(d):
     return np.pi
-    
+
 def is_dimensionality_valid(D):
     return True
 
