@@ -1,5 +1,5 @@
 import results.droc_rank_between_psos as rank
-import results.diversities as diversities
+import results.drocs as drocs
 import benchmarks
 import print_time as t
 from timeit import default_timer as timer
@@ -60,9 +60,9 @@ def process(batch_num, num_batches, prep=False, verbose=False):
     global _configs
 
     if prep:
-        _make_prep_configs(all_pso_names, all_swarm_sizes, all_benchmark_names, [5])
-        _make_prep_configs(all_pso_names, [25], all_benchmark_names, all_dimensionalities)
-        _make_prep_configs(all_pso_names, [25], all_benchmark_names, [5])
+        _make_prep_configs(all_pso_names, all_swarm_sizes, all_benchmark_names, [5], [2000])
+        _make_prep_configs(all_pso_names, [25], all_benchmark_names, all_dimensionalities, [2000])
+        _make_prep_configs(all_pso_names, [25], all_benchmark_names, [5], all_nums_iterations)
 
         num_configs = len(_prep_configs)
         batch_indices = range(batch_num, num_configs, num_batches)
@@ -71,7 +71,8 @@ def process(batch_num, num_batches, prep=False, verbose=False):
         for (i, index) in enumerate(batch_indices):
             prep_config = _prep_configs[index]
             print t.now(), 'Prep', i, 'of', batch_size, prep_config
-            diversities.get(*prep_config, verbose=verbose)
+            # diversities.get(*prep_config, verbose=verbose)
+            drocs.get(*prep_config, verbose=verbose)
     else:
         # Configurations for comparing DRoC performance for different swarm sizes:
         # (with fixed 5D benchmarks and 2000 iterations per PSO)
@@ -129,7 +130,7 @@ def _make_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, num
                                 _configs.append(config)
     print t.now(), 'done.'
 
-def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities):
+def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities, nums_iterations):
     print t.now(), 'determining prep configurations...'
     print t.now(), '(processing', len(pso_names), 'pso names,', len(swarm_sizes), 'swarm sizes,', len(benchmark_names), 'benchmark names, and', len(dimensionalities)
 
@@ -143,7 +144,8 @@ def _make_prep_configs(pso_names, swarm_sizes, benchmark_names, dimensionalities
                     for dimensionality in dimensionalities:
                         if not benchmark.is_dimensionality_valid(dimensionality):
                             continue
-                        for experiment_num in range(0, 30):
-                            prep_config = (pso_name, swarm_size, benchmark_name, dimensionality, 0, experiment_num)
-                            if not prep_config in _prep_configs:
-                                _prep_configs.append(prep_config)
+                        for num_iterations in nums_iterations:
+                            for experiment_num in range(0, 30):
+                                prep_config = (pso_name, swarm_size, benchmark_name, dimensionality, num_iterations, experiment_num)
+                                if not prep_config in _prep_configs:
+                                    _prep_configs.append(prep_config)
