@@ -1,14 +1,9 @@
 import numpy as np
-from numba import vectorize
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
 def function(xs):
-    return -np.sum(_inner(xs))
-
-@vectorize(['float64(float64)'])
-def _inner(x):
-    return x * np.sin(np.sqrt(np.abs(x)))
+    return -np.sum(xs * np.sin(np.sqrt(np.abs(xs))))
 
 # Domain is [-500, 500] across all dimensions
 def min(d):
@@ -16,7 +11,7 @@ def min(d):
 
 def max(d):
     return 500.
-
+    
 def is_dimensionality_valid(D):
     return True
 
