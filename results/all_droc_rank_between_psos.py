@@ -1,4 +1,5 @@
 import results.droc_rank_between_psos as rank
+import results.diversities as diversities
 import results.drocs as drocs
 import benchmarks
 import print_time as t
@@ -21,40 +22,44 @@ def process(batch_num, num_batches, prep=False, verbose=False):
     ]
 
     all_swarm_sizes = [
-        5,
-        10,
-        25,
-        50,
-        75,
-        100,
-        500
+        25
     ]
 
     all_benchmark_names = [
-        'spherical', # Unimodal, smooth, simple
-        'rastrigin', # Rugged, unimodal on macro-scale
-        'rosenbrock', # Smooth, multimodal in 4 dimensions and up
-        'weierstrass' # Rugged on micro- and macro-scale
+        'spherical',
+        'rastrigin',
+        'rosenbrock',
+        'weierstrass',
+        # ^^^ already done
+        # vvv new
+        'ackley',
+        'alpine',
+        'beale',
+        'bohachevsky1_generalized',
+        'eggholder',
+        'goldstein_price',
+        'griewank',
+        'levy13_generalized',
+        'michalewicz',
+        'pathological',
+        'quadric',
+        'quartic',
+        'salomon',
+        'schwefel_2_22',
+        'schwefel_2_26',
+        'six_hump_camel_back',
+        'skew_rastrigin',
+        'step',
+        'zakharov'
     ]
 
     all_dimensionalities = [
-        5,
-        25,
-        50,
-        100,
-        500,
-        1000
+        2, # <== for the benchmarks that are only defined in 2D
+        5 # <== for the rest
     ]
 
     all_nums_iterations = [
-        25,
-        50,
-        75,
-        100,
-        125,
-        150,
-        2000,
-        10000
+        2000
     ]
 
     global _configs
