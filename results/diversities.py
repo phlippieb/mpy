@@ -9,8 +9,7 @@ import db.diversity_table as diversity_table
 import print_time as t
 import time
 
-# Assume we will never need more than 10k iterations per experiment
-_max_iterations = 10000
+_max_iterations = 2000
 
 def get(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, verbose=False, force_calculation=False):
     if force_calculation:
