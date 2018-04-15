@@ -8,13 +8,22 @@ import psodroc.measures.diversity as diversity
 import db.diversity_table as diversity_table
 import print_time as t
 import time
+import numpy as np
 
 _max_iterations = 2000
 
 def get(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, verbose=False, force_calculation=False):
     if force_calculation:
         print t.now(), '     - forcing calculation'
-        _calculate(pso_name, swarm_size, benchmark_name, dimensionality, verbose=verbose, num_iterations=2)
+        new_results = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, verbose=verbose, num_iterations=_max_iterations)
+        
+        print t.now(), '     - storing', len(new_results), 'diversity results...'
+        for (iteration, new_result) in enumerate(new_results):
+            _store(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, new_result)
+        diversity_table.commit()
+        print t.now(), '     - done.'
+        return new_results[iteration]
+        
     else:
         # If the requested result exists, return it
         existing_result = _fetch_existing(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment)
@@ -70,6 +79,9 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
 
         xs = pso.positions
         diversity_measurement = diversity.avg_distance_around_swarm_centre(xs)
+        
+        assert not np.isnan(diversity_measurement), 'Diversity result is NaN!'
+        
         diversity_ys.append(diversity_measurement)
         pso.iterate()
 

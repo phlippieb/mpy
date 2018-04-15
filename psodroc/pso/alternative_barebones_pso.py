@@ -74,7 +74,7 @@ def iterate():
     global pbest_fitnesses
     pbests_changed = False
     for i in range(swarm_size):
-        if fitnesses[i] <= pbest_fitnesses[i]:
+        if fitnesses[i] <= pbest_fitnesses[i] and _position_is_within_bounds(positions[i]):
             pbest_positions[i] = positions[i]
             pbest_fitnesses[i] = fitnesses[i]
             pbests_changed = True
@@ -115,6 +115,12 @@ def _updated_position_component(pbest_position_component, gbest_position_compone
     
     # Sample and return.
     return np.random.normal(distribution_mean, distribution_deviation)
+    
+def _position_is_within_bounds(position):
+    for position_j in position:
+        if position_j < lower_bound or position_j > upper_bound:
+            return False
+    return True
     
 # Validation:
 
