@@ -36,3 +36,6 @@ lib64
 
 # Installer logs
 pip-log.txt
+gcloud/cloud_sql_proxy 
+gcloud/db-connect.sh
+
