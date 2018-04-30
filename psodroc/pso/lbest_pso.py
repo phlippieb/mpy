@@ -32,13 +32,13 @@ def init_swarm(size):
     swarm_size = size
 
     global positions
-    positions = np.zeros([swarm_size, num_dimensions])
+    positions = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
 
     global fitnesses
     fitnesses = [function(position) for position in positions]
 
     global velocities
-    velocities = np.random.rand(swarm_size, num_dimensions) * (upper_bound - lower_bound) + lower_bound
+    velocities = np.zeros([swarm_size, num_dimensions])
 
     global pbest_positions
     pbest_positions = np.copy(positions)
@@ -94,7 +94,6 @@ def iterate():
     fitnesses = [function(position) for position in positions]
 
     new_pbest_positions = []
-    new_pbest_fitnesses = []
     for (old_pbest_position, old_pbest_fitness, current_position, current_fitness) in zip(pbest_positions, pbest_fitnesses, positions, fitnesses):
         if current_fitness < old_pbest_fitness and _position_is_within_bounds(current_position):
             new_pbest_positions.append(current_position)
