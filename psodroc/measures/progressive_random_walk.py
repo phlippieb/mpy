@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def progressive_random_walk(n, domain_min, domain_max, num_steps, s, starting_zone):
+def single_walk(n, domain_min, domain_max, num_steps, s, starting_zone):
     # Perform a random walk.
     # Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
     # n: Int. The number of dimensions of the problem.
@@ -11,8 +11,8 @@ def progressive_random_walk(n, domain_min, domain_max, num_steps, s, starting_zo
     # s: Float-like. The step size upper bound.
     # starting_zone: [Int]. A binary array of size n. Specifies the starting zone of the walk. The starting zone is a hypercube in one corner of the problem space. Each bit in the array specifies, for each corresponding dimension, whether the starting zone is in the lower or upper half of that dimension's domain; a 0 indicates that the walk should start in [domain_min, domain_range/2] in that dimension, and a 1 indicates that it should start in [domain_range/2, domain_max].
 
-    # An array of s n-dimensional vectors for storing results
-    walk = np.zeros([s, n])
+    # An array of num_steps n-dimensional vectors for storing results
+    walk = np.zeros([num_steps, n])
 
     # Keep track of the middle of the domain.
     domain_mid = (domain_max - domain_min) / 2.
@@ -31,7 +31,7 @@ def progressive_random_walk(n, domain_min, domain_max, num_steps, s, starting_zo
 
     # Set the initial position to be against the edge in a random dimension.
     rD = np.random.randint(n)
-    walk[0][rD] = domain_max if starting_zone[rD] == 1 else domain_main
+    walk[0][rD] = domain_max if starting_zone[rD] == 1 else domain_min
 
     # Add steps to the walk.
     for step in range(1, num_steps):
@@ -59,7 +59,29 @@ def progressive_random_walk(n, domain_min, domain_max, num_steps, s, starting_zo
                 walk[step][i] += mirrored_step
 
                 # Flip the corresponding bit in the starting zone to guide the walk in the opposite direction.
-                starting_zone[i] *= -1
+                starting_zone[i] = 1 if starting_zone[i] == 0 else 0
 
     # All steps are complete. Return the walk.
     return walk
+
+
+def multiple_walks(n, domain_min, domain_max, num_steps, s):
+    # Performs `n` walks.
+    # The starting zone of each walk is chosen to maximize the coverage;
+    # see # Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
+    # Out of 2^n starting zones, only every (2^n)/n-th zone is used.
+    increment = (2 ** n) / n
+    starting_zones = np.zeros([n, n], dtype=int)
+    for z in range(n):
+        zone_number = z * increment
+        zone_string = "{0:b}".format(zone_number)
+        reverse_string = zone_string[::-1]
+        for (i, c) in enumerate(reverse_string):
+            starting_zones[z][n-i-1] = int(c)
+
+    walks = np.zeros([n, num_steps, n])
+    for (i, starting_zone) in enumerate(starting_zones):
+        walks[i] = single_walk(n, domain_min, domain_max,
+                               num_steps, s, starting_zone)
+
+    return walks
