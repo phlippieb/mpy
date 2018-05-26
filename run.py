@@ -1,39 +1,22 @@
-from optparse import OptionParser
-import results.all_droc_rank_between_psos as ranks
+# -*- coding: utf-8 -*-
 
-parser = OptionParser()
-parser.add_option('--batch', dest='batch_number')
-parser.add_option('--of', dest='total_batches')
-parser.add_option('--benchmark', dest="is_benchmark", action="store_true", default=False)
-parser.add_option('--prep', dest='prep', action='store_true', default=False)
-parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False)
-options, args = parser.parse_args()
-is_benchmark = options.is_benchmark
-batch_number = options.batch_number
-total_batches = options.total_batches
-prep = options.prep
-verbose = options.verbose
+import psodroc.measures.ruggedness as ruggedness
+import psodroc.benchmarks.spherical as benchmark
+import numpy as np
+dimensionality = 1
 
-if is_benchmark:
-    print 'benchmarking'
-    ranks.benchmark()
+f_01 = []
+for i in range(30):
+    r_01 = ruggedness.FEM_0_01(
+        benchmark.function, benchmark.min(0), benchmark.max(0), dimensionality)
+    f_01.append(r_01)
+a_01 = np.mean(f_01)
+print '0.01:\t', a_01
 
-else:
-   if prep:
-       print 'Running in prep mode.'
-
-   if verbose:
-       print 'Verbose mode is on.'
-
-   if batch_number is not None and total_batches is not None:
-       print 'processing batch', batch_number, 'of', total_batches, 'batches...'
-       ranks.process(int(batch_number), int(total_batches), prep, verbose)
-
-   elif batch_number is not None:
-       raise Exception('When providing a batch_number arg, a total_batches arg is required.')
-
-   elif total_batches is not None:
-       raise Exception('When providing a total_blocks arg, a batch_number arg is required.')
-
-   else:
-       ranks.process(0, 1, prep, verbose)
+f_1 = []
+for i in range(30):
+    r_1 = ruggedness.FEM_0_1(
+        benchmark.function, benchmark.min(0), benchmark.max(0), dimensionality)
+    f_1.append(r_1)
+a_1 = np.mean(f_1)
+print '0.1:\t', a_1
