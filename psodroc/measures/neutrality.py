@@ -7,10 +7,20 @@ import progressive_random_walk as walk
 # The result of LSN is a scalar value in [0, 1], with higher values indicating that neutral areas in the landscape are more connected.
 
 
-def PN(function, domain_min, domain_max, dimensions):
+def PN_LSN(function, domain_min, domain_max, dimensions):
     walks = walk.multiple_walks(
         dimensions, domain_min, domain_max, 0.02)
 
+    return (_PN(walks, function), _LSN(walks, function))
+
+
+def PN(function, domain_min, domain_max, dimensions):
+    walks = walk.multiple_walks(
+        dimensions, domain_min, domain_max, 0.02)
+    return _PN(walks, function)
+
+
+def _PN(walks, function):
     num_neutral_structures = 0
     num_total_structures = 0
 
@@ -32,7 +42,10 @@ def PN(function, domain_min, domain_max, dimensions):
 def LSN(function, domain_min, domain_max, dimensions):
     walks = walk.multiple_walks(
         dimensions, domain_min, domain_max, 0.02)
+    return _LSN(walks, function)
 
+
+def _LSN(walks, function):
     max_lsn = 0.
 
     for xs in walks:
