@@ -13,7 +13,7 @@ def DM(function, domain_min, domain_max, dimensions):
     # dimensions: Int. The number of dimensions the function is defined in.
     # Returns: Float-like. A scalar in [-disp_D, sqrt(D) - disp_D]. A positive return value indicates the presence of multiple funnels.
     max_DM = None
-    for s in np.arange(.05, .15, .001):
+    for s in np.arange(0., .5, .001):
         DM = _DM(function, domain_min, domain_max, dimensions, 100, s)
         max_DM = DM if max_DM is None else max(max_DM, DM)
     return max_DM
