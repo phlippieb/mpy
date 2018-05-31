@@ -1,21 +1,43 @@
 # -*- coding: utf-8 -*-
 
-import psodroc.measures.funnels as funnels
-import psodroc.benchmarks.spherical as benchmark1
-import psodroc.benchmarks.schwefel_2_26 as benchmark2
 import numpy as np
-import matplotlib.pyplot as plt
 
-dimensionality = 1
+import psodroc.measures.neutrality as neutrality
 
-dms1 = []
-dms2 = []
-for i in range(30):
-    dms1.append(funnels.DM(benchmark1.function, benchmark1.min(0),
-                           benchmark1.max(0), dimensionality))
-    dms2.append(funnels.DM(benchmark2.function, benchmark2.min(0),
-                           benchmark2.max(0), dimensionality))
+import psodroc.benchmarks.step as step
+import psodroc.benchmarks.spherical as spherical
 
-plt.plot(dms1, np.zeros_like(dms1), 'x', color='blue')
-plt.plot(dms2, np.zeros_like(dms1), 'x', color='red')
-plt.show()
+# Dimensionality:
+d = 5
+
+# Spherical is not neutral at all:
+print 'spherical:'
+print '- PN =', neutrality.PN(
+    spherical.function, spherical.min(0), spherical.max(0), d)
+print '- LSN =', neutrality.LSN(
+    spherical.function, spherical.min(0), spherical.max(0), d)
+
+# Step contains neutrality, but it is not very connected.
+print 'step:'
+print '- PN =', neutrality.PN(step.function, step.min(0), step.max(0), d)
+print '- LSN =', neutrality.LSN(step.function, step.min(0), step.max(0), d)
+
+
+def neutral(xs):
+    # A purely neutral function:
+    return 0.
+
+
+print 'neutral:'
+print '- PN =', neutrality.PN(neutral, -10, 10, d)
+print '- LSN =', neutrality.LSN(neutral, -10, 10, d)
+
+
+def step_like(xs):
+    # A step-like function with large steps:
+    return np.ceil(xs[0])
+
+
+print 'step-like:'
+print '- PN =', neutrality.PN(step_like, -10, 10, d)
+print '- LSN =', neutrality.LSN(step_like, -10, 10, d)
