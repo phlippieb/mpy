@@ -1,6 +1,7 @@
 from __future__ import division  # make division cast to double by default
 import math
 import progressive_random_walk as random_walk
+import util.find as find
 import itertools
 import numpy as np
 
@@ -26,9 +27,6 @@ def FEM_0_01(function, domain_min, domain_max, dimensions):
 
 def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
     starting_zones = random_walk.get_starting_zones(dimensions)
-
-    # TEST: quicker; just one walk
-    # starting_zones = starting_zones[:1]
 
     # Approach 1:
     # num_steps = walk.get_num_steps(dimensions, max_step_size_fraction)
@@ -65,7 +63,7 @@ def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
 
 
 def find_stability2(fs):
-    return find_smallest(lambda E: _is_stable(fs, E), -3)
+    return find.smallest(lambda E: _is_stable(fs, E), min_e=-3)
 
 
 def _is_stable(fs, E):
@@ -112,36 +110,3 @@ def _probability(p, q, entropy_string):
 
     # The probability of pq is the number of occurrences out of the length of the string.
     return occurrences / len(entropy_string)
-
-
-# UTIL
-
-def find_smallest(condition, min_e):
-    # Find and return the smallest value that meets the given condition.
-    # The result is accurate up to the exponential precision specified by min_e;
-    # eg if min_e=-3, the precision is 0.001.
-
-    # Find the smallest precision that overshoots the condition.
-    e = 0
-    while True:
-        if condition(10 ** e):
-            break
-        e += 1
-
-    # Keep track of a valid range:
-    lower = 0.
-    upper = 10. ** e
-
-    # Search within the valid range at incrementally increasing precision.
-    while e > min_e:
-        e -= 1
-        inc = 10. ** e
-
-        for t in np.arange(lower, upper, inc):
-            if condition(t):
-                upper = t
-                break
-            else:
-                lower = t
-
-    return upper
