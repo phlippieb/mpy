@@ -68,45 +68,11 @@ def find_stability2(fs):
     return find_smallest(lambda E: _is_stable(fs, E), -3)
 
 
-def find_stability(fs, min_increment):
-    # Find a lower and upper bound for the stability point on an exponential scale.
-    lower = upper = min_increment
-    while True:
-        if _is_stable(fs, upper):
-            break
-
-        lower = upper
-        upper += 1
-
-    # upper is now greater than the stability measure, and lower is smaller.
-
-    delta = upper - lower
-    while delta >= min_increment:
-        mid = (lower + upper) / 2.
-
-        if _is_stable(fs, mid):
-            # The mid point between lower and upper is above (or equal to) the stability point.
-            # Search the lower half of the range.
-            upper = mid
-        else:
-            # The mid point between lower and upper is below (or equal to) the stability point.
-            # Search the upper half of the range.
-            lower = mid
-
-        delta = upper - lower
-
-    return upper
-
-
 def _is_stable(fs, E):
     for i in range(len(fs)-1):
         if abs(fs[i] - fs[i+1]) > E:
             return False
     return True
-
-
-def _is_stable2(fs, E):
-    return
 
 
 def _string(fs, E):

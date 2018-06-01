@@ -6,8 +6,7 @@ import psodroc.benchmarks.griewank as benchmark
 f = benchmark.function
 f_min = benchmark.min(0)
 f_max = benchmark.max(0)
-# ds = [1, 2, 5, 15, 30]
-ds = [1000]
+ds = [1, 2, 5, 15, 30]
 
 for d in ds:
     print colored('{}D'.format(d), 'blue')
