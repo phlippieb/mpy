@@ -82,8 +82,7 @@ def get_num_steps(n, s):
     # s: Float-like. The fixed step size as a fraction of the domain range; e.g. 0.1 for a 10-th of the domain range.
     # returns: Int. The suggested number of steps.
 
-    # The longest diagonal in a unit n-D cube is sqrt(n).
-    # The corresponding Manhattan distance is simply n.
+    # The longest Manhattan distance in a unit n-D cube is sqrt(n).
     # s is a fraction of the domain range to use as a step size;
     # therefore, n / s steps are needed to traverse the longest distance.
     return int(n / s)

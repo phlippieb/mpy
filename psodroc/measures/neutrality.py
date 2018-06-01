@@ -8,16 +8,17 @@ import progressive_random_walk as walk
 
 
 def PN_LSN(function, domain_min, domain_max, dimensions):
-    walks = walk.multiple_walks(
-        dimensions, domain_min, domain_max, 0.02)
+    starting_zones = walk.get_starting_zones(dimensions)
+
+    # Approach 1:
+    s = 0.02
+    num_steps = walk.get_num_steps(dimensions, s)
+    step_size = walk.get_step_size(domain_min, domain_max, s)
+
+    walks = [walk.walk(dimensions, domain_min, domain_max, num_steps,
+                       step_size, starting_zone) for starting_zone in starting_zones]
 
     return (_PN(walks, function), _LSN(walks, function))
-
-
-def PN(function, domain_min, domain_max, dimensions):
-    walks = walk.multiple_walks(
-        dimensions, domain_min, domain_max, 0.02)
-    return _PN(walks, function)
 
 
 def _PN(walks, function):
@@ -37,12 +38,6 @@ def _PN(walks, function):
 
     # Return the proportion of neutral structures.
     return float(num_neutral_structures) / float(num_total_structures)
-
-
-def LSN(function, domain_min, domain_max, dimensions):
-    walks = walk.multiple_walks(
-        dimensions, domain_min, domain_max, 0.02)
-    return _LSN(walks, function)
 
 
 def _LSN(walks, function):

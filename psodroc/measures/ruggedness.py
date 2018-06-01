@@ -25,8 +25,15 @@ def FEM_0_01(function, domain_min, domain_max, dimensions):
 
 
 def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
-    walks = walk.multiple_walks(
-        dimensions, domain_min, domain_max, max_step_size_fraction)
+    starting_zones = walk.get_starting_zones(dimensions)
+
+    # Approach 1:
+    s = 0.02
+    num_steps = walk.get_num_steps(dimensions, s)
+    step_size = walk.get_step_size(domain_min, domain_max, s)
+
+    walks = [walk.walk(dimensions, domain_min, domain_max, num_steps,
+                       step_size, starting_zone) for starting_zone in starting_zones]
 
     max_entropy = 0
 

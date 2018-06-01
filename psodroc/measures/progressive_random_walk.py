@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def single_walk(n, domain_min, domain_max, num_steps, s, starting_zone):
+def walk(n, domain_min, domain_max, num_steps, s, starting_zone):
     # Perform a random walk.
     # Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
     # n: Int. The number of dimensions of the problem.
@@ -65,14 +65,13 @@ def single_walk(n, domain_min, domain_max, num_steps, s, starting_zone):
     return walk
 
 
-def multiple_walks(n, domain_min, domain_max, s):
-    # Performs `n` walks.
-    # The starting zone of each walk is chosen to maximize the coverage;
-    # see Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
+def get_starting_zones(n):
+    # Determines an optimal distribution of n starting zones for a search space defined in n dimensions.
+    # see Katherine Mary Malan. Characterising continuous optimisation problems for particle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
     # Out of 2^n starting zones, only every (2^n)/n-th zone is used.
     # n: Int. The number of dimensions of the problem space.
-    # domain_min, domain_max: Float-like. The domain of the problem space.
-    # s: Float-like. The max step size as a proportion of the domain range; e.g. 0.1 for a 10-th of the domain range.
+    # Returns: a list of n-bit arrays (actually integer arrays); each array is a starting zone that can be passed to a walk algorithm.
+
     increment = (2 ** n) / n
     starting_zones = np.zeros([n, n], dtype=int)
     for z in range(n):
@@ -81,12 +80,49 @@ def multiple_walks(n, domain_min, domain_max, s):
         reverse_string = zone_string[::-1]
         for (i, c) in enumerate(reverse_string):
             starting_zones[z][n-i-1] = int(c)
+    return starting_zones
 
-    step_size = (domain_max - domain_min) * s
-    num_steps = int(1. / s) * n * 2
-    walks = np.zeros([n, num_steps, n])
-    for (i, starting_zone) in enumerate(starting_zones):
-        walks[i] = single_walk(n, domain_min, domain_max,
-                               num_steps, step_size, starting_zone)
 
-    return walks
+def get_num_steps(n, s):
+    # Suggests a number of steps to use in order for a walk to be able to traverse a search space.
+    # n: Int. The number of dimensions of the problem space.
+    # s: Float-like. The fixed step size as a fraction of the domain range; e.g. 0.1 for a 10-th of the domain range.
+    # returns: Int. The suggested number of steps.
+
+    # The longest diagonal in a unit n-D cube is sqrt(n).
+    # s is a fraction of the domain range to use as a step size;
+    # therefore, sqrt(n) / s steps are needed to traverse the longest distance.
+    return int(np.sqrt(n) / s)
+
+
+def get_step_size(domain_min, domain_max, s):
+    # Determine the actual step size represented by the given step size fraction s,
+    # when s is a fraction of the search space domain range.
+    return (domain_max - domain_min) * s
+
+
+# def multiple_walks(n, domain_min, domain_max, s):
+#     # Performs `n` walks.
+#     # The starting zone of each walk is chosen to maximize the coverage;
+#     # see Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
+#     # Out of 2^n starting zones, only every (2^n)/n-th zone is used.
+#     # n: Int. The number of dimensions of the problem space.
+#     # domain_min, domain_max: Float-like. The domain of the problem space.
+#     # s: Float-like. The max step size as a proportion of the domain range; e.g. 0.1 for a 10-th of the domain range.
+#     increment = (2 ** n) / n
+#     starting_zones = np.zeros([n, n], dtype=int)
+#     for z in range(n):
+#         zone_number = z * increment
+#         zone_string = "{0:b}".format(zone_number)
+#         reverse_string = zone_string[::-1]
+#         for (i, c) in enumerate(reverse_string):
+#             starting_zones[z][n-i-1] = int(c)
+
+#     step_size = (domain_max - domain_min) * s
+#     num_steps = int(1. / s) * n * 2
+#     walks = np.zeros([n, num_steps, n])
+#     for (i, starting_zone) in enumerate(starting_zones):
+#         walks[i] = single_walk(n, domain_min, domain_max,
+#                                num_steps, step_size, starting_zone)
+
+#     return walks
