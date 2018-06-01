@@ -42,12 +42,11 @@ def _gradients(function, domain_min, domain_max, dimensions, walks, step_size):
 
     for walk in walks:
         fs = [function(xs) for xs in walk]
-        f1s = fs[:-1]
-        f2s = fs[1:]
-        gradients = [_gradient(
+        f1s = fs[:-1]  # f_0, f_1, ..., f_n-1
+        f2s = fs[1:]  # f_1, f_2, ..., f_n
+        gradients += [_gradient(
             f1, f2, f_range, step_size, x_range, dimensions)
             for f1, f2 in zip(f1s, f2s)]
-        # gradients += walk_gradients
 
     return gradients
 

@@ -1,46 +1,39 @@
-# -*- coding: utf-8 -*-
-
+import psodroc.measures.gradients as gradients
 import numpy as np
+from termcolor import colored
 
-import psodroc.measures.neutrality as neutrality
+import psodroc.benchmarks.ackley as benchmark
+f = benchmark.function
+f_min = benchmark.min(0)
+f_max = benchmark.max(0)
+ds = [1, 2, 5, 15, 30]
 
-import psodroc.benchmarks.step as step
-import psodroc.benchmarks.spherical as spherical
+for d in ds:
+    print colored('{} dimensions:'.format(d), 'blue')
+    g_avgs = []
+    g_devs = []
+    samples = 30
+    for i in range(samples):
+        print colored('running {} of {} samples...'.format(
+            i+1, samples), 'white'), '\r',
+        g_avg, g_dev = gradients.G_measures(f, f_min, f_max, d)
+        g_avgs.append(g_avg)
+        g_devs.append(g_dev)
+    g_avg = np.average(g_avgs)
+    g_dev = np.average(g_devs)
+    print '                                             \r',
+    print 'avg:', g_avg, '\ndev:', g_dev
+    print ''
+print colored('done.', 'green')
 
-# Dimensionality:
-d = 5
+"""
+Expected values (Ackley):
 
-# Spherical is not neutral at all:
-print 'spherical:'
-pn, lsn = neutrality.PN_LSN(
-    spherical.function, spherical.min(0), spherical.max(0), d)
-print '- PN =', pn
-print '- LSN =', lsn
-
-# Step contains neutrality, but it is not very connected.
-print 'step:'
-pn, lsn = neutrality.PN_LSN(step.function, step.min(0), step.max(0), d)
-print '- PN =', pn
-print '- LSN =', lsn
-
-
-def neutral(xs):
-    # A purely neutral function:
-    return 0.
-
-
-print 'neutral:'
-pn, lsn = neutrality.PN_LSN(neutral, -10, 10, d)
-print '- PN =', pn
-print '- LSN =', lsn
-
-
-def step_like(xs):
-    # A step-like function with large steps:
-    return np.ceil(xs[0])
-
-
-print 'step-like:'
-pn, lsn = neutrality.PN_LSN(step_like, -10, 10, d)
-print '- PN =', pn
-print '- LSN =', lsn
+D   | avg | dev
+--- | --- | ---
+1   | 13  | 8
+2   | 33  | 22
+5   | 35  | 20
+15  | 3.5 | 2.9
+30  | 3.8 | 3.1
+"""
