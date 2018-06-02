@@ -1,34 +1,51 @@
-import psodroc.measures.ruggedness as ruggedness
-import numpy as np
-from termcolor import colored
+import psodroc.pso.cognitive_only_pso as cpso
 
-import psodroc.benchmarks.griewank as benchmark
+import psodroc.benchmarks.spherical as benchmark
+
 f = benchmark.function
-f_min = benchmark.min(0)
-f_max = benchmark.max(0)
-ds = [1, 2, 5, 15, 30]
+low = benchmark.min(0)
+high = benchmark.max(0)
+d = 2
+swarm_size = 5
 
-for d in ds:
-    print colored('{}D'.format(d), 'blue')
-    fem1s = []
-    fem01s = []
-    samples = 30
-    for i in range(samples):
-        print colored('running {} of {} samples...'.format(
-            i+1, samples), 'white'), '\r',
-        fem01 = ruggedness.FEM_0_01(f, f_min, f_max, d)
-        fem01s.append(fem01)
-    print '                                             \r',
-    print 'FEM 0.01:', np.average(fem01s)
+cpso.init_search_space(f, d, low, high)
+cpso.init_swarm(swarm_size)
+cpso.init_pso_defaults()
 
-    for i in range(samples):
-        print colored('running {} of {} samples...'.format(
-            i+1, samples), 'white'), '\r',
-        fem1 = ruggedness.FEM_0_1(f, f_min, f_max, d)
-        fem1s.append(fem1)
-    print '                                             \r',
-    print 'FEM 0.1: ',  np.average(fem1s)
+# This gives some very weird results :)
+cpso.w = .98
 
-    print ''
+max_velocity = (high - low) * .1
+initial_velocities = np.random.uniform(
+    low=-max_velocity, high=max_velocity, size=[swarm_size, d])
+cpso.velocities = initial_velocities
 
-print colored('done.', 'green')
+import psodroc.measures.diversity as diversity
+diversities = []
+fitnesses = []
+
+num_iterations = 100
+iterations = range(num_iterations)
+for i in iterations:
+    div = diversity.avg_distance_around_swarm_centre(cpso.positions)
+    diversities.append(div)
+    fit = min(cpso.fitnesses)
+    fitnesses.append(fit)
+    cpso.iterate()
+
+# Normalize to [0, 1]
+
+# def normalize(x, mn, mx):
+#     return (x - mn) / (mx - mn)
+
+# div_min, div_max = (np.min(diversities), np.max(diversities))
+# diversities = [normalize(div, div_min, div_max) for div in diversities]
+
+# f_min, f_max = (np.min(fitnesses), np.max(fitnesses))
+# fitnesses = [normalize(fit, f_min, f_max) for fit in fitnesses]
+
+import matplotlib.pyplot as plt
+plt.ylim(ymin=0, ymax=np.max(diversities) + .5)
+plt.plot(iterations, diversities, color='green')  # , linestyle=":")
+# plt.plot(iterations, fitnesses, color='blue')#, linestyle=':')
+plt.show()
