@@ -12,7 +12,7 @@ def FCIs(function, domain_min, domain_max, dimensions):
     # 3. The mean of the standard deviation of the FCI_soc and the FCI_cog measurements, respectively.
 
     num_samples = 30
-    swarm_size = 16
+    swarm_size = 500
 
     fci_socs = [FCI_soc(function, domain_min, domain_max, dimensions, swarm_size)
                 for _ in range(num_samples)]
@@ -77,7 +77,7 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
     cpso.init_pso_defaults()
 
     # Record the initial positions.
-    initial_positions = spso.positions
+    initial_positions = cpso.positions
 
     # Artificially generate a nearby pbest for each particle to get things going.
     for i in range(swarm_size):
@@ -103,8 +103,8 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
 
     # Record the final positions after the specified number of position updates.
     for _ in range(num_iterations):
-        spso.iterate()
-    final_positions = spso.positions
+        cpso.iterate()
+    final_positions = cpso.positions
 
     return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
 
@@ -115,7 +115,7 @@ def _FCI(initial_positions, final_positions, function, domain_min, domain_max, s
     valid_indices = []
     for index in range(swarm_size):
         position = final_positions[index]
-        if spso._position_is_within_bounds(position):
+        if _is_within_bounds(position, domain_min, domain_max):
             valid_indices.append(index)
 
     if len(valid_indices) == 0:
@@ -147,3 +147,10 @@ def _FCI(initial_positions, final_positions, function, domain_min, domain_max, s
                     f_initial in zip(final_fitnesses, initial_fitnesses)]
     num_improvements = np.sum(improvements)
     return float(num_improvements) / float(len(final_fitnesses))
+
+
+def _is_within_bounds(position, lower, upper):
+    for component in position:
+        if component < lower or component > upper:
+            return False
+    return True
