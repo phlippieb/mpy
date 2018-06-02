@@ -33,7 +33,7 @@ def FCI_sigma(FCI_socs, FCI_cogs):
     # and returns the mean of those standard deviations.
     FCI_soc_dev = np.std(FCI_socs)
     FCI_cog_dev = np.std(FCI_cogs)
-    return np.mean(FCI_soc_dev, FCI_cog_dev)
+    return np.mean([FCI_soc_dev, FCI_cog_dev])
 
 
 import psodroc.pso.social_only_pso as spso
