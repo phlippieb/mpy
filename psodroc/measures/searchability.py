@@ -3,21 +3,24 @@ import warnings
 
 
 def FCIs(function, domain_min, domain_max, dimensions):
-    # Performs the following sets of fitness cloud index measurements:
-    # - 30 x FCI_soc measurements (with social-only PSO updates)
-    # - 30 x FCI_cog measurements (with cognitive-only PSO updates)
-    # Returns the following:
-    # 1. The mean of the FCI_soc measurements
-    # 2. The mean of the FCI_cog measurements
-    # 3. The mean of the standard deviation of the FCI_soc and the FCI_cog measurements, respectively.
+    """
+    Performs the following sets of fitness cloud index measurements:
+    - 30 x FCI_soc measurements (with social-only PSO updates)
+    - 30 x FCI_cog measurements (with cognitive-only PSO updates)
+    Returns the following:
+    1. The mean of the FCI_soc measurements
+    2. The mean of the FCI_cog measurements
+    3. The mean of the standard deviation of the FCI_soc and the FCI_cog measurements, respectively.
+    """
 
     num_samples = 30
     swarm_size = 500
+    num_updates = 2
 
-    fci_socs = [FCI_soc(function, domain_min, domain_max, dimensions, swarm_size)
+    fci_socs = [FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_updates)
                 for _ in range(num_samples)]
 
-    fci_cogs = [FCI_cog(function, domain_min, domain_max, dimensions, swarm_size)
+    fci_cogs = [FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_updates)
                 for _ in range(num_samples)]
 
     fci_soc_mean = np.mean(fci_socs)
@@ -39,7 +42,7 @@ def FCI_sigma(FCI_socs, FCI_cogs):
 import psodroc.pso.social_only_pso as spso
 
 
-def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_iterations=2):
+def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_updates=2):
     """
     Get a single fitness cloud index measurement using two position updates with social-only PSO.
     """
@@ -56,7 +59,7 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
     initial_positions = spso.positions
 
     # Record the final positions after the specified number of position updates.
-    for _ in range(num_iterations):
+    for _ in range(num_updates):
         spso.iterate()
     final_positions = spso.positions
 
@@ -66,7 +69,7 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
 import psodroc.pso.cognitive_only_pso as cpso
 
 
-def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterations=2):
+def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_updates=2):
     """
     Get a single fitness cloud index measurement using two position updates with social-only PSO.
     """
@@ -82,28 +85,33 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
     # Artificially generate a nearby pbest for each particle to get things going.
     for i in range(swarm_size):
         # Choose a random nearby position.
-        neighbourhood_range = .1 * (domain_max - domain_min)
+        r = .1 * (domain_max - domain_min)
         x = cpso.positions[i]
-        z = np.random.normal(x, scale=neighbourhood_range, size=dimensions)
+        z = np.random.normal(x, scale=r, size=dimensions)
+
+        # My edit: do not use z as a position or a pbest if it is out of bounds;
+        # simply retry until it's in bounds.
+        while not _is_within_bounds(z, domain_min, domain_max):
+            z = np.random.normal(x, scale=r, size=dimensions)
 
         # Choose the fittest position between x and z to be the particle's pbest,
         # and the other position to be the particle's position.
-        f_x = cpso.fitnesses[i]
+        # (Note: at this point, pbest already refers to x, so we only need to set z where appropriate.)
+        f_x = function(x)
         f_z = function(z)
         if f_x < f_z:
+            # Leave the fitter x as the pbest, and move the particle to z.
             cpso.positions[i] = z
             cpso.fitnesses[i] = f_z
-            cpso.pbest_positions[i] = x
-            cpso.pbest_fitnesses[i] = f_x
         else:
-            cpso.positions[i] = x
-            cpso.fitnesses[i] = f_x
+            # Use the fitter z as the pbest, and leave the particle at x.
             cpso.pbest_positions[i] = z
             cpso.pbest_fitnesses[i] = f_z
 
     # Record the final positions after the specified number of position updates.
-    for _ in range(num_iterations):
+    for _ in range(num_updates):
         cpso.iterate()
+
     final_positions = cpso.positions
 
     return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
@@ -126,25 +134,10 @@ def _FCI(initial_positions, final_positions, function, domain_min, domain_max, s
     initial_fitnesses = [function(x) for x in initial_positions[valid_indices]]
     final_fitnesses = [function(x) for x in final_positions[valid_indices]]
 
-    # Normalise the initial and final fitnesses to [0, 1],
-    # using the best and worst fitnesses from the combined lists.
-    all_fitnesses = initial_fitnesses + final_fitnesses
-    f_min = np.min(all_fitnesses)
-    f_max = np.max(all_fitnesses)
-    f_range = f_max - f_min
-    if f_range == 0:
-        # No difference in fitnesses was encountered by any particles in two updates (wow!).
-        # No improvement means FCI=0.
-        warnings.warn('FCI_cog: No variation in fitness encountered.')
-        return 0.
-
-    initial_fitnesses = [(f - f_min) / f_range for f in initial_fitnesses]
-    final_fitnesses = [(f - f_min) / f_range for f in final_fitnesses]
-
     # [initial_fitnesses, final_fitnesses].T is now the fitness cloud.
     # The fitness cloud index is the proportion of fitnesses that improved.
-    improvements = [1 if f_final < f_initial else 0 for f_final,
-                    f_initial in zip(final_fitnesses, initial_fitnesses)]
+    improvements = [1 if f_final < f_initial else 0
+                    for f_final, f_initial in zip(final_fitnesses, initial_fitnesses)]
     num_improvements = np.sum(improvements)
     return float(num_improvements) / float(len(final_fitnesses))
 
