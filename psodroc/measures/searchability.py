@@ -60,44 +60,7 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
         spso.iterate()
     final_positions = spso.positions
 
-    # Find the indices of the particles that have not left the search space.
-    # Only these particles will be considered.
-    valid_indices = []
-    for index in range(swarm_size):
-        position = final_positions[index]
-        if spso._position_is_within_bounds(position):
-            valid_indices.append(index)
-
-    if len(valid_indices) == 0:
-        warnings.warn("FCI_soc: All particles left the search space.")
-        return 0.
-
-    # Determine the fitnesses of all valid initial and final points.
-    initial_fitnesses = [function(x) for x in initial_positions[valid_indices]]
-    final_fitnesses = [function(x) for x in final_positions[valid_indices]]
-
-    # Normalise the initial and final fitnesses to [0, 1],
-    # using the best and worst fitnesses from the combined lists.
-    all_fitnesses = initial_fitnesses + final_fitnesses
-    f_min = np.min(all_fitnesses)
-    f_max = np.max(all_fitnesses)
-    f_range = f_max - f_min
-    if f_range == 0:
-        # No difference in fitnesses was encountered by any particles in two updates (wow!).
-        # No improvement means FCI=0.
-        warnings.warn('FCI_soc: No variation in fitness encountered.'.format(
-            initial_fitnesses, final_fitnesses))
-        return 0.
-
-    initial_fitnesses = [(f - f_min) / f_range for f in initial_fitnesses]
-    final_fitnesses = [(f - f_min) / f_range for f in final_fitnesses]
-
-    # [initial_fitnesses, final_fitnesses].T is now the fitness cloud.
-    # The fitness cloud index is the proportion of fitnesses that improved.
-    improvements = [1 if f_final < f_initial else 0 for f_final,
-                    f_initial in zip(final_fitnesses, initial_fitnesses)]
-    num_improvements = np.sum(improvements)
-    return float(num_improvements) / float(len(final_fitnesses))
+    return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
 
 
 import psodroc.pso.cognitive_only_pso as cpso
@@ -143,6 +106,10 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
         spso.iterate()
     final_positions = spso.positions
 
+    return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
+
+
+def _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size):
     # Find the indices of the particles that have not left the search space.
     # Only these particles will be considered.
     valid_indices = []
@@ -168,8 +135,7 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_iterat
     if f_range == 0:
         # No difference in fitnesses was encountered by any particles in two updates (wow!).
         # No improvement means FCI=0.
-        warnings.warn('FCI_cog: No variation in fitness encountered.'.format(
-            initial_fitnesses, final_fitnesses))
+        warnings.warn('FCI_cog: No variation in fitness encountered.')
         return 0.
 
     initial_fitnesses = [(f - f_min) / f_range for f in initial_fitnesses]
