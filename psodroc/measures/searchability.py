@@ -61,6 +61,9 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_update
     # Record the final positions after the specified number of position updates.
     for _ in range(num_updates):
         spso.iterate()
+        # Repair positions that have left the search space to be on the boundary.
+        spso.positions = [_repaired_position(
+            x, domain_min, domain_max) for x in spso.positions]
     final_positions = spso.positions
 
     return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
@@ -88,11 +91,7 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
         r = .1 * (domain_max - domain_min)
         x = cpso.positions[i]
         z = np.random.normal(x, scale=r, size=dimensions)
-
-        # My edit: do not use z as a position or a pbest if it is out of bounds;
-        # simply retry until it's in bounds.
-        # while not _is_within_bounds(z, domain_min, domain_max):
-        #     z = np.random.normal(x, scale=r, size=dimensions)
+        # Repair neighbours that are out of bounds to be on the boundary.
         z = _repaired_position(z, domain_min, domain_max)
 
         # Choose the fittest position between x and z to be the particle's pbest,
@@ -112,32 +111,20 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
     # Record the final positions after the specified number of position updates.
     for _ in range(num_updates):
         cpso.iterate()
-
+        # Repair positions that have left the search space to be on the boundary.
+        cpso.positions = [_repaired_position(
+            x, domain_min, domain_max) for x in cpso.positions]
     final_positions = cpso.positions
 
     return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
 
 
 def _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size):
-    # Find the indices of the particles that have not left the search space.
-    # Only these particles will be considered.
-    # valid_indices = []
-    # for index in range(swarm_size):
-    #     position = final_positions[index]
-    #     if _is_within_bounds(position, domain_min, domain_max):
-    #         valid_indices.append(index)
+    """
+    Calculate the proportion of particles whose fitness have improved.
+    """
 
-    # if len(valid_indices) == 0:
-    #     warnings.warn("FCI_cog: All particles left the search space.")
-    #     return 0.
-
-    final_positions = [_repaired_position(
-        position, domain_min, domain_max) for position in final_positions]
-
-    # Determine the fitnesses of all valid initial and final points.
-    # initial_fitnesses = [function(x) for x in initial_positions[valid_indices]]
-    # final_fitnesses = [function(x) for x in final_positions[valid_indices]]
-
+    # Determine the fitnesses of initial and final points.
     initial_fitnesses = [function(x) for x in initial_positions]
     final_fitnesses = [function(x) for x in final_positions]
 
@@ -147,13 +134,6 @@ def _FCI(initial_positions, final_positions, function, domain_min, domain_max, s
                     for f_final, f_initial in zip(final_fitnesses, initial_fitnesses)]
     num_improvements = np.sum(improvements)
     return float(num_improvements) / float(len(final_fitnesses))
-
-
-# def _is_within_bounds(position, lower, upper):
-#     for component in position:
-#         if component < lower or component > upper:
-#             return False
-#     return True
 
 
 def _repaired_position(position, lower, upper):
