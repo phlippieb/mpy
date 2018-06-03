@@ -91,8 +91,9 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
 
         # My edit: do not use z as a position or a pbest if it is out of bounds;
         # simply retry until it's in bounds.
-        while not _is_within_bounds(z, domain_min, domain_max):
-            z = np.random.normal(x, scale=r, size=dimensions)
+        # while not _is_within_bounds(z, domain_min, domain_max):
+        #     z = np.random.normal(x, scale=r, size=dimensions)
+        z = _repaired_position(z, domain_min, domain_max)
 
         # Choose the fittest position between x and z to be the particle's pbest,
         # and the other position to be the particle's position.
@@ -120,19 +121,25 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
 def _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size):
     # Find the indices of the particles that have not left the search space.
     # Only these particles will be considered.
-    valid_indices = []
-    for index in range(swarm_size):
-        position = final_positions[index]
-        if _is_within_bounds(position, domain_min, domain_max):
-            valid_indices.append(index)
+    # valid_indices = []
+    # for index in range(swarm_size):
+    #     position = final_positions[index]
+    #     if _is_within_bounds(position, domain_min, domain_max):
+    #         valid_indices.append(index)
 
-    if len(valid_indices) == 0:
-        warnings.warn("FCI_cog: All particles left the search space.")
-        return 0.
+    # if len(valid_indices) == 0:
+    #     warnings.warn("FCI_cog: All particles left the search space.")
+    #     return 0.
+
+    final_positions = [_repaired_position(
+        position, domain_min, domain_max) for position in final_positions]
 
     # Determine the fitnesses of all valid initial and final points.
-    initial_fitnesses = [function(x) for x in initial_positions[valid_indices]]
-    final_fitnesses = [function(x) for x in final_positions[valid_indices]]
+    # initial_fitnesses = [function(x) for x in initial_positions[valid_indices]]
+    # final_fitnesses = [function(x) for x in final_positions[valid_indices]]
+
+    initial_fitnesses = [function(x) for x in initial_positions]
+    final_fitnesses = [function(x) for x in final_positions]
 
     # [initial_fitnesses, final_fitnesses].T is now the fitness cloud.
     # The fitness cloud index is the proportion of fitnesses that improved.
@@ -142,8 +149,14 @@ def _FCI(initial_positions, final_positions, function, domain_min, domain_max, s
     return float(num_improvements) / float(len(final_fitnesses))
 
 
-def _is_within_bounds(position, lower, upper):
-    for component in position:
-        if component < lower or component > upper:
-            return False
-    return True
+# def _is_within_bounds(position, lower, upper):
+#     for component in position:
+#         if component < lower or component > upper:
+#             return False
+#     return True
+
+
+def _repaired_position(position, lower, upper):
+    for i in range(len(position)):
+        position[i] = max(lower, min(upper, position[i]))
+    return position
