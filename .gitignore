@@ -16,6 +16,9 @@ docs/_build
 # atom ide
 .ropeproject
 
+# VSCode ide
+.vscode/
+
 # C extensions
 *.so
 
