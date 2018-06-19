@@ -55,18 +55,42 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_update
     spso.init_swarm(swarm_size)
     spso.init_pso_defaults()
 
-    # Record the initial positions.
-    initial_positions = spso.positions
+    # Record the initial fitnesses.
+    initial_fitnesses = [function(x) for x in spso.positions]
 
-    # Record the final positions after the specified number of position updates.
+    # Perform position updates.
     for _ in range(num_updates):
         spso.iterate()
-        # Repair positions that have left the search space to be on the boundary.
-        spso.positions = [_repaired_position(
-            x, domain_min, domain_max) for x in spso.positions]
-    final_positions = spso.positions
 
-    return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
+        # Repair positions that have left the search space to be on the boundary.
+        repaired_positions, repaired_indices = _repaired_positions_and_indices(
+            spso.positions, domain_min, domain_max)
+        spso.positions = repaired_positions
+
+        # Update the swarm gbests according to the new (repaired) positions.
+        spso.fitnesses = [function(x) for x in spso.positions]
+        for i in range(swarm_size):
+            if spso.fitnesses[i] < spso.gbest_fitness:
+                spso.gbest_fitness = spso.fitnesses[i]
+                spso.gbest_position = spso.positions[i]
+
+        # Reset the repaired particles' velocities so that they can still return to the search space.
+        for repaired_index in repaired_indices:
+            spso.velocities[repaired_index] = np.zeros(dimensions)
+
+    # Record the final fitnesses after the specified number of position updates.
+    final_fitnesses = [function(x) for x in spso.positions]
+
+    # Normalise fitnesses between the min and max encountered.
+    min_fitness = min(initial_fitnesses + final_fitnesses)
+    max_fitness = max(initial_fitnesses + final_fitnesses)
+    initial_fitnesses = (initial_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+    final_fitnesses = (final_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+
+    fci = _FCI(initial_fitnesses, final_fitnesses)
+    return fci
 
 
 import psodroc.pso.cognitive_only_pso as cpso
@@ -82,8 +106,8 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
     cpso.init_swarm(swarm_size)
     cpso.init_pso_defaults()
 
-    # Record the initial positions.
-    initial_positions = cpso.positions
+    # Record the initial fitnesses.
+    initial_fitnesses = [function(x) for x in cpso.positions]
 
     # Artificially generate a nearby pbest for each particle to get things going.
     for i in range(swarm_size):
@@ -97,9 +121,8 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
         # Choose the fittest position between x and z to be the particle's pbest,
         # and the other position to be the particle's position.
         # (Note: at this point, pbest already refers to x, so we only need to set z where appropriate.)
-        f_x = function(x)
         f_z = function(z)
-        if f_x < f_z:
+        if function(x) < f_z:
             # Leave the fitter x as the pbest, and move the particle to z.
             cpso.positions[i] = z
             cpso.fitnesses[i] = f_z
@@ -108,35 +131,70 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_update
             cpso.pbest_positions[i] = z
             cpso.pbest_fitnesses[i] = f_z
 
-    # Record the final positions after the specified number of position updates.
+    # Record the final fitnesses after the specified number of position updates.
     for _ in range(num_updates):
         cpso.iterate()
+
         # Repair positions that have left the search space to be on the boundary.
-        cpso.positions = [_repaired_position(
-            x, domain_min, domain_max) for x in cpso.positions]
-    final_positions = cpso.positions
+        repaired_positions, repaired_indices = _repaired_positions_and_indices(
+            cpso.positions, domain_min, domain_max)
+        cpso.positions = repaired_positions
 
-    return _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size)
+        # Update the swarm state according to the new (repaired) positions.
+        cpso.fitnesses = [function(x) for x in cpso.positions]
+        for i in range(swarm_size):
+            if cpso.fitnesses[i] < cpso.pbest_fitnesses[i]:
+                cpso.pbest_fitnesses[i] = cpso.fitnesses[i]
+                cpso.pbest_positions[i] = cpso.positions[i]
+
+        # Reset the repaired particles' velocities so that they can still return to the search space.
+        for repaired_index in repaired_indices:
+            cpso.velocities[repaired_index] = np.zeros(dimensions)
+
+    final_fitnesses = [function(x) for x in cpso.positions]
+
+    min_fitness = min(initial_fitnesses + final_fitnesses)
+    max_fitness = max(initial_fitnesses + final_fitnesses)
+    initial_fitnesses = (initial_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+    final_fitnesses = (final_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+
+    fci = _FCI(initial_fitnesses, final_fitnesses)
+    return fci
 
 
-def _FCI(initial_positions, final_positions, function, domain_min, domain_max, swarm_size):
+def _repaired_position(position, lower, upper):
+    repaired_position = np.copy(position)
+    for i in range(len(repaired_position)):
+        repaired_position[i] = max(lower, min(upper, position[i]))
+    return repaired_position
+
+
+def _repaired_positions_and_indices(positions, lower, upper):
+    repaired_positions = np.copy(positions)
+    repaired_indices = []
+
+    for i in range(len(repaired_positions)):
+        repaired_positions[i] = _repaired_position(
+            repaired_positions[i], lower, upper)
+        if not np.array_equal(repaired_positions[i], positions[i]):
+            repaired_indices.append(i)
+
+    return (repaired_positions, repaired_indices)
+
+
+def _FCI(initial_fitnesses, final_fitnesses):
     """
     Calculate the proportion of particles whose fitness have improved.
     """
 
-    # Determine the fitnesses of initial and final points.
-    initial_fitnesses = [function(x) for x in initial_positions]
-    final_fitnesses = [function(x) for x in final_positions]
+    assert len(initial_fitnesses) == len(final_fitnesses), \
+        'Cannot compute FCI. Initial and final fitnesses do not contain equal amounts of fitnesses.'
 
-    # [initial_fitnesses, final_fitnesses].T is now the fitness cloud.
+    # [initial_fitnesses, final_fitnesses].T is the fitness cloud.
     # The fitness cloud index is the proportion of fitnesses that improved.
     improvements = [1 if f_final < f_initial else 0
                     for f_final, f_initial in zip(final_fitnesses, initial_fitnesses)]
     num_improvements = np.sum(improvements)
     return float(num_improvements) / float(len(final_fitnesses))
-
-
-def _repaired_position(position, lower, upper):
-    for i in range(len(position)):
-        position[i] = max(lower, min(upper, position[i]))
-    return position
