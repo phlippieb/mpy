@@ -23,7 +23,8 @@ from psodroc.benchmarks import ackley, \
     step, \
     weierstrass, \
     zakharov
-    
+
+
 def get(name):
     if name == 'ackley':
         return ackley
@@ -73,3 +74,30 @@ def get(name):
         return zakharov
     else:
         raise Exception('Unrecognized benchmark {}'.format(name))
+
+
+all_names = [
+    'ackley',
+    'alpine',
+    'beale',
+    'bohachevsky1_generalized',
+    'eggholder',
+    'goldstein_price',
+    'griewank',
+    'levy13_generalized',
+    'michalewicz',
+    'pathological',
+    'quadric',
+    'quartic',
+    'rastrigin',
+    'rosenbrock',
+    'salomon',
+    'schwefel_2_22',
+    'schwefel_2_26',
+    'six_hump_camel_back',
+    'skew_rastrigin',
+    'spherical',
+    'step',
+    'weierstrass',
+    'zakharov'
+]
