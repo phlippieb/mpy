@@ -2,18 +2,11 @@ import progressive_manhattan_walk as manhattan
 import numpy as np
 
 
-def G_measures(function, domain_min, domain_max, dimensions):
+def G_measures(function, domain_min, domain_max, dimensions, step_size_fraction=1e-3):
     starting_zones = manhattan.get_starting_zones(dimensions)
 
-    # Approach 1:
-    # s = 0.001
-    # num_steps = manhattan.get_num_steps(dimensions, s)
-    # step_size = manhattan.get_step_size(domain_min, domain_max, s)
-
-    # Approach 2:
-    num_steps = 1000
-    step_size = ((domain_max - domain_min) * dimensions) / 1000
-
+    step_size = ((domain_max - domain_min) * dimensions) * step_size_fraction
+    num_steps = int(1. / step_size_fraction)
     walks = [manhattan.walk(dimensions, domain_min, domain_max, num_steps,
                             step_size, starting_zone) for starting_zone in starting_zones]
 
