@@ -109,7 +109,7 @@ CREATE TABLE PN(
     measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
 
     PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
-)
+);
 
 /*
     NEUTRALITY -- LSN
@@ -124,4 +124,4 @@ CREATE TABLE LSN(
     measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
 
     PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
-)
+);

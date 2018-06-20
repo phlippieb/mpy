@@ -49,5 +49,4 @@ def _calculate(benchmark_name, dimensionality, epsilon, step_size_fraction):
     f_max = benchmark.max(0)
     _, lsn = neutrality.PN_LSN(f, f_min, f_max, dimensionality,
                                epsilon=epsilon, step_size_fraction=step_size_fraction)
-    # TODO: use pn
     return lsn
