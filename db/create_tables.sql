@@ -136,7 +136,7 @@ CREATE TABLE DM(
     benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
     dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
     experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
-    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+    measurement DOUBLE PRECISION NOT NULL, -- The funnels measurement
 
     PRIMARY KEY(benchmark_name, dimensionality, experiment)
 );
@@ -149,7 +149,47 @@ CREATE TABLE FDC(
     benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
     dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
     experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
-    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+    measurement DOUBLE PRECISION NOT NULL, -- The deception measurement
 
     PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
+
+/*
+    SEARCHABILITY -- FCI_soc
+    -------------
+*/
+CREATE TABLE FCI_soc(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    fci_soc DOUBLE PRECISION NOT NULL, -- FCI obtained using a social PSO
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
+
+/*
+    SEARCHABILITY -- FCI_cog
+    -------------
+*/
+CREATE TABLE FCI_cog(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    fci_cog DOUBLE PRECISION NOT NULL, -- FCI obtained using a cognitive PSO
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
+
+/*
+    SEARCHABILITY -- FCI_sigma
+    -------------
+    Note: This doesn't have an experiment number; 
+    the idea is to combine all experiments from FCI_cog and FCI_soc into one FCI_sigma.
+*/
+CREATE TABLE FCI_sigma(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    fci_sigma DOUBLE PRECISION NOT NULL, -- mean standard deviation of combined FCI measurements
+
+    PRIMARY KEY(benchmark_name, dimensionality)
 );
