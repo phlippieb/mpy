@@ -3,10 +3,8 @@ from scipy.spatial import distance
 
 
 def FDC(function, domain_min, domain_max, dimensions):
-    # TODO: which sample_size to use?
-
     # Sample some positions and determine their fitnesses.
-    sample_size = 5
+    sample_size = 1000
     xs = np.random.uniform(low=domain_min, high=domain_max,
                            size=[sample_size, dimensions])
     fs = [function(x) for x in xs]
