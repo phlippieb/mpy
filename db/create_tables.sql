@@ -127,3 +127,16 @@ CREATE TABLE gradients(
 
     PRIMARY KEY(benchmark_name, dimensionality, step_size_fraction, experiment)
 );
+
+/*
+    FUNNELS -- dispersion metric
+    -------
+*/
+CREATE TABLE DM(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
