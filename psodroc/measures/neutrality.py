@@ -7,28 +7,26 @@ import progressive_random_walk as walk
 # The result of LSN is a scalar value in [0, 1], with higher values indicating that neutral areas in the landscape are more connected.
 
 
-def PN_LSN(function, domain_min, domain_max, dimensions):
+def PN_LSN(function, domain_min, domain_max, dimensions, epsilon=1e-8, step_size_fraction=.02):
     starting_zones = walk.get_starting_zones(dimensions)
 
-    # Approach 1:
-    s = 0.02
-    num_steps = walk.get_num_steps(dimensions, s)
-    step_size = walk.get_step_size(domain_min, domain_max, s)
+    num_steps = walk.get_num_steps(dimensions, step_size_fraction)
+    step_size = walk.get_step_size(domain_min, domain_max, step_size_fraction)
 
     walks = [walk.walk(dimensions, domain_min, domain_max, num_steps,
                        step_size, starting_zone) for starting_zone in starting_zones]
 
-    return (_PN(walks, function), _LSN(walks, function))
+    return (_PN(walks, function, epsilon), _LSN(walks, function, epsilon))
 
 
-def _PN(walks, function):
+def _PN(walks, function, epsilon):
     num_neutral_structures = 0
     num_total_structures = 0
 
     for xs in walks:
         # Handle each walk individually.
         fitnesses = [function(x) for x in xs]
-        S = _string(fitnesses, 1e-8)
+        S = _string(fitnesses, epsilon)
 
         # Update the number of  neutral structures (indicated by 0s).
         num_neutral_structures += S.count(0)
@@ -40,7 +38,7 @@ def _PN(walks, function):
     return float(num_neutral_structures) / float(num_total_structures)
 
 
-def _LSN(walks, function):
+def _LSN(walks, function, epsilon):
     max_lsn = 0.
 
     for xs in walks:
@@ -49,7 +47,7 @@ def _LSN(walks, function):
 
         # Get a list of symbols.
         fitnesses = [function(x) for x in xs]
-        S = _string(fitnesses, 1e-8)
+        S = _string(fitnesses, epsilon)
 
         # Iterate through the symbols to determine the length of the longest subsequence.
         current_neutral_subsequence_length = 0
