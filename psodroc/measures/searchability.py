@@ -2,34 +2,6 @@ import numpy as np
 import warnings
 
 
-def FCIs(function, domain_min, domain_max, dimensions):
-    """
-    Performs the following sets of fitness cloud index measurements:
-    - 30 x FCI_soc measurements (with social-only PSO updates)
-    - 30 x FCI_cog measurements (with cognitive-only PSO updates)
-    Returns the following:
-    1. The mean of the FCI_soc measurements
-    2. The mean of the FCI_cog measurements
-    3. The mean of the standard deviation of the FCI_soc and the FCI_cog measurements, respectively.
-    """
-
-    num_samples = 30
-    swarm_size = 500
-    num_updates = 2
-
-    fci_socs = [FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_updates)
-                for _ in range(num_samples)]
-
-    fci_cogs = [FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_updates)
-                for _ in range(num_samples)]
-
-    fci_soc_mean = np.mean(fci_socs)
-    fci_cog_mean = np.mean(fci_cogs)
-    fci_sigma = FCI_sigma(fci_socs, fci_cogs)
-
-    return fci_soc_mean, fci_cog_mean, fci_sigma
-
-
 def FCI_sigma(FCI_socs, FCI_cogs):
     # Given a list each of FCI_soc and FCI_cog measurements,
     # this determines the standard deviation of each list of measurements
@@ -42,7 +14,7 @@ def FCI_sigma(FCI_socs, FCI_cogs):
 import psodroc.pso.social_only_pso as spso
 
 
-def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_updates=2):
+def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size=500, num_updates=2):
     """
     Get a single fitness cloud index measurement using two position updates with social-only PSO.
     """
@@ -96,7 +68,7 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size, num_update
 import psodroc.pso.cognitive_only_pso as cpso
 
 
-def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size, num_updates=2):
+def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size=500, num_updates=2):
     """
     Get a single fitness cloud index measurement using two position updates with social-only PSO.
     """
