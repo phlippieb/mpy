@@ -4,6 +4,7 @@ from results.flc.funnels import all_funnels
 from results.flc.gradients import all_gradients
 from results.flc.neutrality import all_neutralities
 from results.flc.ruggedness import all_ruggedness
+from results.flc.searchability import all_fcis
 
 parser = OptionParser()
 parser.add_option('--batch', dest='batch_number')
@@ -26,6 +27,8 @@ if batch_number is not None and total_batches is not None:
         total_batches), verbose=verbose)
     all_ruggedness.process(int(batch_number), int(
         total_batches), verbose=verbose)
+    all_fcis.process(int(batch_number), int(
+        total_batches), verbose=verbose)
 
 elif batch_number is not None:
     raise Exception(
@@ -36,6 +39,7 @@ elif total_batches is not None:
         'When providing a total_blocks arg, a batch_number arg is required.')
 
 else:
+    all_fcis.process(0, 1, verbose)
     all_ruggedness.process(0, 1, verbose)
     all_neutralities.process(0, 1, verbose)
     all_gradients.process(0, 1, verbose)
