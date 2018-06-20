@@ -1,5 +1,6 @@
 from db.flc.neutrality import lsn_table
 from results import benchmarks
+from results.flc.neutrality import pn
 from psodroc.measures import neutrality
 
 
@@ -11,15 +12,17 @@ def get(benchmark_name, dimensionality, experiment, epsilon=1e-8, step_size_frac
         if verbose:
             print 'Measurement not found. Calculating...'
         # Result not found. Calculate and store it.
-        new_result = _calculate(
+        pn, lsn = _calculate(
             benchmark_name, dimensionality, epsilon, step_size_fraction)
         if verbose:
             print 'Calculated. Storing...'
         _store(benchmark_name, dimensionality, epsilon,
-               step_size_fraction, experiment, new_result)
+               step_size_fraction, experiment, lsn)
+        pn._store(benchmark_name, dimensionality, epsilon,
+                  step_size_fraction, experiment, pn)
         if verbose:
             print 'Stored.'
-        return new_result
+        return lsn
     else:
         if verbose:
             print 'Measurement found.'
@@ -47,7 +50,5 @@ def _calculate(benchmark_name, dimensionality, epsilon, step_size_fraction):
     f = benchmark.function
     f_min = benchmark.min(0)
     f_max = benchmark.max(0)
-    _, lsn = neutrality.PN_LSN(f, f_min, f_max, dimensionality,
-                               epsilon=epsilon, step_size_fraction=step_size_fraction)
-    # TODO: use pn
-    return lsn
+    return neutrality.PN_LSN(f, f_min, f_max, dimensionality,
+                             epsilon=epsilon, step_size_fraction=step_size_fraction)
