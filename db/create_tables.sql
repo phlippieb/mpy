@@ -95,40 +95,26 @@ CREATE TABLE FEM_0_01(
     PRIMARY KEY(benchmark_name, dimensionality, experiment)
 );
 
+
 /*
-    NEUTRALITY -- PN
+    NEUTRALITY -- pn and lsn (proportion of neutral structures and longest sequence of neutral structures)
     ----------
 */
-
-CREATE TABLE PN(
+CREATE TABLE neutrality(
     benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
     dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
     epsilon DOUBLE PRECISION NOT NULL, -- The neutrality error margin
     step_size_fraction DOUBLE PRECISION NOT NULL, -- The fraction of the search space domain used as a step size
     experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
-    measurement DOUBLE PRECISION NOT NULL, -- The neutrality measurement
+    pn DOUBLE PRECISION NOT NULL, -- The neutrality measurement
+    lsn DOUBLE PRECISION NOT NULL, -- The neutrality measurement
 
     PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
 );
 
-/*
-    NEUTRALITY -- LSN
-    ----------
-*/
--- TODO: combine with PN?
-CREATE TABLE LSN(
-    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
-    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
-    epsilon DOUBLE PRECISION NOT NULL, -- The neutrality error margin
-    step_size_fraction DOUBLE PRECISION NOT NULL, -- The fraction of the search space domain used as a step size
-    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
-    measurement DOUBLE PRECISION NOT NULL, -- The neutrality measurement
-
-    PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
-);
 
 /*
-    GRADIENTS -- AVG
+    GRADIENTS -- avg and dev
     ---------
 */
 CREATE TABLE gradients(
