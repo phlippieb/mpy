@@ -94,3 +94,18 @@ CREATE TABLE FEM_0_01(
 
     PRIMARY KEY(benchmark_name, dimensionality, experiment)
 );
+
+/*
+    NEUTRALITY -- PN
+    ----------
+*/
+
+CREATE TABLE PN(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    epsilon DOUBLE PRECISION NOT NULL, -- The neutrality error margin
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, epsilon, experiment)
+)
