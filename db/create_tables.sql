@@ -64,3 +64,33 @@ CREATE TABLE droc_rank_between_psos(
     
     PRIMARY KEY(pso_1_name, pso_2_name, swarm_size, benchmark_name, dimensionality, iterations)
 );
+
+/*
+    FLC's
+*/
+
+/*
+    RUGGEDNESS -- FEM 0.1
+    ----------
+*/
+CREATE TABLE FEM_0_1(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
+
+/*
+    RUGGEDNESS -- FEM 0.01
+    ----------
+*/
+CREATE TABLE FEM_0_01(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
