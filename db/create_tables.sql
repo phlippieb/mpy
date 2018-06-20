@@ -110,3 +110,18 @@ CREATE TABLE PN(
 
     PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
 )
+
+/*
+    NEUTRALITY -- LSN
+    ----------
+*/
+CREATE TABLE LSN(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    epsilon DOUBLE PRECISION NOT NULL, -- The neutrality error margin
+    step_size_fraction DOUBLE PRECISION NOT NULL, -- The fraction of the search space domain used as a step size
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The ruggedness measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
+)
