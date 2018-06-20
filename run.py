@@ -1,6 +1,6 @@
 from optparse import OptionParser
-# import results.all_droc_rank_between_psos as ranks
 from results.flc.deception import all_fdcs
+from results.flc.funnels import all_funnels
 
 parser = OptionParser()
 parser.add_option('--batch', dest='batch_number')
@@ -18,6 +18,7 @@ if verbose:
 if batch_number is not None and total_batches is not None:
     print 'processing batch', batch_number, 'of', total_batches, 'batches...'
     all_fdcs.process(int(batch_number), int(total_batches), verbose=verbose)
+    all_funnels.process(int(batch_number), int(total_batches), verbose=verbose)
 
 elif batch_number is not None:
     raise Exception(
@@ -28,4 +29,5 @@ elif total_batches is not None:
         'When providing a total_blocks arg, a batch_number arg is required.')
 
 else:
+    all_funnels.process(0, 1, verbose)
     all_fdcs.process(0, 1, verbose)
