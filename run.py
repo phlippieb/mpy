@@ -2,6 +2,7 @@ from optparse import OptionParser
 from results.flc.deception import all_fdcs
 from results.flc.funnels import all_funnels
 from results.flc.gradients import all_gradients
+from results.flc.neutrality import all_neutralities
 
 parser = OptionParser()
 parser.add_option('--batch', dest='batch_number')
@@ -32,6 +33,7 @@ elif total_batches is not None:
         'When providing a total_blocks arg, a batch_number arg is required.')
 
 else:
+    all_neutralities.process(0, 1, verbose)
     all_gradients.process(0, 1, verbose)
     all_funnels.process(0, 1, verbose)
     all_fdcs.process(0, 1, verbose)
