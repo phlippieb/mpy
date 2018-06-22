@@ -11,7 +11,7 @@ def get(benchmark_name, dimensionality, experiment, epsilon=1e-8, step_size_frac
         if verbose:
             print 'Measurements not found. Calculating...'
         pn, lsn = _calculate(
-            benchmark_name, dimensionality, epsilon, step_size_fraction)
+            benchmark_name, dimensionality, experiment, epsilon, step_size_fraction)
         if verbose:
             print 'Calculated. Storing...'
         _store(benchmark_name, dimensionality, epsilon,
@@ -42,12 +42,14 @@ def _store(benchmark_name, dimensionality, epsilon, step_size_fraction, experime
     neutrality_table.commit()
 
 
-def _calculate(benchmark_name, dimensionality, epsilon, step_size_fraction):
+def _calculate(benchmark_name, dimensionality, experiment, epsilon, step_size_fraction):
     """Calculate the requested measurement."""
     benchmark = benchmarks.get(benchmark_name)
     f = benchmark.function
     f_min = benchmark.min(0)
     f_max = benchmark.max(0)
-    pn, lsn = neutrality.PN_LSN(f, f_min, f_max, dimensionality,
-                                epsilon=epsilon, step_size_fraction=step_size_fraction)
+    # pn, lsn = neutrality.PN_LSN(f, f_min, f_max, dimensionality,
+    #                             epsilon=epsilon, step_size_fraction=step_size_fraction)
+    pn, lsn = neutrality.new_PN_LSN(f, f_min, f_max, dimensionality,
+                                    experiment, epsilon=epsilon, step_size_fraction=step_size_fraction)
     return pn, lsn
