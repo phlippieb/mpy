@@ -13,10 +13,42 @@ def PN_LSN(function, domain_min, domain_max, dimensions, epsilon=1e-8, step_size
     num_steps = walk.get_num_steps(dimensions, step_size_fraction)
     step_size = walk.get_step_size(domain_min, domain_max, step_size_fraction)
 
-    walks = [walk.walk(dimensions, domain_min, domain_max, num_steps,
-                       step_size, starting_zone) for starting_zone in starting_zones]
+    num_neutral_structures = 0
+    max_lsn = 0.
+    num_total_structures = 0
 
-    return (_PN(walks, function, epsilon), _LSN(walks, function, epsilon))
+    for (i, starting_zone) in enumerate(starting_zones):
+        print '[neutrality] walk', i, '/', len(starting_zones), ': walking...'
+        xs = walk.walk(dimensions, domain_min, domain_max,
+                       num_steps, step_size, starting_zone)
+
+        fitnesses = [function(x) for x in xs]
+
+        S = _string(fitnesses, epsilon)
+
+        num_neutral_structures += S.count(0)
+        num_total_structures += len(S)
+        longest_neutral_subsequence_length = 0
+        current_neutral_subsequence_length = 0
+        for s in S:
+            if s == 0:
+                # This is a neutral structure. Increment and record the current subsequence length.
+                current_neutral_subsequence_length += 1
+                longest_neutral_subsequence_length = max(
+                    longest_neutral_subsequence_length, current_neutral_subsequence_length)
+            else:
+                # This is a non-neutral structure. Reset the current subsequence length.
+                current_neutral_subsequence_length = 0
+
+        # Determine the proportion of neutral structures in the longest subsequence for this walk.
+        lsn = float(longest_neutral_subsequence_length) / float(len(S))
+
+        # Record the maximum proportion.
+        max_lsn = max(max_lsn, lsn)
+
+    pn = float(num_neutral_structures) / float(num_total_structures)
+    lsn = max_lsn
+    return pn, lsn
 
 
 def _PN(walks, function, epsilon):
