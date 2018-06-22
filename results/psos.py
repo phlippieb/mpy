@@ -9,7 +9,8 @@ from psodroc.pso import alternative_barebones_pso, \
     lbest_pso, \
     social_only_pso, \
     von_neumann_pso
-    
+
+
 def get(name):
     if name == 'alternative_barebones_pso':
         return alternative_barebones_pso
@@ -31,3 +32,16 @@ def get(name):
         return von_neumann_pso
     else:
         raise Exception("Unrecognized PSO name {}".format(name))
+
+
+all_names = [
+    'alternative_barebones_pso',
+    'barebones_pso',
+    'gbest_pso',
+    'gc_gbest_pso',
+    'gc_lbest_pso',
+    'gc_von_neumann_pso',
+    'lbest_pso',
+    'social_only_pso',
+    'von_neumann_pso'
+]

@@ -22,7 +22,7 @@ echo "starting $num_batches batches..."
 # Name the first window '0'
 echo 'starting batch 0...'
 tmux new-session -d -s $session -n 'batch 0'
-tmux send-keys "python run.py -v --prep --of $num_batches --batch 0" C-m
+tmux send-keys "python run.py -v --of $num_batches --batch 0" C-m
 
 # # Add a window
 # tmux send-keys "echo 'yo yo yo'" C-m
@@ -32,7 +32,7 @@ if [ $num_batches != "1" ]; then
     do
         echo "starting batch $i..."
         tmux new-window -t $session -n "batch $i"
-        tmux send-keys "python run.py -v --prep --of $num_batches --batch $i" C-m
+        tmux send-keys "python run.py -v --of $num_batches --batch $i" C-m
     done
 fi
 
@@ -42,3 +42,4 @@ echo 'done. to attach to session, run'
 echo
 echo "tmux attach -t $session"
 echo
+
