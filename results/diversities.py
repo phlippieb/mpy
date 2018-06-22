@@ -3,7 +3,8 @@
 # If the result already exists, it will be returned.
 # If not, it will be calculated and stored for future queries.
 
-import psos, benchmarks
+import psos
+import benchmarks
 import psodroc.measures.diversity as diversity
 import db.diversity_table as diversity_table
 import print_time as t
@@ -12,39 +13,55 @@ import numpy as np
 
 _max_iterations = 2000
 
+
 def get(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, verbose=False, force_calculation=False):
     if force_calculation:
-        print t.now(), '     - forcing calculation'
-        new_results = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, verbose=verbose, num_iterations=_max_iterations)
-        
-        print t.now(), '     - storing', len(new_results), 'diversity results...'
+        if verbose:
+            print t.now(), '     - forcing calculation'
+        new_results = _calculate(pso_name, swarm_size, benchmark_name,
+                                 dimensionality, verbose=verbose, num_iterations=_max_iterations)
+
+        if verbose:
+            print t.now(), '     - storing', len(new_results), 'diversity results...'
         for (iteration, new_result) in enumerate(new_results):
-            _store(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, new_result)
+            _store(pso_name, swarm_size, benchmark_name,
+                   dimensionality, iteration, experiment, new_result)
         diversity_table.commit()
-        print t.now(), '     - done.'
+        if verbose:
+            print t.now(), '     - done.'
         return new_results[iteration]
-        
+
     else:
         # If the requested result exists, return it
-        existing_result = _fetch_existing(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment)
+        existing_result = _fetch_existing(
+            pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment)
         if existing_result is None:
-            print t.now(), "     - diversity result not found. calculating for", _max_iterations, "iterations..."
-            new_results = _calculate(pso_name, swarm_size, benchmark_name, dimensionality, verbose=verbose)
+            if verbose:
+                print t.now(), "     - diversity result not found. calculating for", _max_iterations, "iterations..."
+            new_results = _calculate(
+                pso_name, swarm_size, benchmark_name, dimensionality, verbose=verbose)
 
-            print t.now(), '     - storing', len(new_results), 'diversity results...'
+            if verbose:
+                print t.now(), '     - storing', len(new_results), 'diversity results...'
             for (iteration, new_result) in enumerate(new_results):
-                _store(pso_name, swarm_size, benchmark_name, dimensionality, iteration, experiment, new_result)
+                _store(pso_name, swarm_size, benchmark_name,
+                       dimensionality, iteration, experiment, new_result)
             diversity_table.commit()
-            print t.now(), '     - done.'
+            if verbose:
+                print t.now(), '     - done.'
             return new_results[iteration]
         else:
             return existing_result
 
+
 def _fetch_existing(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment):
     return diversity_table.fetch(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment)
 
+
 def _store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, result):
-    diversity_table.store(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, iteration, experiment, result)
+    diversity_table.store(pso_name, pso_population_size, benchmark_name,
+                          benchmark_dimensions, iteration, experiment, result)
+
 
 def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensions, verbose=False, num_iterations=None):
     # Set up the PSO for a single diversity experiment
@@ -79,9 +96,9 @@ def _calculate(pso_name, pso_population_size, benchmark_name, benchmark_dimensio
 
         xs = pso.positions
         diversity_measurement = diversity.avg_distance_around_swarm_centre(xs)
-        
+
         assert not np.isnan(diversity_measurement), 'Diversity result is NaN!'
-        
+
         diversity_ys.append(diversity_measurement)
         pso.iterate()
 
