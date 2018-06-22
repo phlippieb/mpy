@@ -19,8 +19,12 @@ def smallest(condition, min_e):
 
     # Search within the valid range at incrementally increasing precision.
     while e > min_e:
+        range = upper - lower
+
         e -= 1
         inc = 10. ** e
+        print '  find: lower={:.4f}, upper={:.4f}, inc={:.4f}'.format(
+            lower, upper, inc)
 
         for t in np.arange(lower, upper, inc):
             if condition(t):
@@ -28,5 +32,34 @@ def smallest(condition, min_e):
                 break
             else:
                 lower = t
+
+    return upper
+
+
+def smallest_2(condition, max_decimal_points):
+    # Find the smallest precision that overshoots the condition.
+    e = 0
+    while True:
+        if condition(10 ** e):
+            break
+        e += 1
+
+    # Keep track of a valid range:
+    lower = 0.
+    upper = 10. ** e
+
+    # binary search!
+    while upper > lower:
+        range = upper - lower
+        mid = round(lower + (range / 2.), max_decimal_points)
+
+        if condition(mid):
+            if upper == mid:
+                break
+            upper = mid
+        else:
+            if lower == mid:
+                break
+            lower = mid
 
     return upper

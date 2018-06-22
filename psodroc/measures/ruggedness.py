@@ -17,15 +17,15 @@ import numpy as np
 # Given a fitness function, this function returns a value in [0, 1] indicating the macro ruggedness of the given function. A result of 0 indicates that the given function is completely flat. A result of 1 indicates that the given function is maximally rugged.
 
 
-def FEM_0_1(function, domain_min, domain_max, dimensions):
-    return _FEM(function, domain_min, domain_max, dimensions, 0.1)
+def FEM_0_1(function, domain_min, domain_max, dimensions, verbose=False):
+    return _FEM(function, domain_min, domain_max, dimensions, 0.1, verbose=verbose)
 
 
-def FEM_0_01(function, domain_min, domain_max, dimensions):
-    return _FEM(function, domain_min, domain_max, dimensions, 0.01)
+def FEM_0_01(function, domain_min, domain_max, dimensions, verbose=False):
+    return _FEM(function, domain_min, domain_max, dimensions, 0.01, verbose=verbose)
 
 
-def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
+def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction, verbose):
     starting_zones = random_walk.get_starting_zones(dimensions)
 
     # Approach 1:
@@ -38,13 +38,15 @@ def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
     step_size = random_walk.get_step_size(
         domain_min, domain_max, max_step_size_fraction)
 
-    walks = [random_walk.walk(dimensions, domain_min, domain_max, num_steps,
-                              step_size, starting_zone) for starting_zone in starting_zones]
-
     max_entropy = 0
 
     # Handle each walk individually.
-    for (i, walk) in enumerate(walks):
+    for (i, starting_zone) in enumerate(starting_zones):
+        if verbose:
+            print '[FEM] Walk', i+1, '/', len(starting_zones)
+        walk = random_walk.walk(dimensions, domain_min,
+                                domain_max, num_steps, step_size, starting_zone)
+
         fs = [function(xs) for xs in walk]
 
         # Find the stability measure (E_star).
@@ -63,7 +65,8 @@ def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction):
 
 
 def find_stability2(fs):
-    return find.smallest(lambda E: _is_stable(fs, E), min_e=-3)
+    return find.smallest_2(lambda E: _is_stable(fs, E), max_decimal_points=3)
+    # return find.smallest(lambda E: _is_stable(fs, E), min_e=-3)
 
 
 def _is_stable(fs, E):

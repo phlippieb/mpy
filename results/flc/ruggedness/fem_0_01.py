@@ -21,7 +21,8 @@ def get(benchmark_name, dimensionality, experiment, verbose=False):
         if verbose:
             print 'Measurement not found. Calculating...'
         # Result not found. Calculate and store it.
-        new_result = _calculate(benchmark_name, dimensionality)
+        new_result = _calculate(
+            benchmark_name, dimensionality, verbose=verbose)
         if verbose:
             print 'Calculated. Storing...'
         _store(benchmark_name, dimensionality, experiment, new_result)
@@ -49,10 +50,10 @@ def _store(benchmark_name, dimensionality, experiment, measurement):
     fem_0_01_table.commit()
 
 
-def _calculate(benchmark_name, dimensionality):
+def _calculate(benchmark_name, dimensionality, verbose):
     """Calculate the requested measurement."""
     benchmark = benchmarks.get(benchmark_name)
     f = benchmark.function
     f_min = benchmark.min(0)
     f_max = benchmark.max(0)
-    return ruggedness.FEM_0_01(f, f_min, f_max, dimensionality)
+    return ruggedness.FEM_0_01(f, f_min, f_max, dimensionality, verbose=verbose)
