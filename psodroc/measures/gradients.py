@@ -2,28 +2,42 @@ import progressive_manhattan_walk as manhattan
 import numpy as np
 
 
-def G_measures(function, domain_min, domain_max, dimensions, step_size_fraction=1e-3):
+def G_measures(function, domain_min, domain_max, dimensions, step_size_fraction=1e-3, verbose=False):
     starting_zones = manhattan.get_starting_zones(dimensions)
 
     step_size = ((domain_max - domain_min) * dimensions) * step_size_fraction
     num_steps = int(1. / step_size_fraction)
-    walks = [manhattan.walk(dimensions, domain_min, domain_max, num_steps,
-                            step_size, starting_zone) for starting_zone in starting_zones]
 
-    # TODO: in Katherine's paper, these are normalised, which mine now contradicts.
-    #       - fix and update my thesis.
+    # Cut it off at 200 walks; high dimensionalities take too long otherwise.
+    starting_zones = starting_zones[:200]
+    walks = []
+    for (i, starting_zone) in enumerate(starting_zones):
+        if verbose:
+            print '[gradients] Walking', i+1, 'of', len(starting_zones), '...'
+        
+        walk = manhattan.walk(dimensions, domain_min,
+                              domain_max, num_steps, step_size, starting_zone)
+        walks.append(walk)
 
     # Determine the gradient between each consecutive step.
+    if verbose:
+        print '[gradients] getting gradients...'
     gradients = _gradients(function, domain_min,
                            domain_max, dimensions, walks, step_size)
 
     # Use the absolute value of each gradient;
     # this is because we don't care about the direction of the gradients,
     # and don't want "ups" and "downs" to cancel out.
+    if verbose:
+        print '[gradients] getting gradient absolutes...'
     abs_gradients = np.absolute(gradients)
 
     # Simply determine and return the average and standard deviation of the absolute gradients.
+    if verbose:
+        print '[gradients] getting avg...'
     avg = np.average(abs_gradients)
+    if verbose:
+        print '[gradients] getting std deviation...'
     dev = np.std(abs_gradients)
     return avg, dev
 
@@ -33,7 +47,7 @@ def _gradients(function, domain_min, domain_max, dimensions, walks, step_size):
     f_range = _f_range(function, walks)
     x_range = domain_max - domain_min
 
-    for walk in walks:
+    for (i, walk) in enumerate(walks):
         fs = [function(xs) for xs in walk]
         f1s = fs[:-1]  # f_0, f_1, ..., f_n-1
         f2s = fs[1:]  # f_1, f_2, ..., f_n
