@@ -1,5 +1,5 @@
 import numpy as np
-import decimal.*
+from decimal import *
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
