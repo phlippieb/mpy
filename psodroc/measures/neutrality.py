@@ -9,6 +9,8 @@ import progressive_random_walk as walk
 
 def PN_LSN(function, domain_min, domain_max, dimensions, epsilon=1e-8, step_size_fraction=.02):
     starting_zones = walk.get_starting_zones(dimensions)
+    # Take up to 200 starting zones
+    starting_zones = starting_zones[:200]
 
     num_steps = walk.get_num_steps(dimensions, step_size_fraction)
     step_size = walk.get_step_size(domain_min, domain_max, step_size_fraction)
