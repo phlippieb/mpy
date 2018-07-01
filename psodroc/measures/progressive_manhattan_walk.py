@@ -1,7 +1,8 @@
 import numpy as np
+import sys
 
 
-def walk(n, domain_min, domain_max, num_steps, s, starting_zone):
+def walk(n, domain_min, domain_max, num_steps, s, starting_zone, verbose=False):
     # Perform a random walk.
     # Katherine Mary Malan. Characterising continuous optimisation problems for parti- cle swarm optimisation performance prediction. PhD thesis, University of Pretoria, 2014.
     # n: Int. The number of dimensions of the problem.
@@ -34,7 +35,18 @@ def walk(n, domain_min, domain_max, num_steps, s, starting_zone):
     walk[0][rD] = domain_max if starting_zone[rD] == 1 else domain_min
 
     # Add steps to the walk.
+    if verbose:
+        last_percent = 0
+        print '[walk]',
+        
     for step in range(1, num_steps):
+        if verbose:
+            percent = int(((step+1) * 100.) / num_steps)
+            if percent > (last_percent + 4):
+                print '\r[walk]', percent, 'percent\r',
+                sys.stdout.flush()
+                last_percent = percent
+
         # Select a random dimension.
         rD = np.random.randint(n)
 
@@ -55,6 +67,8 @@ def walk(n, domain_min, domain_max, num_steps, s, starting_zone):
                 walk[step][i] = walk[step-1][i]
 
     # All steps are complete. Return the walk.
+    if verbose:
+        print ''
     return walk
 
 
