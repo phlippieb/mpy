@@ -25,11 +25,11 @@ if batch_number is not None and total_batches is not None:
     t = int(total_batches)
     print 'processing batch', batch_number, 'of', total_batches, 'batches...'
     all_fcis.process(b, t, verbose)
-    all_gradients.process(b, t, verbose)
-    all_funnels.process(b, t, verbose)
-    all_fdcs.process(b, t, verbose)
-    all_neutralities.process(b, t, verbose)
-    all_ruggedness.process(b, t, verbose)
+    # all_gradients.process(b, t, verbose)
+    # all_funnels.process(b, t, verbose)
+    # all_fdcs.process(b, t, verbose)
+    # all_neutralities.process(b, t, verbose)
+    # all_ruggedness.process(b, t, verbose)
 
 elif batch_number is not None:
     raise Exception(
