@@ -4,6 +4,7 @@ import progressive_random_walk as random_walk
 import util.find as find
 import itertools
 import numpy as np
+from util import norm
 
 # This file contains functions that estimate the ruggedness of a fitness landscape using first entropic measures.
 # It contains two such functions: FEM_0.1, which is used to measure the macro-ruggedness of the landscape, and FEM_0.01, which measures the micro-ruggedness.
@@ -27,6 +28,8 @@ def FEM_0_01(function, domain_min, domain_max, dimensions, verbose=False):
 
 def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction, verbose):
     starting_zones = random_walk.get_starting_zones(dimensions)
+    # Take up to n starting zones
+    starting_zones = starting_zones[:100]
 
     # Approach 1:
     # num_steps = walk.get_num_steps(dimensions, max_step_size_fraction)
@@ -47,11 +50,22 @@ def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction, v
         walk = random_walk.walk(dimensions, domain_min,
                                 domain_max, num_steps, step_size, starting_zone)
 
+        if verbose:
+            print '[FEM] Getting fitnesses'
         fs = [function(xs) for xs in walk]
 
+        if verbose:
+            print '[FEM] normalising fitnesses between', min(
+                fs), 'and', max(fs)
+        fs = norm.norm(fs, min(fs), max(fs), 0., 1.)
+
         # Find the stability measure (E_star).
+        if verbose:
+            print '[FEM] Getting stability'
         E_star = find_stability2(fs)
 
+        if verbose:
+            print '[FEM] Getting max entropy'
         for E in np.arange(0, E_star, .05 * E_star):
             string = _string(fs, E)
 
