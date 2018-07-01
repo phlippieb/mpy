@@ -1,8 +1,21 @@
 import numpy as np
+import decimal.*
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
-def function(xs):
+def function(xs, exact=False):
+    """Schwefel's function 2.22.
+    xs: (Numpy) Array of numeric values.
+    exact: Boolean
+        If true, values will be converted to Decimal before determine result;
+        this is needed for large input arrays (around 500 elements and up);
+        the default float type cannot represent large enough numbers for such results,
+        and will return `inf`.
+        However, this setting will drastically impact performance, and may be disabled if not needed.
+    """
+    if exact:
+        xs = [Decimal(x) for x in xs]
+    
     return np.sum(np.abs(xs)) + np.prod(np.abs(xs))
 
 # Domain is [-10, 10] across all dimensions
