@@ -7,6 +7,16 @@ import warnings
 # Returns -1 if the lhs sample values are significantly smaller than the rhs sample values.
 # Returns 1 if the lhs sample values are significantly greater than the rhs sample values.
 def rank(lhs, rhs, alpha=0.05):
+    if len(lhs) == 0 or len(rhs) == 0:
+        raise(Exception('Empty list(s) passed to rank.'))
+    
+    # Kruskal and MWU raise errors if called on lists containing only identical values (eg [0, 0, 0], which is common when testing neutrality.)
+    # If that is the case, we can still handle it for our purposes.
+    if lhs.count(lhs[0]) == len(lhs) or rhs.count(rhs[0]) == len(rhs):
+        # Either or both lists contain only identical elements.
+        
+
+
     if len(lhs) < 20 or len(rhs) < 20:
         warnings.warn("One or both samples provided to the rank function has less than 20 elements. This is ill-advised when performing a Wilcoxon signed rank test.")
     
