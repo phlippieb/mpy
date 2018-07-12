@@ -1,4 +1,5 @@
 from __future__ import division  # make division cast to double by default
+from decimal import *
 import math
 import progressive_random_walk as random_walk
 import util.find as find
@@ -57,7 +58,7 @@ def _FEM(function, domain_min, domain_max, dimensions, max_step_size_fraction, v
         if verbose:
             print '[FEM] normalising fitnesses between', min(
                 fs), 'and', max(fs)
-        fs = norm.norm(fs, min(fs), max(fs), 0., 1.)
+        fs = norm.norm(fs, min(fs), max(fs), Decimal(0.), Decimal(1.))
 
         # Find the stability measure (E_star).
         if verbose:
