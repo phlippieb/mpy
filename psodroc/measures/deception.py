@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial import distance
+from decimal import *
 
 
 def FDC(function, domain_min, domain_max, dimensions):
@@ -14,9 +15,12 @@ def FDC(function, domain_min, domain_max, dimensions):
 
     # Determine the distance from each position to the fittest position.
     ds = [distance.euclidean(x_star, x) for x in xs]
+    ds = [Decimal(d) for d in ds]
 
     fm = np.mean(fs)
     dm = np.mean(ds)
+    fm = Decimal(fm)
+    dm = Decimal(dm)
 
     i_s = range(sample_size)
     numer = np.sum([(fs[i] - fm) * (ds[i] - dm) for i in i_s])
