@@ -1,9 +1,10 @@
 import numpy as np
 from scipy.spatial.distance import pdist as pairwise_distance
 import itertools
+import sys
 
 
-def DM(function, domain_min, domain_max, dimensions):
+def DM(function, domain_min, domain_max, dimensions, verbose=False):
     # This metric is used to estimate the presence of multiple funnels. It returns a value in the range [-disp_D, sqrt(D) - disp_D],
     # where D is the number of dimensions, and disp_D, a (pre-calculatable) constant, is the dispersion of a large uniform sample in
     # D dimensions. A dispersion metric > 0 indicates the presence of multiple funnels.
@@ -13,9 +14,25 @@ def DM(function, domain_min, domain_max, dimensions):
     # dimensions: Int. The number of dimensions the function is defined in.
     # Returns: Float-like. A scalar in [-disp_D, sqrt(D) - disp_D]. A positive return value indicates the presence of multiple funnels.
     max_DM = None
+
+    if verbose:
+        last_percent = 0
+        print '[walk]',
+
     for s in np.arange(0., .5, .001):
+        if verbose:
+            percent = int(((s+.001) * 100) / .5)
+            if percent > (last_percent):
+                print '\r[DM]', percent, 'percent\r',
+                sys.stdout.flush()
+                last_percent = percent
+
         DM = _DM(function, domain_min, domain_max, dimensions, 100, s)
         max_DM = DM if max_DM is None else max(max_DM, DM)
+
+    if verbose:
+        print ''
+
     return max_DM
 
 
