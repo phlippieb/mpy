@@ -28,7 +28,7 @@ def _config(index):
     experiments = range(30)
     i = 0
     for dimensionality in dimensionalities:
-        for benchmark_name in benchmark_names:
+        for benchmark_name in ['schwefel_2_22']:  # benchmark_names:
             for experiment in experiments:
                 if i == index:
                     return benchmark_name, dimensionality, experiment
