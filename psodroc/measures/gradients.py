@@ -1,6 +1,5 @@
 import progressive_manhattan_walk as manhattan
 import numpy as np
-from decimal import *
 
 
 def G_measures(function, domain_min, domain_max, dimensions, step_size_fraction=1e-3, verbose=False):
@@ -15,7 +14,7 @@ def G_measures(function, domain_min, domain_max, dimensions, step_size_fraction=
     for (i, starting_zone) in enumerate(starting_zones):
         if verbose:
             print '[gradients] Walking', i+1, 'of', len(starting_zones), '...'
-
+        
         walk = manhattan.walk(dimensions, domain_min,
                               domain_max, num_steps, step_size, starting_zone)
         walks.append(walk)
@@ -73,6 +72,4 @@ def _f_range(function, walks):
 def _gradient(f1, f2, f_range, s, x_range, n):
     numer = (f2 - f1) / f_range
     denom = s / (n * x_range)
-    denom = Decimal(denom)
-    g = numer / denom
-    return float(g)
+    return numer / denom
