@@ -3,7 +3,7 @@ import decimal.*
 
 # X. Yao, Y. Liu, and G. Lin. Evolutionary Programming Made Faster. IEEE Transactions on Evolutionary Computation, 3(2):82-102, July 1999.
 
-def function(xs, exact=True):
+def function(xs, exact=False):
     """Schwefel's function 2.22.
     xs: (Numpy) Array of numeric values.
     exact: Boolean
