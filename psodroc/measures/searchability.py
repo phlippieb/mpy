@@ -56,10 +56,10 @@ def FCI_soc(function, domain_min, domain_max, dimensions, swarm_size=500, num_up
     # Normalise fitnesses between the min and max encountered.
     min_fitness = min(initial_fitnesses + final_fitnesses)
     max_fitness = max(initial_fitnesses + final_fitnesses)
-    initial_fitnesses = [(initial_fitness - min_fitness) / \
-        (max_fitness - min_fitness) for initial_fitness in initial_fitnesses]
-    final_fitnesses = [(final_fitness - min_fitness) / \
-        (max_fitness - min_fitness) for final_fitness in final_fitnesses]
+    initial_fitnesses = (initial_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+    final_fitnesses = (final_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
 
     fci = _FCI(initial_fitnesses, final_fitnesses)
     return fci
@@ -80,9 +80,6 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size=500, num_up
 
     # Record the initial fitnesses.
     initial_fitnesses = [function(x) for x in cpso.positions]
-
-    from decimal import *
-    initial_fitnesses = [Decimal(f) for f in initial_fitnesses]
 
     # Artificially generate a nearby pbest for each particle to get things going.
     for i in range(swarm_size):
@@ -130,11 +127,10 @@ def FCI_cog(function, domain_min, domain_max, dimensions, swarm_size=500, num_up
 
     min_fitness = min(initial_fitnesses + final_fitnesses)
     max_fitness = max(initial_fitnesses + final_fitnesses)
-
-    initial_fitnesses = [(initial_fitness - min_fitness) / \
-        (max_fitness - min_fitness) for initial_fitness in initial_fitnesses]
-    final_fitnesses = [(final_fitness - min_fitness) / \
-        (max_fitness - min_fitness) for final_fitness in final_fitnesses]
+    initial_fitnesses = (initial_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
+    final_fitnesses = (final_fitnesses - min_fitness) / \
+        (max_fitness - min_fitness)
 
     fci = _FCI(initial_fitnesses, final_fitnesses)
     return fci
