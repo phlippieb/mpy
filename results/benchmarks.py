@@ -23,6 +23,13 @@ from psodroc.benchmarks import ackley, \
     step, \
     weierstrass, \
     zakharov
+from psodroc.benchmarks.variable.step import vstep10, \
+    vstep5, \
+    vstep2, \
+    vstep1, \
+    vstep0_5, \
+    vstep0_1, \
+    vstep0_05
 
 
 def get(name):
@@ -72,6 +79,20 @@ def get(name):
         return weierstrass
     elif name == 'zakharov':
         return zakharov
+    elif name == 'vstep10':
+        return vstep10
+    elif name == 'vstep5':
+        return vstep5
+    elif name == 'vstep2':
+        return vstep2
+    elif name == 'vstep1':
+        return vstep1
+    elif name == 'vstep0_5':
+        return vstep0_5
+    elif name == 'vstep0_1':
+        return vstep0_1
+    elif name == 'vstep0_05':
+        return vstep0_05
     else:
         raise Exception('Unrecognized benchmark {}'.format(name))
 
@@ -99,5 +120,13 @@ all_names = [
     'spherical',
     'step',
     'weierstrass',
-    'zakharov'
+    'zakharov',
+
+    'vstep10',
+    'vstep5',
+    'vstep2',
+    'vstep1',
+    'vstep0_5',
+    'vstep0_1',
+    'vstep0_05'
 ]
