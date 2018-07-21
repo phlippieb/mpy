@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def vstep(xs, step_size):
+def function(xs, step_size):
     """Step function with variable step size.
     step_size defines the minimum distance to the next step.
     low = -20.

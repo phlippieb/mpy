@@ -2,7 +2,7 @@ import vstep
 
 
 def function(xs):
-    return vstep(xs, 2.)
+    return vstep.function(xs, 2.)
 
 
 def min(d):
