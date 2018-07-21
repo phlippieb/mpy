@@ -12,6 +12,7 @@ from psodroc.benchmarks import ackley, \
     pathological, \
     quadric, \
     quartic, \
+    rana, \
     rastrigin, \
     rosenbrock, \
     salomon, \
@@ -50,6 +51,8 @@ def get(name):
         return quadric
     elif name == 'quartic':
         return quartic
+    elif name == 'rana':
+        return rana
     elif name == 'rastrigin':
         return rastrigin
     elif name == 'rosenbrock':
@@ -89,6 +92,7 @@ all_names = [
     'pathological',
     'quadric',
     'quartic',
+    'rana',
     'rastrigin',
     'rosenbrock',
     'salomon',
