@@ -13,7 +13,7 @@ def DM(function, domain_min, domain_max, dimensions, verbose=False):
     # domain_max: Float-like. The max of the function domain. Assumed to be the same in all dimensions.
     # dimensions: Int. The number of dimensions the function is defined in.
     # Returns: Float-like. A scalar in [-disp_D, sqrt(D) - disp_D]. A positive return value indicates the presence of multiple funnels.
-    max_DM = None
+    dms = []
 
     if verbose:
         last_percent = 0
@@ -27,13 +27,13 @@ def DM(function, domain_min, domain_max, dimensions, verbose=False):
                 sys.stdout.flush()
                 last_percent = percent
 
-        DM = _DM(function, domain_min, domain_max, dimensions, 100, s)
-        max_DM = DM if max_DM is None else max(max_DM, DM)
+        dm = _DM(function, domain_min, domain_max, dimensions, 100, s)
+        dms.append(dm)
 
     if verbose:
         print ''
 
-    return max_DM
+    return np.median(dms)
 
 
 def _DM(function, domain_min, domain_max, dimensions, n, s):
