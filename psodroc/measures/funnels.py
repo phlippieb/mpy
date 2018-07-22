@@ -19,9 +19,10 @@ def DM(function, domain_min, domain_max, dimensions, verbose=False):
         last_percent = 0
         print '[walk]',
 
-    for s in np.arange(0., .5, .05):
+    inc = .005
+    for s in np.arange(0., .5, inc):
         if verbose:
-            percent = int(((s+.05) * 100) / .5)
+            percent = int(((s+inc) * 100) / .5)
             if percent > (last_percent):
                 print '\r[DM]', percent, 'percent\r',
                 sys.stdout.flush()
