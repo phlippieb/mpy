@@ -5,7 +5,6 @@ from results.flc.gradients import all_gradients
 from results.flc.neutrality import all_neutralities
 from results.flc.ruggedness import all_ruggedness
 from results.flc.searchability import all_fcis
-from db.samples import progressive_random_walk_table
 
 parser = OptionParser()
 parser.add_option('--batch', dest='batch_number')
