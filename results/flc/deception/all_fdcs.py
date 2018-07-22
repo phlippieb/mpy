@@ -20,7 +20,7 @@ def process(batch_num, num_batches, verbose):
 def _config(index):
     """Return the i'th configuration"""
     benchmark_names = benchmarks.all_names
-    dimensionalities = [1, 2, 5, 25, 50, 100, 500, 1000]
+    dimensionalities = [1, 2, 5, 25, 50, 100, 500]  # , 1000]
     experiments = range(30)
     i = 0
     for benchmark_name in benchmark_names:

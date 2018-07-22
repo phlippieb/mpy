@@ -12,10 +12,12 @@ def process(batch_num, num_batches, verbose):
             if is_soc:
                 print 'FCI_soc: getting', benchmark_name, dimensionality, experiment
                 # fci_sigma.get(benchmark_name, dimensionality, verbose=verbose)
-                fci_soc.get(benchmark_name, dimensionality, experiment, verbose=verbose)
+                fci_soc.get(benchmark_name, dimensionality,
+                            experiment, verbose=verbose)
             else:
                 print 'FCI_cog: getting', benchmark_name, dimensionality, experiment
-                fci_cog.get(benchmark_name, dimensionality, experiment, verbose=verbose)
+                fci_cog.get(benchmark_name, dimensionality,
+                            experiment, verbose=verbose)
         else:
             print 'FCI: skipping', benchmark_name, dimensionality, '(invalid number of dimensions)'
         batch_num += num_batches
@@ -25,7 +27,7 @@ def process(batch_num, num_batches, verbose):
 def _config(index):
     """Return the i'th configuration"""
     benchmark_names = benchmarks.all_names
-    dimensionalities = [1, 2, 5, 25, 50, 100, 500, 1000]
+    dimensionalities = [1, 2, 5, 25, 50, 100, 500]  # , 1000]
     benchmark_names = ['schwefel_2_22']
     dimensionalities = [500, 1000]
     i = 0
