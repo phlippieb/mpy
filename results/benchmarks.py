@@ -5,6 +5,7 @@ from psodroc.benchmarks import ackley, \
     beale, \
     bohachevsky1_generalized, \
     eggholder, \
+    eggholder_generalized, \
     goldstein_price, \
     griewank, \
     levy13_generalized, \
@@ -37,6 +38,8 @@ def get(name):
         return bohachevsky1_generalized
     elif name == 'eggholder':
         return eggholder
+    elif name == 'eggholder_generalized':
+        return eggholder_generalized
     elif name == 'goldstein_price':
         return goldstein_price
     elif name == 'griewank':
@@ -84,7 +87,7 @@ all_names = [
     'alpine',
     'beale',
     'bohachevsky1_generalized',
-    'eggholder',
+    'eggholder_generalized',
     'goldstein_price',
     'griewank',
     'levy13_generalized',
