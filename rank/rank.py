@@ -6,20 +6,27 @@ import warnings
 # Returns 0 if the samples are not significantly different.
 # Returns -1 if the lhs sample values are significantly smaller than the rhs sample values.
 # Returns 1 if the lhs sample values are significantly greater than the rhs sample values.
+
+
 def rank(lhs, rhs, alpha=0.05):
     if len(lhs) == 0 or len(rhs) == 0:
         raise(Exception('Empty list(s) passed to rank.'))
-    
+
     # Kruskal and MWU raise errors if called on lists containing only identical values (eg [0, 0, 0], which is common when testing neutrality.)
     # If that is the case, we can still handle it for our purposes.
-    if lhs.count(lhs[0]) == len(lhs) or rhs.count(rhs[0]) == len(rhs):
-        # Either or both lists contain only identical elements.
-        
-
+    if lhs.count(lhs[0]) == len(lhs) and rhs.count(rhs[0]) == len(rhs):
+        # Both lists contain only identical values
+        if lhs[0] < rhs[0]:
+            return -1
+        elif lhs[0] > rhs[0]:
+            return 1
+        else:
+            return 0
 
     if len(lhs) < 20 or len(rhs) < 20:
-        warnings.warn("One or both samples provided to the rank function has less than 20 elements. This is ill-advised when performing a Wilcoxon signed rank test.")
-    
+        warnings.warn(
+            "One or both samples provided to the rank function has less than 20 elements. This is ill-advised when performing a Wilcoxon signed rank test.")
+
     # Using the Kruskal-Wallis H test, determine whether the samples are statistically significantly different:
     _, pval = stats.kruskal(lhs, rhs)
     if pval < alpha:
@@ -34,11 +41,11 @@ def rank(lhs, rhs, alpha=0.05):
                 return -1
             else:
                 return 1
-                
+
         else:
             # The samples do not differ significantly (according to the Mann-Whitney U test).
-            return 0    
-        
+            return 0
+
     else:
         # The samples do not differ significantly (according to the Kruskal-Wallis H test).
         return 0
