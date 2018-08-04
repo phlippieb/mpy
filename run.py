@@ -5,6 +5,7 @@ from results.flc.gradients import all_gradients
 from results.flc.neutrality import all_neutralities
 from results.flc.ruggedness import all_ruggedness
 from results.flc.searchability import all_fcis
+from results import all_droc_rank_between_psos
 
 parser = OptionParser()
 parser.add_option('--batch', dest='batch_number')
@@ -22,13 +23,15 @@ if verbose:
 if batch_number is not None and total_batches is not None:
     b = int(batch_number)
     t = int(total_batches)
-    print 'processing batch', batch_number, 'of', total_batches, 'batches...'
-    all_fcis.process(b, t, verbose)
-    all_gradients.process(b, t, verbose)
-    all_funnels.process(b, t, verbose)
-    all_fdcs.process(b, t, verbose)
-    all_neutralities.process(b, t, verbose)
-    all_ruggedness.process(b, t, verbose)
+    # print 'processing batch', batch_number, 'of', total_batches, 'batches...'
+    # all_fcis.process(b, t, verbose)
+    # all_gradients.process(b, t, verbose)
+    # all_funnels.process(b, t, verbose)
+    # all_fdcs.process(b, t, verbose)
+    # all_neutralities.process(b, t, verbose)
+    # all_ruggedness.process(b, t, verbose)
+    all_droc_rank_between_psos.process(b, t, prep=True, verbose=verbose)
+
 
 elif batch_number is not None:
     raise Exception(
@@ -39,9 +42,10 @@ elif total_batches is not None:
         'When providing a total_blocks arg, a batch_number arg is required.')
 
 else:
-    all_fcis.process(0, 1, verbose)
-    all_ruggedness.process(0, 1, verbose)
-    all_neutralities.process(0, 1, verbose)
-    all_gradients.process(0, 1, verbose)
-    all_funnels.process(0, 1, verbose)
-    all_fdcs.process(0, 1, verbose)
+    # all_fcis.process(0, 1, verbose)
+    # all_ruggedness.process(0, 1, verbose)
+    # all_neutralities.process(0, 1, verbose)
+    # all_gradients.process(0, 1, verbose)
+    # all_funnels.process(0, 1, verbose)
+    # all_fdcs.process(0, 1, verbose)
+    pass
