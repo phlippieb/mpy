@@ -1,4 +1,6 @@
 import datetime
+from termcolor import colored
+
 
 def now():
-    return datetime.datetime.now().strftime("%H:%M:%S") + " --"
+    return colored("[" + datetime.datetime.now().strftime("%H:%M:%S") + "]", 'white')
