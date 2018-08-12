@@ -28,8 +28,8 @@ def get(benchmark_name, dimensionality, verbose=False):
             print 'Stored.'
         return new_result
     else:
-        if verbose:
-            print 'Measurement found.'
+        # if verbose:
+        #     print 'Measurement found.'
         return existing_result
 
 
