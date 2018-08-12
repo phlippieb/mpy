@@ -45,3 +45,15 @@ all_names = [
     'social_only_pso',
     'von_neumann_pso'
 ]
+
+print_names = {
+    'alternative_barebones_pso': 'MBBPSO',
+    'barebones_pso': 'BBPSO',
+    'gbest_pso': 'Gbest PSO',
+    'gc_gbest_pso': 'GC Gbest PSO',
+    'gc_lbest_pso': 'GC Lbest PSO',
+    'gc_von_neumann_pso': 'GCVNPSO',
+    'lbest_pso': 'Lbest PSO',
+    'social_only_pso': 'SPSO',
+    'von_neumann_pso': 'VNPSO',
+}
