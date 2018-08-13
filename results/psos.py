@@ -35,15 +35,15 @@ def get(name):
 
 
 all_names = [
-    'alternative_barebones_pso',
-    'barebones_pso',
     'gbest_pso',
+    'lbest_pso',
     'gc_gbest_pso',
     'gc_lbest_pso',
     'gc_von_neumann_pso',
-    'lbest_pso',
+    'von_neumann_pso',
+    'alternative_barebones_pso',
+    'barebones_pso',
     'social_only_pso',
-    'von_neumann_pso'
 ]
 
 print_names = {
