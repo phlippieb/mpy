@@ -32,8 +32,8 @@ def _run(batch_number, total_batches, verbose):
     # all_neutralities.process(b, t, verbose)
     # all_ruggedness.process(b, t, verbose)
 
-    all_diversities.process(b, t, verbose=verbose)
-    # all_drocs.process(b, t, verbose=verbose)
+    # all_diversities.process(b, t, verbose=verbose)
+    all_drocs.process(b, t, verbose=verbose)
     # all_droc_rank_between_psos.process(b, t, verbose=verbose)
 
 

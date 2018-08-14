@@ -9,16 +9,19 @@ import psos
 pso_names = psos.all_names
 
 # Swarm sizes to use with the PSOs
-swarm_sizes = [5, 10, 25, 50, 75, 100, 500]
+#swarm_sizes = [5, 10, 25, 50, 75, 100, 500]
+swarm_sizes = [25]
 
 # Benchmark functions to use
 # benchmark_names = ['ackley', 'alpine', 'beale', 'bohachevsky1_generalized', 'eggholder', 'goldstein_price', 'griewank', 'levy13_generalized', 'michalewicz', 'pathological', 'quadric',
 #    'quartic', 'rastrigin', 'rosenbrock', 'salomon', 'schwefel_2_22', 'schwefel_2_26', 'six_hump_camel_back', 'skew_rastrigin', 'spherical', 'step', 'weierstrass', 'zakharov']
 benchmark_names = ['spherical', 'rastrigin', 'rosenbrock', 'weierstrass']
+# benchmark_names = benchmarks.all_names
 
 # Dimensionalities to use with the benchmark functions
 # dimensionalities = [1, 2, 3, 4, 5, 10, 20, 30]
-dimensionalities = [5]
+# dimensionalities = [5]
+dimensionalities = [2, 5, 25, 50, 100, 500, 1000]
 
 # Numbers of iterations to use
 # num_iterations = [10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450,
