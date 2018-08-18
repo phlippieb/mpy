@@ -108,3 +108,30 @@ all_names = [
     'weierstrass',
     'zakharov'
 ]
+
+print_names = {
+    'ackley': 'Ackley',
+    'alpine': 'Alpine',
+    'beale': 'Beale',
+    'bohachevsky1_generalized': 'Bohachevsky 1',
+    'eggholder_generalized': 'Eggholder',
+    'goldstein_price': 'Goldstein-Price',
+    'griewank': 'Griewank',
+    'levy13_generalized': 'Levy 13',
+    'michalewicz': 'Michalewicz',
+    'pathological': 'Pathological',
+    'quadric': 'Quadric',
+    'quartic': 'Quartic',
+    'rana': 'Rana',
+    'rastrigin': 'Rastrigin',
+    'rosenbrock': 'Rosenbrock',
+    'salomon': 'Salamon',
+    'schwefel_2_22': 'Schwefel 2.22',
+    'schwefel_2_26': 'Schwefel 2.26',
+    'six_hump_camel_back': 'Six-Hump Camel Back',
+    'skew_rastrigin': 'Skew Rastrigin',
+    'spherical': 'Spherical',
+    'step': 'Step',
+    'weierstrass': 'Weierstrass',
+    'zakharov': 'Zakharov',
+}
