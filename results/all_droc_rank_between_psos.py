@@ -56,12 +56,19 @@ def process(batch_num, num_batches, prep=False, verbose=False):
     # all_benchmark_names = benchmarks.all_names
 
     all_dimensionalities = [
-        2,  # <== for the benchmarks that are only defined in 2D
+        #2,  # <== for the benchmarks that are only defined in 2D
         5  # <== for the rest
     ]
 
     all_nums_iterations = [
-        2000
+        25,
+        50,
+        100,
+        200,
+        500,
+        1000,
+        2000,
+        10000
     ]
 
     global _configs
@@ -102,11 +109,15 @@ def process(batch_num, num_batches, prep=False, verbose=False):
 
         # Configurations for comparing DRoC performance at different numbers of iterations:
         # (with fixed 25-particle swarms and 5D benchmarks)
-        # _make_configs(all_pso_names, [25], all_benchmark_names, [
-        #               5], all_nums_iterations)
+        _make_configs(
+            all_pso_names, 
+            [25], 
+            all_benchmark_names, 
+            [5], 
+            all_nums_iterations)
 
         # Configurations for the basic DRoC results from ANTS2014.
-        _make_configs(all_pso_names, [25], all_benchmark_names, [5], [2000])
+        # _make_configs(all_pso_names, [25], all_benchmark_names, [5], [2000])
 
         # Process all the configs (in batches as specified):
         num_configs = len(_configs)
