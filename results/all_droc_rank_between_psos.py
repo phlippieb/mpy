@@ -26,56 +26,66 @@ def process(batch_num, num_batches, prep=False, verbose=False):
         25
     ]
 
-    # all_benchmark_names = [
-    #     'spherical',
-    #     'rastrigin',
-    #     'rosenbrock',
-    #     'weierstrass',
-    #     # ^^^ already done
-    #     # vvv new
-    #     'ackley',
-    #     'alpine',
-    #     'beale',
-    #     'bohachevsky1_generalized',
-    #     'eggholder',
-    #     'goldstein_price',
-    #     'griewank',
-    #     'levy13_generalized',
-    #     'michalewicz',
-    #     'pathological',
-    #     'quadric',
-    #     'quartic',
-    #     'salomon',
-    #     'schwefel_2_22',
-    #     'schwefel_2_26',
-    #     'six_hump_camel_back',
-    #     'skew_rastrigin',
-    #     'step',
-    #     'zakharov'
-    # ]
-    all_benchmark_names = benchmarks.all_names
+    all_benchmark_names = [
+        'spherical',
+        'rastrigin',
+        'rosenbrock',
+        'weierstrass',
+        # ^^^ already done
+        # vvv new
+        # 'ackley',
+        # 'alpine',
+        # 'beale',
+        # 'bohachevsky1_generalized',
+        # 'eggholder',
+        # 'goldstein_price',
+        # 'griewank',
+        # 'levy13_generalized',
+        # 'michalewicz',
+        # 'pathological',
+        # 'quadric',
+        # 'quartic',
+        # 'salomon',
+        # 'schwefel_2_22',
+        # 'schwefel_2_26',
+        # 'six_hump_camel_back',
+        # 'skew_rastrigin',
+        # 'step',
+        # 'zakharov'
+    ]
+    # all_benchmark_names = benchmarks.all_names
 
     all_dimensionalities = [
-        2,  # <== for the benchmarks that are only defined in 2D
+        #2,  # <== for the benchmarks that are only defined in 2D
         5  # <== for the rest
     ]
 
     all_nums_iterations = [
-        2000
+        25,
+        50,
+        100,
+        200,
+        500,
+        1000,
+        2000,
+        10000
     ]
 
     global _configs
 
     if prep:
-        # _make_prep_configs(all_pso_names, all_swarm_sizes,
-        #                    all_benchmark_names, [5], [2000])
+        _make_prep_configs(all_pso_names, all_swarm_sizes,
+                           all_benchmark_names, [5], [2000])
         # _make_prep_configs(
         #     all_pso_names, [25], all_benchmark_names, all_dimensionalities, [2000])
         # _make_prep_configs(all_pso_names, [25], all_benchmark_names, [
         #                    5], all_nums_iterations)
         # Configs for the ANTS2014 results
-        _make_prep_configs(
-            all_pso_names, [25], all_benchmark_names, [25], [2000])
+        # _make_prep_configs(
+        #     all_pso_names, [25], all_benchmark_names, [25], [2000])
+
+        # _make_prep_configs(
+        #     all_pso_names, [25], all_benchmark_names, [5], [25, 50, 75, 100, 125, 150, 2000, 10000])
 
         num_configs = len(_prep_configs)
         batch_indices = range(batch_num, num_configs, num_batches)
@@ -99,11 +109,15 @@ def process(batch_num, num_batches, prep=False, verbose=False):
 
         # Configurations for comparing DRoC performance at different numbers of iterations:
         # (with fixed 25-particle swarms and 5D benchmarks)
-        # _make_configs(all_pso_names, [25], all_benchmark_names, [
-        #               5], all_nums_iterations)
+        _make_configs(
+            all_pso_names, 
+            [25], 
+            all_benchmark_names, 
+            [5], 
+            all_nums_iterations)
 
         # Configurations for the basic DRoC results from ANTS2014.
-        _make_configs(all_pso_names, [25], all_benchmark_names, [5], [2000])
+        # _make_configs(all_pso_names, [25], all_benchmark_names, [5], [2000])
 
         # Process all the configs (in batches as specified):
         num_configs = len(_configs)
