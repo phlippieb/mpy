@@ -36,13 +36,13 @@ def get(name):
 
 all_names = [
     'gbest_pso',
+    'von_neumann_pso',
     'lbest_pso',
     'gc_gbest_pso',
-    'gc_lbest_pso',
     'gc_von_neumann_pso',
-    'von_neumann_pso',
-    'alternative_barebones_pso',
+    'gc_lbest_pso',
     'barebones_pso',
+    'alternative_barebones_pso',
     'social_only_pso',
 ]
 
