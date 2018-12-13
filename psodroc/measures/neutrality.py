@@ -12,7 +12,7 @@ def PN_LSN(function, domain_min, domain_max, dimensions, epsilon=1e-8, step_size
     # Limit the starting zones
     starting_zones = starting_zones[:100]
 
-    num_steps = walk.get_num_steps(dimensions, step_size_fraction)
+    num_steps = 200
     step_size = walk.get_step_size(domain_min, domain_max, step_size_fraction)
 
     num_neutral_structures = 0
