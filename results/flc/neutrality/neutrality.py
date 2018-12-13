@@ -3,13 +3,19 @@ from results import benchmarks
 from psodroc.measures import neutrality
 
 
-def get(benchmark_name, dimensionality, experiment, epsilon=1e-8, step_size_fraction=.02, verbose=False):
+def get(benchmark_name, dimensionality, experiment, epsilon=1e-8, step_size_fraction=.02, verbose=False, force=False):
     """Fetch or calculate the neutrality measures."""
-    existing_results = _fetch_existing(
-        benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
-    if existing_results is None:
+    existing_results = None
+    if force:
+        existing_results = _fetch_existing(
+            benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
+    if force or existing_results is None:
         if verbose:
-            print 'Measurements not found. Calculating...'
+            if force:
+                print 'Calculating...'
+            else:
+                print 'Measurements not found. Calculating...'
+        
         pn, lsn = _calculate(
             benchmark_name, dimensionality, epsilon, step_size_fraction)
         if verbose:
