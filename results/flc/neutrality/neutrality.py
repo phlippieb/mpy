@@ -6,7 +6,7 @@ from psodroc.measures import neutrality
 def get(benchmark_name, dimensionality, experiment, epsilon=1e-8, step_size_fraction=.02, verbose=False, force=False):
     """Fetch or calculate the neutrality measures."""
     existing_results = None
-    if force:
+    if not force:
         existing_results = _fetch_existing(
             benchmark_name, dimensionality, epsilon, step_size_fraction, experiment)
     if force or existing_results is None:
