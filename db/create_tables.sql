@@ -129,10 +129,23 @@ CREATE TABLE gradients(
 );
 
 /*
-    FUNNELS -- dispersion metric
+    FUNNELS -- dispersion metric (new median version used in thesis)
     -------
 */
 CREATE TABLE DM(
+    benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
+    dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
+    experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
+    measurement DOUBLE PRECISION NOT NULL, -- The funnels measurement
+
+    PRIMARY KEY(benchmark_name, dimensionality, experiment)
+);
+
+/*
+    FUNNELS -- dispersion metric (old version used in article)
+    -------
+*/
+CREATE TABLE DM_OLD(
     benchmark_name VARCHAR(32) NOT NULL, -- Name of the benchmark function being characterised
     dimensionality INTEGER NOT NULL, -- Dimensionality of the benchmark function
     experiment INTEGER NOT NULL, -- The numbered experiment (so we can take multiple samples, eg. 30)
