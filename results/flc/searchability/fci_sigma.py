@@ -3,7 +3,7 @@ from results.flc.searchability import fci_cog, fci_soc
 from psodroc.measures import searchability
 
 
-def get(benchmark_name, dimensionality, verbose=False):
+def get(benchmark_name, dimensionality, experiment, verbose=False):
     """Fetch or calculate the FCI_sigma (mean standard deviation of multiple FCI_soc and _cog measurements).
 
     If the measurement is available in the database, it is returned directly.
