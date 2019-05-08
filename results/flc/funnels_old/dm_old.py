@@ -1,4 +1,4 @@
-from db.flc.funnels import dm_table
+from db.flc.funnels_old import dm_old_table
 from results import benchmarks
 from psodroc.measures import funnels
 
@@ -37,7 +37,7 @@ def get(benchmark_name, dimensionality, experiment, verbose=False):
 
 def _fetch_existing(benchmark_name, dimensionality, experiment):
     """Fetch the requested measurement from the database if it exists. Return None if it doesn't."""
-    return dm_table.fetch(benchmark_name, dimensionality, experiment)
+    return dm_old_table.fetch(benchmark_name, dimensionality, experiment)
 
 
 def _store(benchmark_name, dimensionality, experiment, measurement):
@@ -45,9 +45,9 @@ def _store(benchmark_name, dimensionality, experiment, measurement):
 
     Also commits the result immediately.
     """
-    dm_table.store(benchmark_name, dimensionality,
+    dm_old_table.store(benchmark_name, dimensionality,
                    experiment, measurement)
-    dm_table.commit()
+    dm_old_table.commit()
 
 
 def _calculate(benchmark_name, dimensionality, verbose=False):
